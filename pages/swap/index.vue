@@ -196,9 +196,12 @@
 
 <script lang="ts">
 import { Component, Vue } from 'nuxt-property-decorator'
+const Swiper = process.client ? require('swiper').default : null
+require('swiper/swiper-bundle.css')
 
 @Component
 export default class SwapPage extends Vue {
+  private swiper!: any
   swap = true
   status = true
   layout() {
@@ -206,19 +209,17 @@ export default class SwapPage extends Vue {
   }
 
   mounted() {
-    this.$nextTick(() => {
-      const swiper = new Swiper('.swiper-container', {
+    if (process.client && Swiper) {
+      this.swiper = new Swiper('.swiper-container', {
         loop: true,
+        slidesPerView: 1,
         spaceBetween: 20,
         pagination: {
           el: '.swiper-pagination',
           clickable: true,
         },
-        breakpoints: {
-          0: { slidesPerView: 1 },
-        },
       })
-    })
+    }
   }
 }
 </script>

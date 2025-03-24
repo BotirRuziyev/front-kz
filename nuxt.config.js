@@ -13,9 +13,7 @@ export default {
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-      { rel: 'stylesheet', href: 'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css' }
     ],
-    script: [{ src: 'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js' }]
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
