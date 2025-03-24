@@ -240,12 +240,18 @@ export default class SwapPage extends Vue {
       z-index: 2;
     }
     .swiper-pagination {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      left: 50%;
       bottom: 28px;
+      transform: translateX(-50%);
       z-index: 1;
       &-bullet {
         width: 8px;
         height: 8px;
         background: #211e2e;
+        margin: 0 3px;
       }
       &-bullet-active {
         width: 10px;
