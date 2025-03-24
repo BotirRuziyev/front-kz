@@ -34,12 +34,6 @@ export default class ModalSeed extends Vue {
 </script>
 <style lang="scss">
 .modal-seed {
-  p {
-    font-family: var(--font-family);
-    font-weight: 400;
-    font-size: 14px;
-    color: rgba(255, 255, 255, 0.4);
-  }
   position: relative;
   width: 327px;
   height: 267px;

@@ -11,13 +11,12 @@ export default class BlockTitleOracle extends Vue {
 </script>
 <style lang="scss">
 .block-title-oracle {
-  font-family: 'Kenyan Coffee';
-  font-weight: 400;
-  letter-spacing: 1.5px;
-  font-size: 17px;
-  line-height: 17px;
-  text-transform: uppercase;
   width: 100%;
+  letter-spacing: 0.7px;
+  font-family: var(--second-family);
+  font-weight: 700;
+  font-size: 16px;
+  text-transform: uppercase;
   color: #fff;
 }
 </style>

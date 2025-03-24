@@ -1,9 +1,9 @@
 <template>
   <button
-    class="button_oracle"
+    class="button-oracle"
     :class="backgrounColor"
     v-on="$listeners"
-    @click="$router.push(to)"
+    @click="$router.push(`${to}`)"
   >
     <TelegramIcon v-if="icon == 'telegram'" />
     <MessageIcon v-if="icon == 'message'" />
@@ -28,8 +28,8 @@ export default class ButtonOracle extends Vue {
   name = 'ButtonOracle'
   @Prop({ default: '' }) readonly text!: string
   @Prop({ default: '' }) readonly icon!: string
-  @Prop({ default: 'black' }) readonly color!: string
   @Prop({ default: '' }) readonly to!: string
+  @Prop({ default: 'black' }) readonly color!: string
 
   get backgrounColor() {
     return this.color
@@ -38,7 +38,7 @@ export default class ButtonOracle extends Vue {
 </script>
 
 <style lang="scss">
-.button_oracle {
+.button-oracle {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -47,8 +47,7 @@ export default class ButtonOracle extends Vue {
   width: 100%;
   height: 52px;
   border: 2px solid #f64e2a;
-  box-shadow: 0 0 10px 2px rgba(246, 78, 42, 0.25);
-
+  box-shadow: 0px 0px 10px 2px rgba(246, 78, 42, 0.25);
   border-radius: 8px;
   cursor: pointer;
 
@@ -62,11 +61,12 @@ export default class ButtonOracle extends Vue {
 
   &.black {
     background-color: #0a090f;
-    border-color: #e70303;
   }
+
   &.orange {
     background-color: #f64e2a;
   }
+
   &.gray {
     background-color: #1f1e27;
   }

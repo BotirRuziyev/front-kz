@@ -11,14 +11,20 @@ export default {
       { hid: 'description', name: 'description', content: '' },
       { name: 'format-detection', content: 'telephone=no' },
     ],
-    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
+    link: [
+      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+      { rel: 'stylesheet', href: 'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css' }
+    ],
+    script: [{ src: 'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js' }]
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: ['@/assets/styles/main.css'],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: [],
+  plugins: [
+    { src: '~/plugins/swiper.ts', mode: 'client' }
+  ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
@@ -54,7 +60,9 @@ export default {
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
-  build: {},
+  build: {
+    transpile: ['swiper'],
+  },
   runtimeConfig: {
     TELEGRAM_TOKEN: "7567503159:AAEcvhmFAqvJ4kAMuV76GAZ8gwFtrr2j5hU",
   }
