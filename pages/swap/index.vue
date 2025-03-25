@@ -234,8 +234,10 @@ export default class SwapPage extends Vue {
     overflow: hidden;
   }
   .swiper {
+    width: calc(100% - 1px);
     overflow: visible;
     position: relative;
+    margin-left: 0.5px;
     .swiper-wrapper {
       position: relative;
       z-index: 2;
