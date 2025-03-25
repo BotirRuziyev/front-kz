@@ -66,10 +66,12 @@
             :key="index"
             class="list-item"
           >
-            <div class="contact-img">
-              <img :src="contact.img" alt="" />
-            </div>
-            <span class="user-name">{{ contact.name }}</span>
+            <nuxt-link to="#">
+              <div class="contact-img">
+                <img :src="contact.img" alt="" />
+              </div>
+              <span class="user-name">{{ contact.name }}</span>
+            </nuxt-link>
           </li>
         </ul>
       </div>

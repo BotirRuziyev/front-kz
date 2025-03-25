@@ -4,6 +4,19 @@
       <div class="swap-page-in">
         <block-nav-bar text="Swap" />
         <block-home-cards />
+        <div class="swiper swiper-container">
+          <div class="swiper-wrapper">
+            <div v-for="item in 3" :key="item" class="swiper-slide">
+              <select-oracle
+                class="form-select-first"
+                amount="15"
+                name="USDT"
+                price="(≈ $15)"
+              />
+            </div>
+          </div>
+          <div class="swiper-pagination"></div>
+        </div>
         <div class="swiper swiper-container swiper-first">
           <div class="swiper-wrapper">
             <div v-for="item in 3" :key="item" class="swiper-slide">
@@ -12,33 +25,23 @@
           </div>
           <div class="swiper-pagination"></div>
         </div>
-        <div class="swiper swiper-container">
-          <div class="swiper-wrapper">
-            <div v-for="item in 3" :key="item" class="swiper-slide">
-              <select-oracle
-                class="form-select-first"
-                amount="15"
-                name="UDT"
-                price="(≈ $15)"
-              />
-            </div>
-          </div>
-          <div class="swiper-pagination"></div>
-        </div>
         <div class="swap-form">
           <div class="form-control">
+            <span v-if="false" class="error"
+              >Amount exceeds your current balance</span
+            >
             <div class="form-input">
-              <input-oracle v="1" />
+              <input-oracle :v="maxsum" placeholder="1" />
               <div class="input-icon">
                 <img :src="require('@/assets/svg/tether-usdt.svg')" alt="" />
               </div>
             </div>
             <div class="form-input">
-              <input-oracle v="0.00000010" />
+              <input-oracle placeholder="0.00000010" />
               <div class="input-icon bitcoin-icon">
                 <img :src="require('@/assets/svg/bitcoin-icon.svg')" alt="" />
               </div>
-              <div class="input-icon">
+              <div class="input-icon" @click="sendMax">
                 <img :src="require('@/assets/svg/money-send.svg')" alt="" />
               </div>
             </div>
@@ -78,12 +81,8 @@
             </div>
           </div>
           <div class="form-control">
-            <div class="form-input">
-              <input-oracle v="$101,920" />
-            </div>
-            <div class="form-input">
-              <input-oracle v="$101,920" />
-            </div>
+            <input-oracle class="form-input" v="$101,920" />
+            <input-oracle class="form-input" v="$101,920" />
           </div>
         </div>
         <div class="validity-period">
@@ -204,6 +203,7 @@ export default class SwapPage extends Vue {
   private swiper!: any
   swap = true
   status = true
+  maxsum = ''
   layout() {
     return 'mobile'
   }
@@ -220,6 +220,10 @@ export default class SwapPage extends Vue {
         },
       })
     }
+  }
+
+  sendMax() {
+    this.maxsum = '101,920'
   }
 }
 </script>
@@ -269,11 +273,35 @@ export default class SwapPage extends Vue {
       display: flex;
       align-items: stretch;
       gap: 12px;
+      position: relative;
+      .error {
+        position: absolute;
+        bottom: calc(100% + 4px);
+        left: 0;
+        font-family: var(--font-family);
+        font-weight: 400;
+        font-size: 10px;
+        line-height: 12px;
+        color: #ff5906;
+      }
       .form-input {
         position: relative;
       }
+      .form-button {
+        width: 100%;
+        background: #121119;
+        border-radius: 8px;
+        padding: 16px 14px;
+        font-family: var(--font-family);
+        font-weight: 400;
+        text-align: left;
+        font-size: 16px;
+        line-height: 11px;
+        color: #fff;
+      }
       input {
-        padding-right: 73px;
+        height: 43px;
+        padding-right: 74px;
         text-overflow: ellipsis;
       }
       .input-icon {

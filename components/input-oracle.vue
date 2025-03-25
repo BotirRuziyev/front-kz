@@ -41,7 +41,7 @@ export default class InputOracle extends Vue {
   @Prop({ default: false }) readonly user!: boolean
   @Prop({ default: null }) readonly trashAction?: Function
 
-  value = ''
+  value: string = this.v
 
   @Watch('value')
   onChildChanged() {
@@ -62,6 +62,11 @@ export default class InputOracle extends Vue {
 
   created() {
     this.value = this.v
+  }
+
+  @Watch('v')
+  onVChange(newValue: string) {
+    this.value = newValue
   }
 }
 </script>
@@ -115,12 +120,16 @@ export default class InputOracle extends Vue {
     background: rgba(29, 29, 41, 0.4);
     border: none;
     border-radius: 8px;
+    border: 1px solid rgba(255, 89, 6, 0);
     box-sizing: border-box;
     font-family: var(--font-family);
     font-weight: 400;
     font-size: 16px;
-    color: #7c7a87;
+    color: #fff;
     outline: 0;
+    &:focus {
+      border-color: rgba(255, 89, 6, 0.2);
+    }
 
     &::placeholder {
       font-family: 'Reza Zulmi Alfaizi Sans';
