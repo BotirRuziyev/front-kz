@@ -309,6 +309,7 @@ export default class SwapPage extends Vue {
         top: 50%;
         right: 10px;
         transform: translateY(-50%);
+        cursor: pointer;
         &.bitcoin-icon {
           right: 42px;
         }
