@@ -4,7 +4,7 @@
       <div class="swap-page-in">
         <block-nav-bar text="Swap" />
         <block-home-cards />
-        <div class="swiper swiper-container">
+        <div class="swiper swiper-container swiper-first">
           <div class="swiper-wrapper">
             <div v-for="item in 3" :key="item" class="swiper-slide">
               <select-oracle
@@ -17,7 +17,7 @@
           </div>
           <div class="swiper-pagination"></div>
         </div>
-        <div class="swiper swiper-container swiper-first">
+        <div class="swiper swiper-container">
           <div class="swiper-wrapper">
             <div v-for="item in 3" :key="item" class="swiper-slide">
               <select-oracle amount="0,015424" name="BTC" price="(≈ $1.455)" />
