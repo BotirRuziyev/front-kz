@@ -10,7 +10,11 @@
       :style="{ paddingLeft }"
       :readonly="readonly"
     />
-
+    <CalendarIcon
+      v-if="calendar"
+      class="input-calendar-action"
+      @click="$emit('openCalendar', $event)"
+    />
     <TrashIcon v-if="trashAction" class="input-trash-action" />
   </div>
 </template>
@@ -22,12 +26,15 @@ import TrashIcon from '@/assets/svg/trash.svg?inline'
 import SearchIcon from '@/assets/svg/search.svg?inline'
 // @ts-ignore
 import UserIcon from '@/assets/svg/UserCircle.svg?inline'
+// @ts-ignore
+import CalendarIcon from '@/assets/svg/calendar.svg?inline'
 
 @Component({
   components: {
     TrashIcon,
     SearchIcon,
     UserIcon,
+    CalendarIcon,
   },
 })
 export default class InputOracle extends Vue {
@@ -39,6 +46,7 @@ export default class InputOracle extends Vue {
   @Prop({ default: false }) readonly search!: boolean
   @Prop({ default: false }) readonly readonly!: boolean
   @Prop({ default: false }) readonly user!: boolean
+  @Prop({ default: false }) readonly calendar!: boolean
   @Prop({ default: null }) readonly trashAction?: Function
 
   value: string = this.v
@@ -57,7 +65,7 @@ export default class InputOracle extends Vue {
   }
 
   get paddingLeft() {
-    return this.search || this.user ? '50px' : '12px'
+    return this.search || this.user ? '43px' : '12px'
   }
 
   created() {
@@ -98,6 +106,13 @@ export default class InputOracle extends Vue {
     left: 12px;
     top: 50%;
     transform: translateY(-50%);
+  }
+  &-calendar-action {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
   }
 
   &.big {

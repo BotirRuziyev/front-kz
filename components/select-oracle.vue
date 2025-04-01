@@ -1,5 +1,5 @@
 <template>
-  <div ref="select" class="form-select">
+  <div ref="select" class="form-select select-oracle">
     <button class="select-btn" :class="{ active: show }" @click="show = !show">
       <div class="left-block">
         <div class="coin-img">
@@ -69,7 +69,7 @@ export default class SelectOracle extends Vue {
 </script>
 
 <style lang="scss">
-.form-select {
+.select-oracle {
   position: relative;
   z-index: 1;
   .select-btn {
@@ -86,6 +86,11 @@ export default class SelectOracle extends Vue {
     transition: 0.2s;
     &.active {
       border-color: #f64e2a;
+      .arrown-icon {
+        img {
+          transform: rotate(-270deg);
+        }
+      }
     }
     .left-block {
       display: flex;
@@ -131,6 +136,7 @@ export default class SelectOracle extends Vue {
     .arrown-icon {
       img {
         transform: rotate(-90deg);
+        transition: 0.3s;
       }
     }
   }

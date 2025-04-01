@@ -3,7 +3,9 @@
     <nuxt-link :to="to" class="back-btn">
       <img :src="require('@/assets/svg/arrow-back.svg')" alt="" />
     </nuxt-link>
-    {{ text }}
+    <span>
+      {{ text }}
+    </span>
   </div>
 </template>
 <script lang="ts">

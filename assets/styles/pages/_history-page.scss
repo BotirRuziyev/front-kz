@@ -1,0 +1,58 @@
+.history-page {
+    .block-nav-bar {
+        span {
+            display: block;
+            width: calc(100% - 44px);
+            text-align: center;
+        }
+    }
+    .input {
+        margin-bottom: 10px;
+    }
+    .history-tab {
+        .tab-head {
+            .tab-button {
+                display: flex;
+                margin-bottom: 13px;
+                background: #121119;
+                border-radius: 12px;
+                padding: 4px;
+                position: relative;
+                .btn-bg {
+                    width: calc(50% - 8px);
+                    height: calc(100% - 8px);
+                    background: #f64e2a;
+                    border-radius: 8px;
+                    position: absolute;
+                    top: 4px;
+                    left: 4px;
+                    transition: 0.3s;
+                    &.expensis-bg {
+                        left: 4px;
+                    }
+                    &.deposit-bg {
+                        left: calc(50% + 4px);
+                    }
+                }
+                .tab-btn {
+                    width: 50%;
+                    cursor: pointer;
+                    border-radius: 8px;
+                    padding: 16px 10px;
+                    position: relative;
+                    z-index: 2;
+                    font-family: var(--second-family);
+                    font-weight: 700;
+                    font-size: 12px;
+                    text-align: center;
+                    text-transform: uppercase;
+                    line-height: 8px;
+                    color: #fff;
+                }
+            }
+        }
+    }
+    .form-select {
+        margin-bottom: 30px;
+    }
+}
