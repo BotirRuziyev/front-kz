@@ -1,6 +1,6 @@
 <template>
   <div class="history-page">
-    <block-nav-bar to="#" text="History" />
+    <block-nav-bar to="#" :text="pageTitle" />
     <input-oracle
       :search="true"
       :calendar="true"
@@ -18,14 +18,26 @@
           <button
             class="expenses-btn tab-btn"
             :class="{ active: expensis }"
-            @click=";(expensis = true), (deposit = false)"
+            @click="
+              expensis = true
+              deposit = false
+              expensisChart = true
+              depositChart = false
+              chartBack()
+            "
           >
             Expenses
           </button>
           <button
             class="deposits-btn tab-btn"
             :class="{ active: deposit }"
-            @click=";(expensis = false), (deposit = true)"
+            @click="
+              ;(expensis = false),
+                (deposit = true),
+                (expensisChart = false),
+                (depositChart = true),
+                chartBack()
+            "
           >
             deposits
           </button>
@@ -33,11 +45,26 @@
       </div>
     </div>
     <div v-if="expensis && !deposit" class="expenses-content">
-      <div v-if="expensisChart" class="expensis-chart">
-        <form-select :data="data" label="Choose a cryptocurrency" />
-        <TransferHistoryChart />
+      <div class="expensis-chart">
+        <form-select
+          v-if="step != 2"
+          :data="data"
+          label="Choose a cryptocurrency"
+        />
+        <ExpensisDoughnutChart
+          :data="expensesText"
+          :active-expensis-type="activeExpensesType"
+          :step="step"
+          :chart-data="chartData"
+          @chartBack="chartBack"
+        />
         <div class="chart-labels">
-          <ChartLabel :data="expensisData" />
+          <ChartLabel
+            :step="step"
+            :data="expensisData"
+            :title="expensisTitle"
+            @item-selected="expensisSelect"
+          />
         </div>
       </div>
       <transfer-history-item
@@ -47,7 +74,24 @@
       />
     </div>
     <div v-if="deposit && !expensis" class="deposits-content">
-      <form-select :data="data" label="All crypto" />
+      <div class="expensis-chart">
+        <form-select v-if="stepDeposit != 2" :data="data" label="All crypto" />
+        <DepositDoughnutChart
+          :data="depositText"
+          :active-deposit-type="activeDepositType"
+          :step-deposit="stepDeposit"
+          :chart-data="chartData"
+          @chartBack="chartBack"
+        />
+        <div class="chart-labels">
+          <ChartLabel
+            :step="stepDeposit"
+            :data="depositData"
+            title="deposits"
+            @item-selected="depositSelect"
+          />
+        </div>
+      </div>
       <transfer-history-item
         :data="historyData"
         color="color-green"
@@ -162,12 +206,24 @@
 import { Component, Vue } from 'nuxt-property-decorator'
 import CalendarOracle from '~/components/calendar-oracle.vue'
 import ChartLabel from '~/components/charts/chart-labels.vue'
-import TransferHistoryChart from '~/components/charts/TransferHistoryChart.vue'
+import DepositDoughnutChart from '~/components/charts/DepositDoughnutChart.vue'
+import ExpensisDoughnutChart from '~/components/charts/ExpensisDoughnutChart.vue'
 
+interface Payload {
+  type: string
+  step: number
+}
+interface Text {
+  title?: string
+  price?: string
+  date?: string
+  percent?: string
+}
 @Component({
   components: {
     CalendarOracle,
-    TransferHistoryChart,
+    ExpensisDoughnutChart,
+    DepositDoughnutChart,
     ChartLabel,
   },
 })
@@ -176,6 +232,14 @@ export default class HistoryPage extends Vue {
     return 'mobile'
   }
 
+  step = 0
+  stepDeposit = 0
+  activeExpensesType: string | null = null
+  activeDepositType: string | null = null
+  pageTitle = 'History'
+  expensisTitle = 'Escrow'
+  depositTitle = 'deposits'
+
   expensis = true
   deposit = false
   isOpen = false
@@ -183,94 +247,189 @@ export default class HistoryPage extends Vue {
   expensesModal = false
 
   expensisChart = true
+  depositChart = false
+
+  chartData = {
+    labels: ['Escrow', 'P2P', 'SWAP', 'Transfers'],
+    datasets: [
+      {
+        data: [28, 25, 28, 19],
+        backgroundColor: ['#f6c32a', '#f64e2a', '#902af6', '#2af653'],
+        borderWidth: 0,
+      },
+    ],
+  }
 
   expensisData = [
     {
       id: 1,
+      type: 'escrow',
       name: 'Escrow -',
       price: '$1,923.15',
       color: 'color-escrow',
     },
     {
       id: 2,
+      type: 'p2p',
       name: 'P2P',
       price: '$1,923.15',
       color: 'color-p2p',
     },
     {
       id: 3,
+      type: 'swap',
       name: 'SWAP',
       price: '$1,923.15',
       color: 'color-swap',
     },
     {
       id: 4,
+      type: 'transfers',
       name: 'Transfers',
       price: '$1,923.15',
       color: 'color-transfers',
     },
     {
       id: 5,
+      type: '',
       name: 'Prepaid Cards',
       price: '$1,923.15',
       color: 'color-prepaid',
     },
     {
       id: 6,
+      type: '',
       name: 'Bills',
       price: '$1,923.15',
       color: 'color-bills',
     },
     {
       id: 7,
+      type: '',
       name: 'Fees',
       price: '$1,923.15',
       color: 'color-fees',
     },
     {
       id: 8,
+      type: '',
       name: 'Mixing',
       price: '$1,923.15',
       color: 'color-mixing',
     },
     {
       id: 9,
+      type: '',
       name: 'Shops',
       price: '$1,923.15',
       color: 'color-shops',
     },
     {
       id: 10,
+      type: '',
       name: 'OraclePay',
       price: '$1,923.15',
       color: 'color-oracle-pay',
     },
     {
       id: 11,
+      type: '',
       name: 'Checks',
       price: '$1,923.15',
       color: 'color-checks',
     },
   ]
 
-  chartData = {
-    labels: ['Yanvar', 'Fevral', 'Mart'],
-    datasets: [
-      {
-        label: 'Transferlar',
-        data: [12, 19, 3],
-        backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
-      },
-    ],
+  depositData = [
+    {
+      id: 1,
+      type: 'escrow',
+      name: 'Escrow -',
+      price: '$1,923.15',
+      color: 'color-escrow',
+    },
+    {
+      id: 2,
+      type: 'p2p',
+      name: 'P2P',
+      price: '$1,923.15',
+      color: 'color-p2p',
+    },
+    {
+      id: 3,
+      type: 'swap',
+      name: 'SWAP',
+      price: '$1,923.15',
+      color: 'color-swap',
+    },
+    {
+      id: 4,
+      type: 'transfers',
+      name: 'Transfers',
+      price: '$1,923.15',
+      color: 'color-transfers',
+    },
+    {
+      id: 5,
+      type: '',
+      name: 'Prepaid Cards',
+      price: '$1,923.15',
+      color: 'color-prepaid',
+    },
+    {
+      id: 6,
+      type: '',
+      name: 'Bills',
+      price: '$1,923.15',
+      color: 'color-bills',
+    },
+    {
+      id: 7,
+      type: '',
+      name: 'Fees',
+      price: '$1,923.15',
+      color: 'color-fees',
+    },
+    {
+      id: 8,
+      type: '',
+      name: 'Mixing',
+      price: '$1,923.15',
+      color: 'color-mixing',
+    },
+    {
+      id: 9,
+      type: '',
+      name: 'Shops',
+      price: '$1,923.15',
+      color: 'color-shops',
+    },
+    {
+      id: 10,
+      type: '',
+      name: 'OraclePay',
+      price: '$1,923.15',
+      color: 'color-oracle-pay',
+    },
+    {
+      id: 11,
+      type: '',
+      name: 'Checks',
+      price: '$1,923.15',
+      color: 'color-checks',
+    },
+  ]
+
+  expensesText: Text = {
+    title: 'EXPENSES',
+    price: '1,923$',
+    date: '01.01.25 - 01.02.25',
   }
 
-  chartOptions = {
-    plugins: {
-      title: {
-        display: true,
-        text: 'Oylik transferlar',
-      },
-    },
+  depositText: Text = {
+    title: 'receipts',
+    price: '1,923$',
+    date: '25.01.25 - 01.02.25',
   }
 
   data = [
@@ -393,6 +552,301 @@ export default class HistoryPage extends Vue {
     },
   ]
 
+  expensisSelect(payload: Payload) {
+    this.activeExpensesType = payload.type
+    this.expensisTitle = 'Escrow'
+    this.pageTitle = 'escrow History'
+    this.step = this.step !== 2 ? this.step + 1 : (this.step = 2)
+
+    if (this.step === 1) {
+      this.expensisData = [
+        {
+          id: 1,
+          type: 'escrow',
+          name: '@TopHitta228 (ID: 90192102)',
+          price: '$593.15',
+          color: 'color-escrow',
+        },
+        {
+          id: 2,
+          type: 'p2p',
+          name: '@UserUser (ID: 810192102)',
+          price: '$1,923.15',
+          color: 'color-p2p',
+        },
+        {
+          id: 3,
+          type: 'swap',
+          name: '@TopUser (ID: 10192102)',
+          price: '$1,923.15',
+          color: 'color-swap',
+        },
+        {
+          id: 4,
+          type: 'transfers',
+          name: '@TopUser123 (ID: 70192102) ',
+          price: '$1,923.15',
+          color: 'color-transfers',
+        },
+      ]
+      this.expensesText = {
+        title: 'Escrow',
+        price: '1,923$',
+        date: '01.01.25 - 01.02.25',
+      }
+    } else {
+      this.expensisData = this.expensisData.filter(
+        (item) => item.type === payload.type
+      )
+      this.expensesText = {
+        title: 'Escrow',
+        price: '593$',
+        percent: '22%',
+        date: '01.01.25 - 01.02.25',
+      }
+    }
+  }
+
+  depositSelect(payload: Payload) {
+    this.activeDepositType = payload.type
+    this.depositTitle = 'Escrow'
+    this.pageTitle = 'escrow History'
+    this.stepDeposit =
+      this.stepDeposit !== 2 ? this.stepDeposit + 1 : (this.stepDeposit = 2)
+    if (this.stepDeposit === 1) {
+      this.depositData = [
+        {
+          id: 1,
+          type: 'escrow',
+          name: '@TopHitta228 (ID: 90192102)',
+          price: '$593.15',
+          color: 'color-escrow',
+        },
+        {
+          id: 2,
+          type: 'p2p',
+          name: '@UserUser (ID: 810192102)',
+          price: '$1,923.15',
+          color: 'color-p2p',
+        },
+        {
+          id: 3,
+          type: 'swap',
+          name: '@TopUser (ID: 10192102)',
+          price: '$1,923.15',
+          color: 'color-swap',
+        },
+        {
+          id: 4,
+          type: 'transfers',
+          name: '@TopUser123 (ID: 70192102) ',
+          price: '$1,923.15',
+          color: 'color-transfers',
+        },
+      ]
+      this.depositText = {
+        title: 'Escrow',
+        price: '1,923$',
+        date: '01.01.25 - 01.02.25',
+      }
+    } else {
+      this.depositData = this.depositData.filter(
+        (item) => item.type === payload.type
+      )
+      this.depositText = {
+        title: 'Escrow',
+        price: '1.256$',
+        percent: '41%',
+        date: '01.01.25 - 01.02.25',
+      }
+    }
+  }
+
+  chartBack() {
+    this.chartData = {
+      labels: ['Escrow', 'P2P', 'SWAP', 'Transfers'],
+      datasets: [
+        {
+          data: [28, 25, 28, 19],
+          backgroundColor: ['#f6c32a', '#f64e2a', '#902af6', '#2af653'],
+          borderWidth: 0,
+        },
+      ],
+    }
+    this.pageTitle = 'History'
+    this.expensisTitle = 'EXPENSES'
+    this.expensesText = {
+      title: 'Escrow',
+      price: '1,923$',
+      date: '01.01.25 - 01.02.25',
+    }
+    this.expensisData = [
+      {
+        id: 1,
+        type: 'escrow',
+        name: 'Escrow -',
+        price: '$1,923.15',
+        color: 'color-escrow',
+      },
+      {
+        id: 2,
+        type: 'p2p',
+        name: 'P2P',
+        price: '$1,923.15',
+        color: 'color-p2p',
+      },
+      {
+        id: 3,
+        type: 'swap',
+        name: 'SWAP',
+        price: '$1,923.15',
+        color: 'color-swap',
+      },
+      {
+        id: 4,
+        type: 'transfers',
+        name: 'Transfers',
+        price: '$1,923.15',
+        color: 'color-transfers',
+      },
+      {
+        id: 5,
+        type: '',
+        name: 'Prepaid Cards',
+        price: '$1,923.15',
+        color: 'color-prepaid',
+      },
+      {
+        id: 6,
+        type: '',
+        name: 'Bills',
+        price: '$1,923.15',
+        color: 'color-bills',
+      },
+      {
+        id: 7,
+        type: '',
+        name: 'Fees',
+        price: '$1,923.15',
+        color: 'color-fees',
+      },
+      {
+        id: 8,
+        type: '',
+        name: 'Mixing',
+        price: '$1,923.15',
+        color: 'color-mixing',
+      },
+      {
+        id: 9,
+        type: '',
+        name: 'Shops',
+        price: '$1,923.15',
+        color: 'color-shops',
+      },
+      {
+        id: 10,
+        type: '',
+        name: 'OraclePay',
+        price: '$1,923.15',
+        color: 'color-oracle-pay',
+      },
+      {
+        id: 11,
+        type: '',
+        name: 'Checks',
+        price: '$1,923.15',
+        color: 'color-checks',
+      },
+    ]
+    this.expensesText = {
+      title: 'receipts',
+      price: '1,923$',
+      date: '25.01.25 - 01.02.25',
+    }
+    this.depositData = [
+      {
+        id: 1,
+        type: 'escrow',
+        name: 'Escrow -',
+        price: '$1,923.15',
+        color: 'color-escrow',
+      },
+      {
+        id: 2,
+        type: 'p2p',
+        name: 'P2P',
+        price: '$1,923.15',
+        color: 'color-p2p',
+      },
+      {
+        id: 3,
+        type: 'swap',
+        name: 'SWAP',
+        price: '$1,923.15',
+        color: 'color-swap',
+      },
+      {
+        id: 4,
+        type: 'transfers',
+        name: 'Transfers',
+        price: '$1,923.15',
+        color: 'color-transfers',
+      },
+      {
+        id: 5,
+        type: '',
+        name: 'Prepaid Cards',
+        price: '$1,923.15',
+        color: 'color-prepaid',
+      },
+      {
+        id: 6,
+        type: '',
+        name: 'Bills',
+        price: '$1,923.15',
+        color: 'color-bills',
+      },
+      {
+        id: 7,
+        type: '',
+        name: 'Fees',
+        price: '$1,923.15',
+        color: 'color-fees',
+      },
+      {
+        id: 8,
+        type: '',
+        name: 'Mixing',
+        price: '$1,923.15',
+        color: 'color-mixing',
+      },
+      {
+        id: 9,
+        type: '',
+        name: 'Shops',
+        price: '$1,923.15',
+        color: 'color-shops',
+      },
+      {
+        id: 10,
+        type: '',
+        name: 'OraclePay',
+        price: '$1,923.15',
+        color: 'color-oracle-pay',
+      },
+      {
+        id: 11,
+        type: '',
+        name: 'Checks',
+        price: '$1,923.15',
+        color: 'color-checks',
+      },
+    ]
+    this.step = 0
+    this.stepDeposit = 0
+  }
+
   openCalendar(event: MouseEvent) {
     ;(this.$refs.calendar as CalendarOracle).openCalendar()
     this.isOpen = true
@@ -403,17 +857,18 @@ export default class HistoryPage extends Vue {
     if (!target) return
 
     const rect = target.getBoundingClientRect()
-    alert(`Top: ${rect.top}, Left: ${rect.left}`)
-
-    alert(`Top: ${rect.top}, Left: ${rect.left}`)
     const calendarElement = document.querySelector(
       '.flatpickr-calendar'
     ) as HTMLElement
+    const inputElement = document.querySelector('.input') as HTMLElement
+    const input = inputElement.getBoundingClientRect()
 
     if (calendarElement) {
       calendarElement.style.position = 'fixed'
+      calendarElement.style.width = `${input.width}px`
       calendarElement.style.top = `${rect.top + 40}px`
-      calendarElement.style.left = `${rect.left - 322}px`
+      calendarElement.style.left = `auto`
+      calendarElement.style.right = `${rect.right - input.width + 12}px`
       calendarElement.style.visibility = 'visible'
       calendarElement.style.opacity = '1'
       setTimeout(() => {}, 100)

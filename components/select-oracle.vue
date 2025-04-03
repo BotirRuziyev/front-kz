@@ -71,7 +71,7 @@ export default class SelectOracle extends Vue {
 <style lang="scss">
 .select-oracle {
   position: relative;
-  z-index: 1;
+  z-index: 2;
   .select-btn {
     width: 100%;
     display: flex;

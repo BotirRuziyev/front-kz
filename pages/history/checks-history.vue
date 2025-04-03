@@ -13,44 +13,95 @@
         <div class="tab-button">
           <div
             class="btn-bg"
-            :class="createCheck ? 'expensis-bg' : 'deposit-bg'"
+            :class="expensis ? 'expensis-bg' : 'deposit-bg'"
           ></div>
           <button
-            class="create-check__btn tab-btn"
-            :class="{ active: createCheck }"
-            @click=";(createCheck = true), (cashedCheck = false)"
+            class="expenses-btn tab-btn"
+            :class="{ active: expensis }"
+            @click="
+              expensis = true
+              deposit = false
+              expensisChart = true
+              depositChart = false
+              chartBack()
+            "
           >
             CREATED CHECKS
           </button>
           <button
-            class="cashed-checks__btn tab-btn"
-            :class="{ active: cashedCheck }"
-            @click=";(createCheck = false), (cashedCheck = true)"
+            class="deposits-btn tab-btn"
+            :class="{ active: deposit }"
+            @click="
+              ;(expensis = false),
+                (deposit = true),
+                (expensisChart = false),
+                (depositChart = true),
+                chartBack()
+            "
           >
             CASHED CHECKS
           </button>
         </div>
       </div>
     </div>
-    <form-select :data="data" label="Choose a cryptocurrency" />
-    <div v-if="createCheck && !cashedCheck" class="create-checks-content">
+    <div v-if="expensis && !deposit" class="expenses-content">
+      <div class="expensis-chart">
+        <form-select
+          v-if="step != 2"
+          :data="data"
+          label="Choose a cryptocurrency"
+        />
+        <ExpensisDoughnutChart
+          :data="expensesText"
+          :active-created-type="activeCreatedType"
+          :step="step"
+          :chart-data="chartData"
+          @chartBack="chartBack"
+        />
+        <div class="chart-labels">
+          <ChartLabel
+            :step="step"
+            :data="expensisData"
+            :title="expensisTitle"
+            @item-selected="expensisSelect"
+          />
+        </div>
+      </div>
       <transfer-history-item
         :data="historyData"
-        color="color-blue"
-        @openModal=";(createModal = true), $nuxt.$emit('open-modal')"
+        color="color-white"
+        @openModal=";(expensesModal = true), $nuxt.$emit('open-modal')"
       />
     </div>
-    <div v-if="cashedCheck && !createCheck" class="cashed-checks-content">
+    <div v-if="deposit && !expensis" class="deposits-content">
+      <div class="expensis-chart">
+        <form-select v-if="stepDeposit != 2" :data="data" label="All crypto" />
+        <DepositDoughnutChart
+          :data="depositText"
+          :active-cashed-type="activeCashedType"
+          :step-deposit="stepDeposit"
+          :chart-data="chartData"
+          @chart-back="chartBack"
+        />
+        <div class="chart-labels">
+          <ChartLabel
+            :step="stepDeposit"
+            :data="depositData"
+            title="deposits"
+            @item-selected="depositSelect"
+          />
+        </div>
+      </div>
       <transfer-history-item
         :data="historyData"
-        color="color-blue"
-        @openModal=";(cashedModal = true), $nuxt.$emit('open-modal')"
+        color="color-green"
+        @openModal=";(depositModal = true), $nuxt.$emit('open-modal')"
       />
     </div>
     <draggable-modal
       class="checks-modal"
-      :is-open="createModal"
-      @close="createModal = false"
+      :is-open="expensesModal"
+      @close="expensesModal = false"
     >
       <div class="modal-header">
         <p class="modal-header__date">
@@ -119,10 +170,27 @@
 <script lang="ts">
 import { Component, Vue } from 'nuxt-property-decorator'
 import CalendarOracle from '~/components/calendar-oracle.vue'
+import ChartLabel from '~/components/charts/chart-labels.vue'
+import ExpensisDoughnutChart from '~/components/charts/ExpensisDoughnutChart.vue'
+import DepositDoughnutChart from '~/components/charts/DepositDoughnutChart.vue'
+
+interface Payload {
+  type: string
+  step: number
+}
+interface Text {
+  title?: string
+  price?: string
+  date?: string
+  percent?: string
+}
 
 @Component({
   components: {
     CalendarOracle,
+    ExpensisDoughnutChart,
+    ChartLabel,
+    DepositDoughnutChart,
   },
 })
 export default class TransfersHistoryPage extends Vue {
@@ -130,12 +198,93 @@ export default class TransfersHistoryPage extends Vue {
     return 'mobile'
   }
 
-  createCheck = true
-  cashedCheck = false
+  step = 0
+  stepDeposit = 0
+  activeCreatedType: string | null = null
+  activeCashedType: string | null = null
+  expensisTitle = 'CHECKS CREATED'
+  depositTitle = 'CASHED CHECKS'
+
+  expensis = true
+  deposit = false
   isOpen = false
   isSelectOpen = false
-  cashedModal = false
-  createModal = false
+  depositModal = false
+  expensesModal = false
+
+  expensisChart = true
+  depositChart = false
+
+  chartData = {
+    labels: ['Active', 'Expired', 'Claimed'],
+    datasets: [
+      {
+        data: [32, 32, 36],
+        backgroundColor: ['#2A67F6', '#902AF6', '#F6C32A'],
+        borderWidth: 0,
+      },
+    ],
+  }
+
+  expensisData = [
+    {
+      id: 1,
+      type: 'claimed',
+      name: 'Claimed',
+      price: '$1,923.15',
+      color: 'color-escrow',
+    },
+    {
+      id: 2,
+      type: 'active',
+      name: 'Active',
+      price: '$1,923.15',
+      color: 'color-checks',
+    },
+    {
+      id: 3,
+      type: 'expired',
+      name: 'Expired',
+      price: '$1,923.15',
+      color: 'color-swap',
+    },
+  ]
+
+  depositData = [
+    {
+      id: 1,
+      type: 'claimed',
+      name: 'Claimed',
+      price: '$1,923.15',
+      color: 'color-escrow',
+    },
+    {
+      id: 2,
+      type: 'active',
+      name: 'Active',
+      price: '$1,923.15',
+      color: 'color-checks',
+    },
+    {
+      id: 3,
+      type: 'expired',
+      name: 'Expired',
+      price: '$1,923.15',
+      color: 'color-swap',
+    },
+  ]
+
+  expensesText: Text = {
+    price: '12.234$',
+    percent: '30%',
+    date: '12.12.25 - 12.12.26',
+  }
+
+  depositText: Text = {
+    price: '12.234$',
+    percent: '30%',
+    date: '12.12.25 - 12.12.26',
+  }
 
   data = [
     {
@@ -356,6 +505,83 @@ export default class TransfersHistoryPage extends Vue {
     },
   ]
 
+  expensisSelect(payload: Payload) {
+    this.activeCreatedType = payload.type
+    this.expensisTitle = 'CLAIMED'
+    this.expensisData = []
+  }
+
+  depositSelect(payload: Payload) {
+    this.activeCashedType = payload.type
+    this.depositTitle = 'CLAIMED'
+
+    this.depositData = []
+  }
+
+  chartBack() {
+    this.expensisTitle = 'EXPENSES'
+    this.expensesText = {
+      price: '12.234$',
+      percent: '30%',
+      date: '12.12.25 - 12.12.26',
+    }
+
+    this.expensisData = [
+      {
+        id: 1,
+        type: 'claimed',
+        name: 'Claimed',
+        price: '$1,923.15',
+        color: 'color-escrow',
+      },
+      {
+        id: 2,
+        type: 'active',
+        name: 'Active',
+        price: '$1,923.15',
+        color: 'color-checks',
+      },
+      {
+        id: 3,
+        type: 'expired',
+        name: 'Expired',
+        price: '$1,923.15',
+        color: 'color-swap',
+      },
+    ]
+
+    this.depositText = {
+      price: '12.234$',
+      percent: '30%',
+      date: '12.12.25 - 12.12.26',
+    }
+    this.depositData = [
+      {
+        id: 1,
+        type: 'claimed',
+        name: 'Claimed',
+        price: '$1,923.15',
+        color: 'color-escrow',
+      },
+      {
+        id: 2,
+        type: 'active',
+        name: 'Active',
+        price: '$1,923.15',
+        color: 'color-checks',
+      },
+      {
+        id: 3,
+        type: 'expired',
+        name: 'Expired',
+        price: '$1,923.15',
+        color: 'color-swap',
+      },
+    ]
+    this.step = 0
+    this.stepDeposit = 0
+  }
+
   openCalendar(event: MouseEvent) {
     ;(this.$refs.calendar as CalendarOracle).openCalendar()
     this.isOpen = true
@@ -391,6 +617,44 @@ export default class TransfersHistoryPage extends Vue {
         .transfer-item {
           align-items: start;
         }
+      }
+    }
+  }
+  .chart-labels__wrapper {
+    .chart-label__list {
+      .chart-label__body {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-family: var(--font-family);
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 140%;
+        color: #fff;
+        span {
+          font-family: var(--second-family);
+          font-weight: 700;
+          font-size: 14px;
+          line-height: 140%;
+          color: #fff;
+        }
+      }
+    }
+  }
+  .chart-container {
+    .chart-content {
+      .chart-date {
+        order: 1;
+        margin-bottom: 14px;
+      }
+      .chart-price {
+        order: 2;
+        margin-bottom: 14px;
+      }
+      .chart-percent {
+        order: 3;
+        margin-bottom: 0;
       }
     }
   }

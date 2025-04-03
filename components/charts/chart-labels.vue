@@ -1,14 +1,21 @@
 <template>
   <div class="chart-labels__wrapper">
-    <h2 class="chart-labels__title">Expenses</h2>
-    <ul ref="chartLabel" class="chart-label__list" :class="{ show: isVisible }">
-      <li v-for="item in data" :key="item.id" class="chart-label">
+    <h2 class="chart-labels__title">{{ title }}</h2>
+    <ul class="chart-label__list" :class="{ show: isVisible }">
+      <li
+        v-for="item in visibleItems"
+        :key="item.id"
+        class="chart-label"
+        @click="selectItem(item.type)"
+      >
         <span class="chart-label__type" :class="item.color"></span>
         <div class="chart-label__body">
           {{ item.name }} <br />
-          {{ item.price }}
+          <span>
+            {{ item.price }}
+          </span>
         </div>
-        <div class="coin-amount">
+        <div ref="coinAmount" class="coin-amount">
           <div class="amount-item amount-btc">
             <span></span>
             1,814 BTC
@@ -29,6 +36,7 @@
       </li>
     </ul>
     <button
+      v-if="!isVisible && visibleItems.length > 3"
       class="more-btn"
       :class="{ active: isVisible }"
       @click="isVisible = !isVisible"
@@ -43,35 +51,37 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue, Watch } from 'nuxt-property-decorator'
+import { Component, Prop, Vue } from 'nuxt-property-decorator'
+
+interface Labels {
+  id: number
+  type: string
+  name: string
+  price: string
+  color: string
+}
+
+interface Payload {
+  type: string
+  step: number
+}
 
 @Component
 export default class ChartLabel extends Vue {
-  @Prop({ default: () => [] }) data!: []
-
-  $refs!: {
-    chartLabel: HTMLDivElement
-  }
+  @Prop({ default: '' }) title!: string
+  @Prop({ default: null }) step!: number
+  @Prop({ default: () => [] }) data!: Labels[]
 
   isVisible = false
+  getStep = this.step
 
-  mounted() {
-    this.updateChartHeight()
+  get visibleItems() {
+    return this.isVisible ? this.data : this.data.slice(0, 4)
   }
 
-  updateChartHeight() {
-    this.$nextTick(() => {
-      if (!this.$refs.chartLabel) return
-
-      this.$refs.chartLabel.style.height = this.isVisible
-        ? `${this.$refs.chartLabel.scrollHeight}px`
-        : '220px'
-    })
-  }
-
-  @Watch('isVisible')
-  onVisibilityChange() {
-    this.updateChartHeight()
+  selectItem(type: string) {
+    this.$emit('item-selected', { type, step: this.getStep } as Payload)
+    this.isVisible = true
   }
 }
 </script>
@@ -125,9 +135,6 @@ export default class ChartLabel extends Vue {
     display: flex;
     flex-direction: column;
     gap: 4px;
-    height: 220px;
-    overflow: hidden;
-    transition: 0.3s;
     .chart-label {
       width: 100%;
       display: flex;
@@ -136,13 +143,18 @@ export default class ChartLabel extends Vue {
       background: #121119;
       border-radius: 8px;
       padding: 11px 10px;
+      position: relative;
+      cursor: pointer;
+      z-index: 0;
       &:hover {
+        z-index: 3;
         .coin-amount {
-          right: -4px;
           opacity: 1;
           visibility: visible;
+          right: -6px;
         }
       }
+
       &__type {
         display: block;
         width: 7px;
@@ -204,11 +216,12 @@ export default class ChartLabel extends Vue {
         background-size: contain;
         position: absolute;
         top: 50%;
-        right: 10px;
+        right: 15px;
         transform: translateY(-50%);
         visibility: hidden;
         opacity: 0;
-        transition: 0.3s;
+        transition: right 0.4s, opacity 0.1s;
+        z-index: 5;
         .amount-item {
           display: flex;
           align-items: center;

@@ -132,6 +132,7 @@ export default class TransferHistory extends Vue {
   flex-direction: column;
   gap: 24px;
   .transfer-history-item {
+    cursor: pointer;
     .transfer-date {
       margin-bottom: 12px;
       font-family: var(--font-family);

@@ -110,6 +110,7 @@ export default class FormSelect extends Vue {
   width: 100%;
   position: relative;
   border: 0;
+  z-index: 2;
   .select-btn {
     width: 100%;
     display: flex;

@@ -29,8 +29,8 @@ export default class CalendarOracle extends Vue {
       {
         mode: 'range',
         dateFormat: 'Y-m-d',
-        closeOnSelect: false, // 🔹 Sana tanlaganda yopilmasin
-        onClose: this.onDateSelect, // 🟢 Endi mavjud
+        closeOnSelect: false,
+        onClose: this.onDateSelect,
         appendTo: document.body,
       }
     )
@@ -107,7 +107,6 @@ export default class CalendarOracle extends Vue {
   background: #1d1c27;
   border-radius: 13px;
   padding: 5px 0px 12px 0px;
-  max-width: 361px;
   width: 100%;
   height: auto;
   &.animate.open {
