@@ -42,13 +42,13 @@ html {
   font-family: 'SF Pro';
   font-style: normal;
   font-weight: 400;
-  src: url('~assets/fonts/sf-pro/SFPRODISPLAYREGULAR.otf') format('opentype');
+  src: url('@/assets/fonts/sf-pro/SFPRODISPLAYREGULAR.otf') format('opentype');
 }
 @font-face {
   font-family: 'SF Pro';
   font-style: normal;
   font-weight: 500;
-  src: url('~assets/fonts/sf-pro/SFPRODISPLAYMEDIUM.otf') format('opentype');
+  src: url('@/assets/fonts/sf-pro/SFPRODISPLAYMEDIUM.otf') format('opentype');
 }
 @font-face {
   font-family: 'Hanson';
