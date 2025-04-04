@@ -862,11 +862,15 @@ export default class TransfersHistoryPage extends Vue {
     const calendarElement = document.querySelector(
       '.flatpickr-calendar'
     ) as HTMLElement
+    const inputElement = document.querySelector('.input') as HTMLElement
+    const input = inputElement.getBoundingClientRect()
 
     if (calendarElement) {
       calendarElement.style.position = 'fixed'
+      calendarElement.style.width = `${input.width}px`
       calendarElement.style.top = `${rect.top + 40}px`
-      calendarElement.style.left = `${rect.left - 322}px`
+      calendarElement.style.left = `auto`
+      calendarElement.style.right = `${rect.right - input.width + 12}px`
       calendarElement.style.visibility = 'visible'
       calendarElement.style.opacity = '1'
       setTimeout(() => {}, 100)
