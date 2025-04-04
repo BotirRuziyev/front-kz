@@ -38,7 +38,7 @@ html {
   --font5: 'Evolventa', sans-serif;
   --font6: 'Inter', sans-serif;
 }
-@font-face {
+/* @font-face {
   font-family: 'SF Pro';
   font-style: normal;
   font-weight: 400;
@@ -49,7 +49,7 @@ html {
   font-style: normal;
   font-weight: 500;
   src: url('~assets/fonts/sf-pro/SFPRODISPLAYMEDIUM.otf') format('opentype');
-}
+} */
 @font-face {
   font-family: 'Hanson';
   font-style: normal;
