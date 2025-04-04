@@ -102,13 +102,12 @@ export default class CalendarOracle extends Vue {
   }
 }
 .flatpickr-calendar {
-  backdrop-filter: blur(80px);
-  box-shadow: 0 10px 60px 0 rgba(0, 0, 0, 0.1);
-  background: #1d1c27;
-  border-radius: 13px;
-  padding: 5px 0px 12px 0px;
-  width: 100%;
-  height: auto;
+  backdrop-filter: blur(80px) !important;
+  box-shadow: 0 10px 60px 0 rgba(0, 0, 0, 0.1) !important;
+  background: #1d1c27 !important;
+  border-radius: 13px !important;
+  padding: 5px 0px 12px 0px !important;
+  height: auto !important;
   &.animate.open {
     animation: none;
   }
@@ -118,12 +117,12 @@ export default class CalendarOracle extends Vue {
   }
   .flatpickr-months {
     .flatpickr-prev-month {
-      width: 15px;
-      height: 17px;
-      right: 60px;
+      width: 15px !important;
+      height: 17px !important;
+      right: 60px !important;
       left: auto !important;
-      top: 14px;
-      padding: 0;
+      top: 14px !important;
+      padding: 0 !important;
       svg {
         display: none;
       }
@@ -144,9 +143,9 @@ export default class CalendarOracle extends Vue {
       }
     }
     .flatpickr-next-month {
-      width: 15px;
-      height: 17px;
-      right: 16px;
+      width: 15px !important;
+      height: 17px !important;
+      right: 16px !important;
       left: auto !important;
       top: 14px;
       padding: 0;
@@ -184,8 +183,8 @@ export default class CalendarOracle extends Vue {
       letter-spacing: -0.03em;
       color: #fff;
       .flatpickr-monthDropdown-months {
-        background: #1d1c27;
-        width: fit-content;
+        background: #1d1c27 !important;
+        width: fit-content !important;
         padding: 0;
         option {
           font-family: var(--font-family);
