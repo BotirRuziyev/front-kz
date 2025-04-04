@@ -274,11 +274,13 @@ export default class ExpensesDoughnutChart extends Vue {
   }
 
   private backChart() {
+    this.$emit('chartBack')
     if (this.chart) {
-      this.chart.data = this.chartData
-      this.$emit('chartBack')
       this.chart.destroy()
     }
+    this.$nextTick(() => {
+      this.initChart()
+    })
   }
 }
 </script>

@@ -177,8 +177,6 @@ export default class DepositDoughnutChart extends Vue {
   }
 
   private updateChartOpacity() {
-    console.log('deposit')
-
     if (!this.chart?.data?.datasets?.[0]) return
     this.chartText = false
     const dataset = this.chart.data.datasets[0]
