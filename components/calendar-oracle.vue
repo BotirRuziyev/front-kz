@@ -113,7 +113,7 @@ export default class CalendarOracle extends Vue {
   }
   &::before,
   &::after {
-    display: none;
+    display: none !important;
   }
   .flatpickr-months {
     .flatpickr-prev-month {
