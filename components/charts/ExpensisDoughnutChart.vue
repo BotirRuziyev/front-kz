@@ -16,8 +16,8 @@
       <div class="chart-content" :class="{ show: chartText }">
         <h3 v-if="data.title" class="chart-title">{{ data.title }}</h3>
         <h3 v-if="data.price" class="chart-price">{{ data.price }}</h3>
-        <h3 v-if="data.percent" class="chart-percent">{{ data.percent }}</h3>
-        <h3 v-if="data.date" class="chart-date">{{ data.date }}</h3>
+        <!-- <h3 v-if="data.percent" class="chart-percent">{{ data.percent }}</h3>
+        <h3 v-if="data.date" class="chart-date">{{ data.date }}</h3> -->
       </div>
     </div>
   </div>
@@ -82,7 +82,7 @@ export default class ExpensesDoughnutChart extends Vue {
       type: 'doughnut',
       data: this.chartData,
       options: {
-        cutout: '84%',
+        cutout: '90%',
         responsive: true,
         layout: {
           padding: {
@@ -343,23 +343,19 @@ export default class ExpensesDoughnutChart extends Vue {
       transform: translate(-50%, -50%) scale(1);
     }
     .chart-title {
-      margin-bottom: 12px;
-      font-family: var(--second-family);
-      font-weight: 700;
+      margin-bottom: 4px;
+      font-family: 'Roboto', sans-serif;
+      font-weight: 400;
       font-size: 14px;
-      text-transform: uppercase;
+      line-height: 130%;
       text-align: center;
-      line-height: 10px;
-      color: rgba(255, 255, 255, 0.3);
+      color: #b0afb2;
     }
     .chart-price {
-      margin-bottom: 12px;
-      font-family: var(--second-family);
-      font-weight: 700;
-      font-size: 22px;
-      text-align: center;
-      line-height: 15px;
-      text-transform: uppercase;
+      font-family: 'Hector', sans-serif;
+      font-weight: 400;
+      font-size: 20px;
+      line-height: 120%;
       color: #fff;
     }
     .chart-date {
@@ -371,7 +367,7 @@ export default class ExpensesDoughnutChart extends Vue {
       color: #fff;
     }
     .chart-percent {
-      margin-bottom: 12px;
+      // margin-bottom: 12px;
       font-family: var(--second-family);
       font-weight: 700;
       font-size: 14px;

@@ -1,9 +1,18 @@
 .history-page {
+    padding: 0 16px;
+    max-width: 400px;
+    margin: 0 auto;
+    background: #0a090f;
     .block-nav-bar {
         span {
             display: block;
             width: calc(100% - 44px);
+            font-family: "Inter", sans-serif;
             text-align: center;
+            text-transform: capitalize;
+            font-weight: 500;
+            font-size: 18px;
+            color: #fff;
         }
     }
     .input {
@@ -13,47 +22,185 @@
         .tab-head {
             .tab-button {
                 display: flex;
-                margin-bottom: 13px;
-                background: #121119;
-                border-radius: 12px;
-                padding: 4px;
-                position: relative;
-                .btn-bg {
-                    width: calc(50% - 8px);
-                    height: calc(100% - 8px);
-                    background: #f64e2a;
-                    border-radius: 8px;
-                    position: absolute;
-                    top: 4px;
-                    left: 4px;
-                    transition: 0.3s;
-                    &.expensis-bg {
-                        left: 4px;
-                    }
-                    &.deposit-bg {
-                        left: calc(50% + 4px);
-                    }
-                }
+                gap: 8px;
+                margin-bottom: 24px;
                 .tab-btn {
                     width: 50%;
                     cursor: pointer;
+                    background: #1d1c25;
                     border-radius: 8px;
-                    padding: 16px 10px;
-                    position: relative;
-                    z-index: 2;
-                    font-family: var(--second-family);
-                    font-weight: 700;
-                    font-size: 12px;
-                    text-align: center;
-                    text-transform: uppercase;
-                    line-height: 8px;
+                    padding: 9px 10px;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    font-family: "Roboto", sans-serif;
+                    font-weight: 500;
+                    font-size: 14px;
+                    text-transform: capitalize;
+                    line-height: 130%;
                     color: #fff;
+                    transition: 0.3s;
+                    &.active {
+                        background: #f64e2a;
+                    }
                 }
             }
         }
     }
     .form-select {
         margin-bottom: 30px;
+    }
+    .history-description {
+        margin-bottom: 24px;
+        margin-top: -8px;
+        font-family: "Inter", sans-serif;
+        font-weight: 300;
+        font-size: 12px;
+        line-height: 140%;
+        text-align: center;
+        color: #fff;
+    }
+    .history-title {
+        margin-bottom: 17px;
+        font-family: "Hector", sans-serif;
+        font-weight: 400;
+        font-size: 20px;
+        line-height: 120%;
+        text-align: center;
+        color: #fff;
+    }
+    .transaction-title {
+        margin-bottom: 16px;
+        font-family: "Hector", sans-serif;
+        font-weight: 400;
+        font-size: 20px;
+        letter-spacing: 0.05em;
+        color: #fff;
+    }
+    .history-search {
+        padding: 16px 0;
+        .search-head {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 32px;
+            .input {
+                width: 100%;
+                margin-bottom: 0;
+                input {
+                    background: #1d1c25;
+                    font-family: "Nunito", sans-serif;
+                    font-weight: 600;
+                    font-size: 14px;
+                    line-height: 120%;
+                    color: #fff;
+                    &::placeholder {
+                        font-family: "Nunito", sans-serif;
+                        font-weight: 600;
+                        font-size: 14px;
+                        line-height: 120%;
+                    }
+                    &:focus {
+                        border-color: #1d1c25;
+                    }
+                }
+            }
+            .close-search {
+                cursor: pointer;
+                font-family: "Nunito", sans-serif;
+                font-weight: 400;
+                font-size: 14px;
+                line-height: 135%;
+                color: #fff;
+            }
+        }
+        .transfer-history__wrapper {
+            .transfer-history-item {
+                .transfer-history__list {
+                    .transfer-item {
+                        &__body {
+                            .item {
+                                &-description {
+                                    color: rgba(255, 255, 255, 0.4);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    .coin-selected__btn {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: #1d1c25;
+        border-radius: 12px;
+        padding: 12px 16px 12px 12px;
+        margin-bottom: 24px;
+        cursor: pointer;
+        font-family: "Nunito", sans-serif;
+        font-weight: 600;
+        font-size: 14px;
+        line-height: 120%;
+        color: #fff;
+        .selected-coin {
+            max-width: calc(100% - 20px);
+            overflow-x: auto;
+            overflow-y: hidden;
+            display: flex;
+            align-items: center;
+            text-overflow: ellipsis;
+            gap: 5px;
+            &::-webkit-scrollbar {
+                height: 0;
+            }
+        }
+        .arrow-icon {
+            transform: rotate(-90deg);
+            svg {
+                path {
+                    stroke: #fff;
+                }
+            }
+        }
+    }
+    .history-chart__filter {
+        margin-bottom: 32px;
+        position: relative;
+        .chart-pagination {
+            display: flex;
+            justify-content: center;
+            gap: 4px;
+            margin-bottom: 12px;
+            .pagination-double {
+                background: #3b3947;
+                border-radius: 10px;
+                width: 3px;
+                height: 6px;
+                cursor: pointer;
+                transition: 0.3s;
+                &.active {
+                    min-width: 19px;
+                    background: #f64e2a;
+                }
+                &.active_center {
+                    min-width: 10px;
+                }
+                &.active_small {
+                    min-width: 5px;
+                }
+            }
+        }
+        .month-name {
+            font-family: "Inter", sans-serif;
+            font-weight: 500;
+            font-size: 16px;
+            line-height: 135%;
+            text-align: center;
+            color: #fff;
+        }
     }
 }
 .checks-history {

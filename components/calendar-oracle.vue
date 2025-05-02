@@ -1,26 +1,40 @@
 <template>
-  <div
-    ref="calendarInput"
-    class="calendar-oracle"
-    :class="{ show: isOpen }"
-  ></div>
+  <div class="calendar-container">
+    <button class="calendar-btn" @click="openCalendar">
+      <CalendarIcon />
+    </button>
+    <div
+      ref="calendarInput"
+      class="calendar-oracle"
+      :class="{ show: isOpen }"
+    ></div>
+  </div>
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'nuxt-property-decorator'
+import { Component, Vue } from 'nuxt-property-decorator'
 import flatpickr from 'flatpickr'
 import 'flatpickr/dist/flatpickr.min.css'
+// @ts-ignore
+import CalendarIcon from '@/assets/svg/calendar-icon.svg?inline'
 
-@Component
+@Component({
+  components: {
+    CalendarIcon,
+  },
+})
 export default class CalendarOracle extends Vue {
-  @Prop({ default: false }) isOpen!: boolean
+  // @Prop({ default: false }) isOpen!: boolean
 
+  isOpen = false
   private calendarInstance: any = null
   private selectedDates: string = ''
 
   mounted() {
     this.initCalendar()
     document.addEventListener('click', this.ClickOutside)
+    window.addEventListener('resize', this.adjustDayCells)
+    this.adjustDayCells()
   }
 
   initCalendar() {
@@ -36,6 +50,16 @@ export default class CalendarOracle extends Vue {
     )
 
     this.addApplyButton()
+  }
+
+  private adjustDayCells = () => {
+    this.$nextTick(() => {
+      document.querySelectorAll('.flatpickr-day').forEach((e) => {
+        const el = e as HTMLElement
+        const widthPx = el.offsetWidth + 'px'
+        el.style.height = widthPx
+      })
+    })
   }
 
   onDateSelect(selectedDates: Date[], dateStr: string) {
@@ -60,12 +84,15 @@ export default class CalendarOracle extends Vue {
     if (this.calendarInstance) {
       this.calendarInstance.close()
       this.$emit('close')
+      this.isOpen = false
     }
   }
 
   openCalendar() {
     if (this.calendarInstance) {
+      this.isOpen = true
       this.calendarInstance.open()
+      this.adjustDayCells()
     }
   }
 
@@ -80,28 +107,59 @@ export default class CalendarOracle extends Vue {
     if (calendarInput && calendarInput.contains(target)) {
       this.applyDate()
       this.$emit('close')
+      this.isOpen = false
     }
   }
 }
 </script>
 
 <style lang="scss">
-.calendar-oracle {
-  width: 100%;
-  height: 100vh;
-  background: rgba(0, 0, 0, 0);
-  visibility: hidden;
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 100;
-  transition: 0.3s;
-  &.show {
-    background: rgba(0, 0, 0, 0.6);
-    visibility: visible;
+.calendar-container {
+  .calendar-btn {
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+    &:hover {
+      svg {
+        path {
+          stroke: #f64e2a;
+          &:nth-child(2) {
+            fill: #f64e2a;
+          }
+        }
+      }
+    }
+    svg {
+      path {
+        transition: 0.3s;
+      }
+    }
+  }
+  .calendar-oracle {
+    width: 100%;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0);
+    visibility: hidden;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    transition: 0.3s;
+    &.show {
+      background: rgba(0, 0, 0, 0.6);
+      visibility: visible;
+    }
   }
 }
 .flatpickr-calendar {
+  max-width: 343px;
+  width: 100%;
+  position: fixed;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%);
   backdrop-filter: blur(80px) !important;
   box-shadow: 0 10px 60px 0 rgba(0, 0, 0, 0.1) !important;
   background: #1d1c27 !important;
@@ -229,8 +287,7 @@ export default class CalendarOracle extends Vue {
         gap: 4px;
         .flatpickr-day {
           width: 100%;
-          height: 44px;
-          max-width: 100%;
+          // max-width: 100%;
           display: flex;
           align-items: center;
           justify-content: center;
@@ -261,6 +318,7 @@ export default class CalendarOracle extends Vue {
           }
           &.prevMonthDay {
             opacity: 0;
+            visibility: hidden;
           }
           &.nextMonthDay {
             display: none;

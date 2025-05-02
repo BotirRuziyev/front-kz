@@ -1,21 +1,24 @@
 <template>
   <div class="chart-labels__wrapper">
-    <h2 class="chart-labels__title">{{ title }}</h2>
-    <ul class="chart-label__list" :class="{ show: isVisible }">
+    <!-- <h2 class="chart-labels__title">{{ title }}</h2> -->
+    <ul class="chart-label__list">
       <li
-        v-for="item in visibleItems"
+        v-for="item in data"
         :key="item.id"
         class="chart-label"
-        @click="selectItem(item.type)"
+        @click="$router.push(item.to)"
       >
         <span class="chart-label__type" :class="item.color"></span>
         <div class="chart-label__body">
-          {{ item.name }} <br />
-          <span>
+          <div class="left-block">
+            <p class="chart-label__title">{{ item.name }}</p>
+            <p class="chart-label__percent">24.5%</p>
+          </div>
+          <p class="chart-label__price">
             {{ item.price }}
-          </span>
+          </p>
         </div>
-        <div ref="coinAmount" class="coin-amount">
+        <!-- <div ref="coinAmount" class="coin-amount">
           <div class="amount-item amount-btc">
             <span></span>
             1,814 BTC
@@ -32,21 +35,9 @@
             <span></span>
             2 LTC
           </div>
-        </div>
+        </div> -->
       </li>
     </ul>
-    <button
-      v-if="!isVisible && visibleItems.length > 3"
-      class="more-btn"
-      :class="{ active: isVisible }"
-      @click="isVisible = !isVisible"
-    >
-      <span v-if="!isVisible">Show more</span>
-      <span v-else> Read more </span>
-      <span class="arrow-icon">
-        <img :src="require('@/assets/svg/arrow-back.svg')" alt="" />
-      </span>
-    </button>
   </div>
 </template>
 
@@ -55,16 +46,16 @@ import { Component, Prop, Vue } from 'nuxt-property-decorator'
 
 interface Labels {
   id: number
-  type: string
+  to: string
   name: string
   price: string
   color: string
 }
 
-interface Payload {
-  type: string
-  step: number
-}
+// interface Payload {
+//   type: string
+//   step: number
+// }
 
 @Component
 export default class ChartLabel extends Vue {
@@ -72,16 +63,10 @@ export default class ChartLabel extends Vue {
   @Prop({ default: null }) step!: number
   @Prop({ default: () => [] }) data!: Labels[]
 
-  isVisible = false
   getStep = this.step
 
-  get visibleItems() {
-    return this.isVisible ? this.data : this.data.slice(0, 4)
-  }
-
-  selectItem(type: string) {
-    this.$emit('item-selected', { type, step: this.getStep } as Payload)
-    this.isVisible = true
+  selectItem(name: string) {
+    this.$emit('item-selected', name)
   }
 }
 </script>
@@ -92,57 +77,29 @@ export default class ChartLabel extends Vue {
   flex-direction: column;
   gap: 14px;
   margin-bottom: 24px;
-  .chart-labels__title {
-    margin-bottom: 14px;
-    font-family: var(--second-family);
-    font-weight: 700;
-    font-size: 16px;
-    text-align: center;
-    text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.3);
-  }
-  .more-btn {
-    max-width: fit-content;
-    margin: 0 auto;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    font-family: var(--font-family);
-    font-weight: 400;
-    font-size: 14px;
-    line-height: 140%;
-    color: #f64e2a;
-    &.active {
-      .arrow-icon {
-        transform: rotate(-270deg);
-      }
-    }
-    .arrow-icon {
-      display: block;
-      width: 18px;
-      height: 18px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transform: rotate(-90deg);
-      transition: 0.3s;
-      img {
-        height: 12px;
-      }
-    }
-  }
+  // .chart-labels__title {
+  //   margin-bottom: 14px;
+  //   font-family: 'Roboto', sans-serif;
+  //   font-weight: 700;
+  //   font-size: 16px;
+  //   text-align: center;
+  //   text-transform: uppercase;
+  //   color: rgba(255, 255, 255, 0.3);
+  // }
   .chart-label__list {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 6px;
+    overflow-x: auto;
+    overflow-y: hidden;
     .chart-label {
       width: 100%;
       display: flex;
-      align-items: start;
-      gap: 8px;
-      background: #121119;
-      border-radius: 8px;
-      padding: 11px 10px;
+      align-items: center;
+      gap: 10px;
+      border: 1px solid #2b2741;
+      border-radius: 12px;
+      padding: 12px;
       position: relative;
       cursor: pointer;
       z-index: 0;
@@ -157,8 +114,8 @@ export default class ChartLabel extends Vue {
 
       &__type {
         display: block;
-        width: 7px;
-        height: 7px;
+        width: 12px;
+        height: 12px;
         border-radius: 50%;
         &.color-escrow {
           background: #f6c32a;
@@ -199,11 +156,32 @@ export default class ChartLabel extends Vue {
         }
       }
       &__body {
-        font-family: var(--font-family);
-        font-weight: 400;
-        font-size: 14px;
-        line-height: 15px;
-        color: #fff;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        .chart-label__title {
+          font-family: 'Roboto', sans-serif;
+          font-weight: 500;
+          font-size: 12px;
+          line-height: 135%;
+          color: #fff;
+        }
+        .chart-label__percent {
+          font-family: 'Roboto', sans-serif;
+          font-weight: 400;
+          font-size: 12px;
+          line-height: 135%;
+          color: #7a74ba;
+        }
+        .chart-label__price {
+          font-family: 'Roboto', sans-serif;
+          font-weight: 500;
+          font-size: 12px;
+          line-height: 135%;
+          color: #fff;
+        }
       }
       .coin-amount {
         width: 136px;

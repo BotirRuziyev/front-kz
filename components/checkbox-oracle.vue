@@ -1,7 +1,7 @@
 <template>
   <div class="form-checkbox">
     <input type="checkbox" :checked="checked" />
-    <span @click="checkedOpen"></span>
+    <span></span>
   </div>
 </template>
 <script lang="ts">
@@ -10,10 +10,6 @@ import { Component, Prop, Vue } from 'nuxt-property-decorator'
 @Component
 export default class CheckboxOracle extends Vue {
   @Prop({ default: false }) checked!: boolean
-
-  checkedOpen() {
-    this.checked = !this.checked
-  }
 }
 </script>
 <style lang="scss">

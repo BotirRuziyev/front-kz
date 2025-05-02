@@ -81,7 +81,7 @@ export default class DepositDoughnutChart extends Vue {
       type: 'doughnut',
       data: this.chartData,
       options: {
-        cutout: '84%',
+        cutout: '90%',
         responsive: true,
         layout: {
           padding: {

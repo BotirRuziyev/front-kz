@@ -11,25 +11,31 @@
           v-for="item in transfer.expenses"
           :key="item._id"
           class="transfer-item"
-          @click="openModal()"
+          @click="openModal(item.description)"
         >
           <div class="coin-img">
             <img :src="item.img" alt="" />
           </div>
           <div class="transfer-item__body">
             <div class="item">
-              <h4 class="item-title">{{ item.title }}</h4>
-              <h4 class="coin-amound" :class="color">
-                <span v-if="color == 'color-white'">
-                  <img :src="require('@/assets/svg/snowflake.svg')" alt="" />
-                </span>
+              <h4 class="item-title">{{ item.description }}</h4>
+              <h4
+                class="coin-amound"
+                :class="item.price || item.card ? color : 'y-center ' + color"
+              >
+                <span v-if="color == 'color-brown'"> - </span>
                 <span v-else> + </span>
                 {{ item.amount }}
               </h4>
             </div>
             <div class="item">
-              <p class="item-description">{{ item.description }}</p>
-              <h4 class="coin-price" :class="color">≈ {{ item.price }}</h4>
+              <p class="item-description">{{ item.title }}</p>
+              <h4 v-if="item.price" class="coin-price" :class="color">
+                ≈ {{ item.price }}
+              </h4>
+              <h4 v-if="item.card" class="card-info" :class="color">
+                {{ item.card }}
+              </h4>
             </div>
             <div v-if="item.activations" class="activations">
               <h4 class="activations-title">{{ item.activations._title }}</h4>
@@ -77,6 +83,7 @@ interface Transfer {
     amount: string
     description: string
     price: string
+    card: string
     activations?: {
       _title?: string
       selected?: boolean
@@ -100,8 +107,8 @@ export default class TransferHistory extends Vue {
     this.localData = [...newVal]
   }
 
-  openModal() {
-    this.$emit('openModal')
+  openModal(description: string) {
+    this.$emit('openModal', description)
   }
 
   activationsArrow(id: number, _id: number, event: Event) {
@@ -130,17 +137,20 @@ export default class TransferHistory extends Vue {
 .transfer-history__wrapper {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 16px;
   .transfer-history-item {
     cursor: pointer;
     .transfer-date {
-      margin-bottom: 12px;
-      font-family: var(--font-family);
-      font-weight: 400;
-      font-size: 16px;
-      color: rgba(255, 255, 255, 0.4);
+      margin-bottom: 4px;
+      font-family: 'Roboto', sans-serif;
+      font-weight: 600;
+      font-size: 14px;
+      line-height: 130%;
+      color: #b2aaf9;
     }
     .transfer-history__list {
+      width: calc(100% + 32px);
+      margin-left: -16px;
       display: flex;
       flex-direction: column;
       gap: 8px;
@@ -148,14 +158,13 @@ export default class TransferHistory extends Vue {
         display: flex;
         align-items: center;
         gap: 9px;
-        background: #121119;
-        padding: 12px;
-        border-radius: 10px;
+        border-bottom: 1px solid #2b2741;
+        padding: 13px 16px;
         .coin-img {
-          min-width: 42px;
-          min-height: 42px;
-          max-height: 42px;
-          max-width: 42px;
+          min-width: 36px;
+          min-height: 36px;
+          max-height: 36px;
+          max-width: 36px;
           border-radius: 50%;
           overflow: hidden;
           display: flex;
@@ -172,27 +181,37 @@ export default class TransferHistory extends Vue {
           display: flex;
           flex-direction: column;
           gap: 4px;
+          overflow: hidden;
           .item {
             display: flex;
             align-items: center;
             justify-content: space-between;
             gap: 6px;
+
             .item-title {
-              font-family: var(--font-family);
+              width: 100%;
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              font-family: 'Roboto', sans-serif;
               font-weight: 400;
               font-size: 14px;
-              line-height: 17px;
-              color: rgba(255, 255, 255, 0.4);
+              line-height: 130%;
+              color: #fff;
             }
             .coin-amound {
               display: flex;
               align-items: center;
-              gap: 4px;
-              font-family: var(--font-family);
+              white-space: nowrap;
+              font-family: 'Roboto', sans-serif;
               font-weight: 400;
-              font-size: 16px;
+              font-size: 14px;
               line-height: 130%;
-              text-align: right;
+              color: #fff;
+
+              &.y-center {
+                transform: translateY(12px);
+              }
 
               &.color-green {
                 color: #1b961f;
@@ -200,25 +219,33 @@ export default class TransferHistory extends Vue {
               &.color-white {
                 color: #fff;
               }
-              &.color-blue {
-                color: #0033ad;
+              &.color-brown {
+                color: #f64e2a;
               }
             }
             .item-description {
-              font-family: var(--font-family);
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              font-family: 'Roboto', sans-serif;
               font-weight: 400;
-              font-size: 14px;
-              color: #fff;
+              font-size: 12px;
+              line-height: 135%;
+              color: #7a74ba;
             }
-            .coin-price {
-              font-family: var(--font-family);
+            .coin-price,
+            .card-info {
+              white-space: nowrap;
+              font-family: 'Roboto', sans-serif;
               font-weight: 400;
-              font-size: 16px;
-              line-height: 130%;
+              font-size: 12px;
+              line-height: 135%;
+              text-align: right;
+              color: #fff;
               text-align: right;
 
               &.color-green {
-                color: rgba(27, 150, 31, 0.3);
+                color: #fff;
               }
               &.color-white {
                 color: rgba(255, 255, 255, 0.3);

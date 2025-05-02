@@ -1,8 +1,8 @@
 <template>
-  <div class="history-page general-history">
+  <div class="history-page swap-history">
     <div v-if="!search">
       <block-nav-bar
-        to="#"
+        to="/history"
         :text="pageTitle"
         :search="searchIcon"
         @openSearch="search = true"
@@ -115,7 +115,7 @@
                     (depositChart = true)
                 "
               >
-                deposits
+                Deposits
               </button>
               <button
                 class="expenses-btn tab-btn"
@@ -132,38 +132,18 @@
             </div>
           </div>
         </div>
-        <div
-          v-if="isDeLabSelected && deposit && !expensis"
-          class="chart-labels"
-        >
-          <ChartLabel
-            :step="stepDeposit"
-            :data="depositData"
-            title="deposits"
-            @item-selected="depositSelect"
-          />
-        </div>
-        <div
-          v-if="isExLabSelected && expensis && !deposit"
-          class="chart-labels"
-        >
-          <ChartLabel
-            :step="step"
-            :data="expensisData"
-            :title="expensisTitle"
-            @item-selected="expensisSelect"
-          />
-        </div>
         <h2 class="transaction-title">Transaction</h2>
         <transfer-history-item
           v-if="deposit && !expensis"
           :data="historyData"
-          color="color-brown"
+          color="color-green"
+          @openModal="isDeposits = true"
         />
         <transfer-history-item
           v-if="expensis && !deposit"
           :data="historyData"
-          color="color-green"
+          color="color-brown"
+          @openModal="isExpenses = true"
         />
       </div>
     </div>
@@ -180,13 +160,11 @@
         v-if="deposit && !expensis"
         :data="historyData"
         color="color-white"
-        @openModal=";(depositModal = true), $nuxt.$emit('open-modal')"
       />
       <transfer-history-item
         v-if="expensis && !deposit"
         :data="historyData"
         color="color-white"
-        @openModal=";(expensesModal = true), $nuxt.$emit('open-modal')"
       />
     </div>
     <draggable-modal
@@ -215,6 +193,208 @@
         </li>
       </ul>
     </draggable-modal>
+    <history-modal
+      class="history-successfully__modal swap-history"
+      :is-visible="isDeposits"
+      @close="isDeposits = false"
+    >
+      <div class="modal-head">
+        <button class="close-btn" @click="isDeposits = false">
+          <CloseIcon />
+        </button>
+        <div class="coin-icon">
+          <img :src="require('@/assets/svg/litecoin-ltc.svg')" alt="" />
+        </div>
+        <h3 class="modal-title">Swap Details</h3>
+        <div class="border-bottom">
+          <svg
+            width="290"
+            height="1"
+            viewBox="0 0 290 1"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path d="M0 0.5H290" stroke="#60578E" stroke-dasharray="8 8" />
+          </svg>
+        </div>
+      </div>
+      <div class="user-info">
+        <ul class="user-info__list">
+          <li class="list-item">
+            <div class="info-head">
+              <h5 class="info-top__text">Date</h5>
+              <h5 class="info-top__text">Time</h5>
+            </div>
+            <div class="info-bottom">
+              <h5 class="info-bottom__text">Feb 20, 2025</h5>
+              <h5 class="info-bottom__text">11:23 AM</h5>
+            </div>
+          </li>
+          <li class="list-item">
+            <div class="info-head">
+              <h5 class="info-top__text">Swap ID</h5>
+              <h5 class="info-top__text">Status</h5>
+            </div>
+            <div class="info-bottom">
+              <h5 class="info-bottom__text">SWAP-10932</h5>
+              <h5 class="info-bottom__text">Completed</h5>
+            </div>
+          </li>
+          <li class="list-item">
+            <div class="info-head">
+              <h5 class="info-top__text">From</h5>
+              <h5 class="info-top__text">To</h5>
+            </div>
+            <div class="info-bottom">
+              <h5 class="info-bottom__text">
+                <div class="coin-icon">
+                  <img :src="require('@/assets/svg/litecoin-ltc.svg')" alt="" />
+                </div>
+                ***3213
+              </h5>
+              <h5 class="info-bottom__text">
+                <div class="coin-icon">
+                  <img :src="require('@/assets/svg/litecoin-ltc.svg')" alt="" />
+                </div>
+                ***3213
+              </h5>
+            </div>
+          </li>
+          <li class="list-item">
+            <div class="info-head">
+              <h5 class="info-top__text">Amount Paid</h5>
+              <h5 class="info-top__text">Amount Received</h5>
+            </div>
+            <div class="info-bottom">
+              <h5 class="info-bottom__text total-bottom__text">
+                0.5 BTC <span>≈ $98.98</span>
+              </h5>
+              <h5 class="info-bottom__text total-bottom__text">
+                24.5 ETH <span>≈ $98.98</span>
+              </h5>
+            </div>
+          </li>
+          <li class="list-item">
+            <div class="info-head">
+              <h5 class="info-top__text">Exchange Rate</h5>
+            </div>
+            <div class="info-bottom">
+              <h5 class="info-bottom__text">1 BTC = 49 ETH</h5>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </history-modal>
+    <history-modal
+      class="history-successfully__modal swap-history"
+      :is-visible="isExpenses"
+      @close="isExpenses = false"
+    >
+      <div class="modal-head">
+        <button class="close-btn" @click="isExpenses = false">
+          <CloseIcon />
+        </button>
+        <div class="coin-icon">
+          <img :src="require('@/assets/svg/litecoin-ltc.svg')" alt="" />
+        </div>
+        <h3 class="modal-title">Swap Details</h3>
+        <div class="border-bottom">
+          <svg
+            width="290"
+            height="1"
+            viewBox="0 0 290 1"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path d="M0 0.5H290" stroke="#60578E" stroke-dasharray="8 8" />
+          </svg>
+        </div>
+      </div>
+      <div class="user-info">
+        <ul class="user-info__list">
+          <li class="list-item">
+            <div class="info-head">
+              <h5 class="info-top__text">Date</h5>
+              <h5 class="info-top__text">Time</h5>
+            </div>
+            <div class="info-bottom">
+              <h5 class="info-bottom__text">Feb 20, 2025</h5>
+              <h5 class="info-bottom__text">11:23 AM</h5>
+            </div>
+          </li>
+          <li class="list-item">
+            <div class="info-head">
+              <h5 class="info-top__text">Swap ID</h5>
+              <h5 class="info-top__text">Status</h5>
+            </div>
+            <div class="info-bottom">
+              <h5 class="info-bottom__text">SWAP-10932</h5>
+              <h5 class="info-bottom__text">Completed</h5>
+            </div>
+          </li>
+          <li class="list-item">
+            <div class="info-head">
+              <h5 class="info-top__text">From</h5>
+              <h5 class="info-top__text">To</h5>
+            </div>
+            <div class="info-bottom">
+              <h5 class="info-bottom__text">
+                <div class="coin-icon">
+                  <img :src="require('@/assets/svg/litecoin-ltc.svg')" alt="" />
+                </div>
+                ***3213
+              </h5>
+              <h5 class="info-bottom__text">
+                <div class="coin-icon">
+                  <img :src="require('@/assets/svg/litecoin-ltc.svg')" alt="" />
+                </div>
+                ***3213
+              </h5>
+            </div>
+          </li>
+          <li class="list-item">
+            <div class="info-head">
+              <h5 class="info-top__text">To</h5>
+            </div>
+            <div class="info-bottom">
+              <h5 class="info-bottom__text">odsj2J9023jklLKD909210321312Das</h5>
+            </div>
+          </li>
+          <li class="list-item">
+            <div class="info-head">
+              <h5 class="info-top__text">Amount Paid</h5>
+              <h5 class="info-top__text">Amount Received</h5>
+            </div>
+            <div class="info-bottom">
+              <h5 class="info-bottom__text total-bottom__text">
+                0.5 BTC <span>≈ $98.98</span>
+              </h5>
+              <h5 class="info-bottom__text total-bottom__text">
+                24.5 ETH <span>≈ $98.98</span>
+              </h5>
+            </div>
+          </li>
+          <li class="list-item">
+            <div class="info-head">
+              <h5 class="info-top__text">Reason</h5>
+            </div>
+            <div class="info-bottom">
+              <h5 class="info-bottom__text">SWAP Order Paid</h5>
+            </div>
+          </li>
+          <li class="list-item">
+            <div class="info-head">
+              <h5 class="info-top__text">Including Fees</h5>
+            </div>
+            <div class="info-bottom">
+              <h5 class="info-bottom__text total-bottom__text">
+                0.0005 BTC <span>≈ $5 USD</span>
+              </h5>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </history-modal>
   </div>
 </template>
 
@@ -227,11 +407,13 @@ import ExpensisDoughnutChart from '~/components/charts/ExpensisDoughnutChart.vue
 
 // @ts-ignore
 import ArrowIcon from '@/assets/svg/arrow-back.svg?inline'
+// @ts-ignore
+import CoinIcon from '@/assets/svg/litecoin-ltc.svg?inline'
+// @ts-ignore
+import CopyIcon from '@/assets/svg/copy.svg?inline'
+// @ts-ignore
+import CloseIcon from '@/assets/svg/close.svg?inline'
 
-// interface Payload {
-//   type: string
-//   step: number
-// }
 interface Item {
   id: number
   img: string
@@ -251,9 +433,12 @@ interface Text {
     DepositDoughnutChart,
     ChartLabel,
     ArrowIcon,
+    CoinIcon,
+    CopyIcon,
+    CloseIcon,
   },
 })
-export default class HistoryPage extends Vue {
+export default class SwapHistoryPage extends Vue {
   searchIcon = true
   search = false
   allCheck = false
@@ -262,10 +447,10 @@ export default class HistoryPage extends Vue {
   activeExpensesType: string | null = null
   activeDepositType: string | null = null
   pageTitle = 'History'
-  expensisTitle = 'ALL'
-  depositTitle = 'ALL'
-  expensis = true
-  deposit = false
+  expensisTitle = 'SWAPS'
+  depositTitle = 'SWAPS'
+  expensis = false
+  deposit = true
   isOpen = false
   filterModal = false
   depositModal = false
@@ -274,6 +459,8 @@ export default class HistoryPage extends Vue {
   isDeLabSelected = true
   expensisChart = true
   depositChart = false
+  isDeposits = false
+  isExpenses = false
   selectedMonth = 1
 
   selectedItems: string[] = []
@@ -292,166 +479,6 @@ export default class HistoryPage extends Vue {
       },
     ],
   }
-
-  expensisData = [
-    {
-      id: 1,
-      to: '/history/escrow',
-      name: 'Escrow',
-      price: '$1,923.15',
-      color: 'color-escrow',
-    },
-    {
-      id: 2,
-      to: '/history/p2p',
-      name: 'P2P',
-      price: '$1,923.15',
-      color: 'color-p2p',
-    },
-    {
-      id: 3,
-      to: '/history/swap',
-      name: 'SWAP',
-      price: '$1,923.15',
-      color: 'color-swap',
-    },
-    {
-      id: 4,
-      to: '/history/transfers',
-      name: 'Transfers',
-      price: '$1,923.15',
-      color: 'color-transfers',
-    },
-    {
-      id: 5,
-      to: '/history/prepaid',
-      name: 'Prepaid Cards',
-      price: '$1,923.15',
-      color: 'color-prepaid',
-    },
-    {
-      id: 6,
-      to: '/history/bills',
-      name: 'Bills',
-      price: '$1,923.15',
-      color: 'color-bills',
-    },
-    {
-      id: 7,
-      to: '/history/fees',
-      name: 'Fees',
-      price: '$1,923.15',
-      color: 'color-fees',
-    },
-    {
-      id: 8,
-      to: '/history/mixing',
-      name: 'Mixing',
-      price: '$1,923.15',
-      color: 'color-mixing',
-    },
-    {
-      id: 9,
-      to: '/history/shops',
-      name: 'Shops',
-      price: '$1,923.15',
-      color: 'color-shops',
-    },
-    {
-      id: 10,
-      to: '/history/oracle-pay',
-      name: 'OraclePay',
-      price: '$1,923.15',
-      color: 'color-oracle-pay',
-    },
-    {
-      id: 11,
-      to: '/history/checks',
-      name: 'Checks',
-      price: '$1,923.15',
-      color: 'color-checks',
-    },
-  ]
-
-  depositData = [
-    {
-      id: 1,
-      to: '/history/escrow',
-      name: 'Escrow',
-      price: '$1,923.15',
-      color: 'color-escrow',
-    },
-    {
-      id: 2,
-      to: '/history/p2p',
-      name: 'P2P',
-      price: '$1,923.15',
-      color: 'color-p2p',
-    },
-    {
-      id: 3,
-      to: '/history/swap',
-      name: 'SWAP',
-      price: '$1,923.15',
-      color: 'color-swap',
-    },
-    {
-      id: 4,
-      to: '/history/transfers',
-      name: 'Transfers',
-      price: '$1,923.15',
-      color: 'color-transfers',
-    },
-    {
-      id: 5,
-      to: '/history/prepaid-cards',
-      name: 'Prepaid Cards',
-      price: '$1,923.15',
-      color: 'color-prepaid',
-    },
-    {
-      id: 6,
-      to: '/history/bills',
-      name: 'Bills',
-      price: '$1,923.15',
-      color: 'color-bills',
-    },
-    {
-      id: 7,
-      to: '/history/fees',
-      name: 'Fees',
-      price: '$1,923.15',
-      color: 'color-fees',
-    },
-    {
-      id: 8,
-      to: '/history/mixing',
-      name: 'Mixing',
-      price: '$1,923.15',
-      color: 'color-mixing',
-    },
-    {
-      id: 9,
-      to: '/history/shops',
-      name: 'Shops',
-      price: '$1,923.15',
-      color: 'color-shops',
-    },
-    {
-      id: 10,
-      to: '/history/oraclepay',
-      name: 'OraclePay',
-      price: '$1,923.15',
-      color: 'color-oracle-pay',
-    },
-    {
-      id: 11,
-      to: '/history/checks',
-      name: 'Checks',
-      price: '$1,923.15',
-      color: 'color-checks',
-    },
-  ]
 
   expensesText: Text = {
     title: 'Total',
@@ -514,91 +541,17 @@ export default class HistoryPage extends Vue {
         {
           _id: 1,
           img: require('@/assets/svg/btc.svg'),
-          title: 'O-Pay Dep.',
+          description: 'Payout Received for Deal: ESC-10932',
           amount: '0,0244 TON',
-          description: 'Telegram Shop API Keys',
+          title: 'Counterparty: @MerchantName',
           price: '100.234$',
         },
         {
           _id: 2,
           img: require('@/assets/svg/ton.svg'),
-          title: 'O-Pay Dep.',
+          description: 'Refund for Deal: ESC-10932',
           amount: '0,0244 TON',
-          description: 'Telegram Shop API Keys',
-          price: '100.234$',
-        },
-      ],
-    },
-    {
-      id: 2,
-      date: 'March 20, 2025',
-      expenses: [
-        {
-          _id: 1,
-          img: require('@/assets/svg/litecoin-ltc.svg'),
-          title: 'O-Pay Dep.',
-          amount: '0,0244 TON',
-          description: 'Telegram Shop API Keys',
-          price: '154.111$',
-        },
-        {
-          _id: 2,
-          img: require('@/assets/svg/eth.svg'),
-          title: 'O-Pay Dep.',
-          amount: '0,0244 TON',
-          description: 'Telegram Shop API Keys',
-          price: '84.455$',
-        },
-        {
-          _id: 3,
-          img: require('@/assets/svg/litecoin-ltc.svg'),
-          title: 'O-Pay Dep.',
-          amount: '0,0244 TON',
-          description: 'Telegram Shop API Keys',
-          price: '84.455$',
-        },
-      ],
-    },
-    {
-      id: 3,
-      date: 'March 20, 2025',
-      expenses: [
-        {
-          _id: 1,
-          img: require('@/assets/svg/litecoin-ltc.svg'),
-          title: 'O-Pay Dep.',
-          amount: '0,0244 TON',
-          description: 'Telegram Shop API Keys',
-          price: '154.111$',
-        },
-        {
-          _id: 2,
-          img: require('@/assets/svg/eth.svg'),
-          title: 'O-Pay Dep.',
-          amount: '0,0244 TON',
-          description: 'Telegram Shop API Keys',
-          price: '84.455$',
-        },
-      ],
-    },
-    {
-      id: 4,
-      date: 'March 20, 2025',
-      expenses: [
-        {
-          _id: 1,
-          img: require('@/assets/svg/btc.svg'),
-          title: 'O-Pay Dep.',
-          amount: '0,0244 TON',
-          description: 'Telegram Shop API Keys',
-          price: '100.234$',
-        },
-        {
-          _id: 2,
-          img: require('@/assets/svg/ton.svg'),
-          title: 'O-Pay Dep.',
-          amount: '0,0244 TON',
-          description: 'Telegram Shop API Keys',
+          title: 'Counterparty: @MerchantName',
           price: '100.234$',
         },
       ],
@@ -609,118 +562,12 @@ export default class HistoryPage extends Vue {
     this.selectedMonth = i
   }
 
-  expensisSelect(name: string) {
-    this.expensisTitle = name
+  expensisSelect() {
     this.isExLabSelected = false
-    // this.activeExpensesType = payload.type
-    // this.expensisTitle = 'Escrow'
-    // this.pageTitle = 'escrow History'
-    // this.step = this.step !== 2 ? this.step + 1 : (this.step = 2)
-
-    // if (this.step === 1) {
-    //   this.expensisData = [
-    //     {
-    //       id: 1,
-    //       type: 'escrow',
-    //       name: '@TopHitta228 (ID: 90192102)',
-    //       price: '$593.15',
-    //       color: 'color-escrow',
-    //     },
-    //     {
-    //       id: 2,
-    //       type: 'p2p',
-    //       name: '@UserUser (ID: 810192102)',
-    //       price: '$1,923.15',
-    //       color: 'color-p2p',
-    //     },
-    //     {
-    //       id: 3,
-    //       type: 'swap',
-    //       name: '@TopUser (ID: 10192102)',
-    //       price: '$1,923.15',
-    //       color: 'color-swap',
-    //     },
-    //     {
-    //       id: 4,
-    //       type: 'transfers',
-    //       name: '@TopUser123 (ID: 70192102) ',
-    //       price: '$1,923.15',
-    //       color: 'color-transfers',
-    //     },
-    //   ]
-    //   this.expensesText = {
-    //     title: 'Escrow',
-    //     price: '1,923$',
-    //     date: '01.01.25 - 01.02.25',
-    //   }
-    // } else {
-    //   this.expensisData = this.expensisData.filter(
-    //     (item) => item.type === payload.type
-    //   )
-    //   this.expensesText = {
-    //     title: 'Escrow',
-    //     price: '593$',
-    //     percent: '22%',
-    //     date: '01.01.25 - 01.02.25',
-    //   }
-    // }
   }
 
-  depositSelect(name: string) {
-    this.depositTitle = name
+  depositSelect() {
     this.isDeLabSelected = false
-    // this.activeDepositType = payload.type
-    // this.depositTitle = 'Escrow'
-    // this.pageTitle = 'escrow History'
-    // this.stepDeposit =
-    //   this.stepDeposit !== 2 ? this.stepDeposit + 1 : (this.stepDeposit = 2)
-    // if (this.stepDeposit === 1) {
-    //   this.depositData = [
-    //     {
-    //       id: 1,
-    //       type: 'escrow',
-    //       name: '@TopHitta228 (ID: 90192102)',
-    //       price: '$593.15',
-    //       color: 'color-escrow',
-    //     },
-    //     {
-    //       id: 2,
-    //       type: 'p2p',
-    //       name: '@UserUser (ID: 810192102)',
-    //       price: '$1,923.15',
-    //       color: 'color-p2p',
-    //     },
-    //     {
-    //       id: 3,
-    //       type: 'swap',
-    //       name: '@TopUser (ID: 10192102)',
-    //       price: '$1,923.15',
-    //       color: 'color-swap',
-    //     },
-    //     {
-    //       id: 4,
-    //       type: 'transfers',
-    //       name: '@TopUser123 (ID: 70192102) ',
-    //       price: '$1,923.15',
-    //       color: 'color-transfers',
-    //     },
-    //   ]
-    //   this.depositText = {
-    //     title: 'Escrow',
-    //     price: '1,923$',
-    //     date: '01.01.25 - 01.02.25',
-    //   }
-    // } else {
-    //   this.depositData = this.depositData.filter(
-    //     (item) => item.type === payload.type
-    //   )
-    //   this.depositText = {
-    //     title: 'Escrow',
-    //     price: '1.256$',
-    //     percent: '41%',
-    //     date: '01.01.25 - 01.02.25',
-    //   }
-    // }
   }
 
   openCalendar(event: MouseEvent) {
