@@ -160,11 +160,7 @@
     </div>
     <div v-else class="history-search">
       <div class="search-head">
-        <input-oracle
-          :search="true"
-          placeholder="Search..."
-          @openCalendar="openCalendar"
-        />
+        <input-oracle :search="true" placeholder="Search..." />
         <button class="close-search" @click="search = false">отменить</button>
       </div>
       <transfer-history-item
@@ -668,34 +664,6 @@ export default class ChecksHistoryPage extends Vue {
   depositSelect(name: string) {
     this.depositTitle = name
     this.isDeLabSelected = false
-  }
-
-  openCalendar(event: MouseEvent) {
-    ;(this.$refs.calendar as CalendarOracle).openCalendar()
-    this.isOpen = true
-    const target = (event.target as HTMLElement).closest(
-      '.input-calendar-action'
-    ) as HTMLElement | null
-
-    if (!target) return
-
-    const rect = target.getBoundingClientRect()
-    const calendarElement = document.querySelector(
-      '.flatpickr-calendar'
-    ) as HTMLElement
-    const inputElement = document.querySelector('.input') as HTMLElement
-    const input = inputElement.getBoundingClientRect()
-
-    if (calendarElement) {
-      calendarElement.style.position = 'fixed'
-      calendarElement.style.width = `${input.width}px`
-      calendarElement.style.top = `${rect.top + 40}px`
-      calendarElement.style.left = `auto`
-      calendarElement.style.right = `${rect.right - input.width + 12}px`
-      calendarElement.style.visibility = 'visible'
-      calendarElement.style.opacity = '1'
-      setTimeout(() => {}, 100)
-    }
   }
 
   @Watch('data', { deep: true })

@@ -169,11 +169,7 @@
     </div>
     <div v-else class="history-search">
       <div class="search-head">
-        <input-oracle
-          :search="true"
-          placeholder="Search..."
-          @openCalendar="openCalendar"
-        />
+        <input-oracle :search="true" placeholder="Search..." />
         <button class="close-search" @click="search = false">отменить</button>
       </div>
       <transfer-history-item
@@ -404,7 +400,7 @@ export default class HistoryPage extends Vue {
     },
     {
       id: 5,
-      to: '/history/prepaid-cards',
+      to: '/history/prepaid',
       name: 'Prepaid Cards',
       price: '$1,923.15',
       color: 'color-prepaid',
@@ -669,86 +665,6 @@ export default class HistoryPage extends Vue {
   depositSelect(name: string) {
     this.depositTitle = name
     this.isDeLabSelected = false
-    // this.activeDepositType = payload.type
-    // this.depositTitle = 'Escrow'
-    // this.pageTitle = 'escrow History'
-    // this.stepDeposit =
-    //   this.stepDeposit !== 2 ? this.stepDeposit + 1 : (this.stepDeposit = 2)
-    // if (this.stepDeposit === 1) {
-    //   this.depositData = [
-    //     {
-    //       id: 1,
-    //       type: 'escrow',
-    //       name: '@TopHitta228 (ID: 90192102)',
-    //       price: '$593.15',
-    //       color: 'color-escrow',
-    //     },
-    //     {
-    //       id: 2,
-    //       type: 'p2p',
-    //       name: '@UserUser (ID: 810192102)',
-    //       price: '$1,923.15',
-    //       color: 'color-p2p',
-    //     },
-    //     {
-    //       id: 3,
-    //       type: 'swap',
-    //       name: '@TopUser (ID: 10192102)',
-    //       price: '$1,923.15',
-    //       color: 'color-swap',
-    //     },
-    //     {
-    //       id: 4,
-    //       type: 'transfers',
-    //       name: '@TopUser123 (ID: 70192102) ',
-    //       price: '$1,923.15',
-    //       color: 'color-transfers',
-    //     },
-    //   ]
-    //   this.depositText = {
-    //     title: 'Escrow',
-    //     price: '1,923$',
-    //     date: '01.01.25 - 01.02.25',
-    //   }
-    // } else {
-    //   this.depositData = this.depositData.filter(
-    //     (item) => item.type === payload.type
-    //   )
-    //   this.depositText = {
-    //     title: 'Escrow',
-    //     price: '1.256$',
-    //     percent: '41%',
-    //     date: '01.01.25 - 01.02.25',
-    //   }
-    // }
-  }
-
-  openCalendar(event: MouseEvent) {
-    ;(this.$refs.calendar as CalendarOracle).openCalendar()
-    this.isOpen = true
-    const target = (event.target as HTMLElement).closest(
-      '.input-calendar-action'
-    ) as HTMLElement | null
-
-    if (!target) return
-
-    const rect = target.getBoundingClientRect()
-    const calendarElement = document.querySelector(
-      '.flatpickr-calendar'
-    ) as HTMLElement
-    const inputElement = document.querySelector('.input') as HTMLElement
-    const input = inputElement.getBoundingClientRect()
-
-    if (calendarElement) {
-      calendarElement.style.position = 'fixed'
-      calendarElement.style.width = `${input.width}px`
-      calendarElement.style.top = `${rect.top + 40}px`
-      calendarElement.style.left = `auto`
-      calendarElement.style.right = `${rect.right - input.width + 12}px`
-      calendarElement.style.visibility = 'visible'
-      calendarElement.style.opacity = '1'
-      setTimeout(() => {}, 100)
-    }
   }
 
   @Watch('data', { deep: true })
