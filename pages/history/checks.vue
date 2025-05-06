@@ -24,12 +24,19 @@
             </span>
           </button>
           <h2 class="history-title">{{ expensisTitle }}</h2>
-          <ExpensisDoughnutChart
-            :data="expensesText"
-            :active-expensis-type="activeExpensesType"
-            :step="step"
-            :chart-data="chartData"
-          />
+          <div class="swiper historySwiper">
+            <div class="swiper-wrapper">
+              <div v-for="item in 5" :key="item" class="swiper-slide">
+                <ExpensisDoughnutChart
+                  :data="expensesText"
+                  :active-expensis-type="activeExpensesType"
+                  :step="step"
+                  :chart-data="chartData"
+                />
+              </div>
+            </div>
+            <div class="swiper-pagination" style="display: none"></div>
+          </div>
           <div class="history-chart__filter">
             <div class="chart-pagination">
               <div
@@ -71,12 +78,19 @@
             </span>
           </button>
           <h2 class="history-title">{{ depositTitle }}</h2>
-          <DepositDoughnutChart
-            :data="depositText"
-            :active-deposit-type="activeDepositType"
-            :step-deposit="stepDeposit"
-            :chart-data="chartData"
-          />
+          <div class="swiper historySwiper">
+            <div class="swiper-wrapper">
+              <div v-for="item in 5" :key="item" class="swiper-slide">
+                <DepositDoughnutChart
+                  :data="depositText"
+                  :active-deposit-type="activeDepositType"
+                  :step-deposit="stepDeposit"
+                  :chart-data="chartData"
+                />
+              </div>
+            </div>
+            <div class="swiper-pagination" style="display: none"></div>
+          </div>
           <div class="history-chart__filter">
             <div class="chart-pagination">
               <div
@@ -112,7 +126,8 @@
                   ;(expensis = false),
                     (deposit = true),
                     (expensisChart = false),
-                    (depositChart = true)
+                    (depositChart = true),
+                    (selectedMonth = 1)
                 "
               >
                 Issued Checks
@@ -125,6 +140,7 @@
                   deposit = false
                   expensisChart = true
                   depositChart = false
+                  selectedMonth = 1
                 "
               >
                 Cashed Checks
@@ -339,107 +355,6 @@
         </ul>
       </div>
     </history-modal>
-    <!-- <draggable-modal
-      class="deposits-modal"
-      :is-open="depositModal"
-      @close="depositModal = false"
-    >
-      <div class="modal-header">
-        <p class="modal-header__date">
-          12 Dec
-          <span></span>
-          9:14 PM EST
-        </p>
-      </div>
-      <div class="modal-logo">
-        <img :src="require('@/assets/svg/litecoin-ltc.svg')" alt="" />
-      </div>
-      <h2 class="user-info">@UserUser (ID:810192102)</h2>
-      <div class="transfer-info">
-        <h2 class="deposit-coin">+ 0,0244 BTC</h2>
-        <h3 class="deposit-price">≈ 100.234$</h3>
-        <span class="transfer-funds"> Transfer of funds </span>
-      </div>
-      <button class="return-btn border-gradient">
-        <div class="left-blur"></div>
-        <div class="btn-icon">
-          <img :src="require('@/assets/svg/return.svg')" alt="" />
-        </div>
-        Return
-      </button>
-      <div class="deposit-account">
-        <h2 class="deposit-account__title">DEPOSIT TO THE ACCOUNT</h2>
-        <div class="deposit-block">
-          <div class="coin-img">
-            <img :src="require('@/assets/svg/tether-usdt.svg')" alt="" />
-          </div>
-          <div class="coin-info">
-            <div class="coin-info-head">
-              <h3 class="coin-name">0,015424 BTC</h3>
-              <p class="coin-price">(≈ $1.456)</p>
-            </div>
-            <div class="coin-account-info">BTC Account: ***2235</div>
-          </div>
-        </div>
-      </div>
-      <div class="requisites">
-        <h2 class="requisites-title">requisites</h2>
-        <div class="sender">
-          <p class="label">Sender</p>
-          <h3 class="user-info">@UserUser (ID:810192102)</h3>
-        </div>
-      </div>
-    </draggable-modal>
-    <draggable-modal
-      class="expenses-modal"
-      :is-open="expensesModal"
-      @close="expensesModal = false"
-    >
-      <div class="modal-header">
-        <p class="modal-header__date">
-          12 Dec
-          <span></span>
-          9:14 PM EST
-        </p>
-      </div>
-      <div class="modal-logo">
-        <img :src="require('@/assets/svg/litecoin-ltc.svg')" alt="" />
-      </div>
-      <h2 class="user-info">@UserUser (ID:810192102)</h2>
-      <div class="transfer-info">
-        <h2 class="deposit-coin color-white">+ 0,0244 BTC</h2>
-        <h3 class="deposit-price color-white">≈ 100.234$</h3>
-      </div>
-      <button class="return-btn border-gradient">
-        <div class="left-blur"></div>
-        <div class="btn-icon">
-          <img :src="require('@/assets/svg/repeat.svg')" alt="" />
-        </div>
-        Repeat
-      </button>
-      <div class="deposit-account">
-        <h2 class="deposit-account__title">Transfer from an account</h2>
-        <div class="deposit-block">
-          <div class="coin-img">
-            <img :src="require('@/assets/svg/tether-usdt.svg')" alt="" />
-          </div>
-          <div class="coin-info">
-            <div class="coin-info-head">
-              <h3 class="coin-name">0,015424 BTC</h3>
-              <p class="coin-price">(≈ $1.456)</p>
-            </div>
-            <div class="coin-account-info">BTC Account: ***2235</div>
-          </div>
-        </div>
-      </div>
-      <div class="requisites">
-        <h2 class="requisites-title">requisites</h2>
-        <div class="sender">
-          <p class="label">Sender</p>
-          <h3 class="user-info">@UserUser (ID:810192102)</h3>
-        </div>
-      </div>
-    </draggable-modal> -->
   </div>
 </template>
 
@@ -456,6 +371,9 @@ import ArrowIcon from '@/assets/svg/arrow-back.svg?inline'
 import CoinIcon from '@/assets/svg/litecoin-ltc.svg?inline'
 // @ts-ignore
 import CloseIcon from '@/assets/svg/close.svg?inline'
+
+const Swiper = process.client ? require('swiper').default : null
+require('swiper/swiper-bundle.css')
 
 // interface Payload {
 //   type: string
@@ -485,6 +403,7 @@ interface Text {
   },
 })
 export default class ChecksHistoryPage extends Vue {
+  private swiper!: any
   searchIcon = true
   search = false
   allCheck = false
@@ -623,6 +542,27 @@ export default class ChecksHistoryPage extends Vue {
     },
   ]
 
+  mounted() {
+    if (process.client && Swiper) {
+      this.swiper = new Swiper('.historySwiper', {
+        loop: false,
+        slidesPerView: 1,
+        spaceBetween: 20,
+        pagination: {
+          el: '.swiper-pagination',
+          clickable: true,
+        },
+        on: {
+          slideChange: () => {
+            if (this.swiper) {
+              this.selectedMonth = this.swiper.activeIndex + 1
+            }
+          },
+        },
+      })
+    }
+  }
+
   created() {
     this.localData = [...this.data]
   }
@@ -654,6 +594,9 @@ export default class ChecksHistoryPage extends Vue {
 
   monthSelected(i: any) {
     this.selectedMonth = i
+    if (this.swiper) {
+      this.swiper.slideTo(i - 1)
+    }
   }
 
   expensisSelect(name: string) {

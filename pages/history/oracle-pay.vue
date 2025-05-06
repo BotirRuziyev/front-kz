@@ -24,12 +24,19 @@
             </span>
           </button>
           <h2 class="history-title">{{ expensisTitle }}</h2>
-          <ExpensisDoughnutChart
-            :data="expensesText"
-            :active-expensis-type="activeExpensesType"
-            :step="step"
-            :chart-data="chartData"
-          />
+          <div class="swiper historySwiper">
+            <div class="swiper-wrapper">
+              <div v-for="item in 5" :key="item" class="swiper-slide">
+                <ExpensisDoughnutChart
+                  :data="expensesText"
+                  :active-expensis-type="activeExpensesType"
+                  :step="step"
+                  :chart-data="chartData"
+                />
+              </div>
+            </div>
+            <div class="swiper-pagination" style="display: none"></div>
+          </div>
           <div class="history-chart__filter">
             <div class="chart-pagination">
               <div
@@ -71,12 +78,19 @@
             </span>
           </button>
           <h2 class="history-title">{{ depositTitle }}</h2>
-          <DepositDoughnutChart
-            :data="depositText"
-            :active-deposit-type="activeDepositType"
-            :step-deposit="stepDeposit"
-            :chart-data="chartData"
-          />
+          <div class="swiper historySwiper">
+            <div class="swiper-wrapper">
+              <div v-for="item in 5" :key="item" class="swiper-slide">
+                <DepositDoughnutChart
+                  :data="depositText"
+                  :active-deposit-type="activeDepositType"
+                  :step-deposit="stepDeposit"
+                  :chart-data="chartData"
+                />
+              </div>
+            </div>
+            <div class="swiper-pagination" style="display: none"></div>
+          </div>
           <div class="history-chart__filter">
             <div class="chart-pagination">
               <div
@@ -112,7 +126,8 @@
                   ;(expensis = false),
                     (deposit = true),
                     (expensisChart = false),
-                    (depositChart = true)
+                    (depositChart = true),
+                    (selectedMonth = 1)
                 "
               >
                 Deposits
@@ -125,6 +140,7 @@
                   deposit = false
                   expensisChart = true
                   depositChart = false
+                  selectedMonth = 1
                 "
               >
                 Expenses
@@ -391,6 +407,9 @@ import CoinIcon from '@/assets/svg/litecoin-ltc.svg?inline'
 // @ts-ignore
 import CloseIcon from '@/assets/svg/close.svg?inline'
 
+const Swiper = process.client ? require('swiper').default : null
+require('swiper/swiper-bundle.css')
+
 // interface Payload {
 //   type: string
 //   step: number
@@ -419,6 +438,7 @@ interface Text {
   },
 })
 export default class OraclePayHistoryPage extends Vue {
+  private swiper!: any
   searchIcon = true
   search = false
   allCheck = false
@@ -533,6 +553,27 @@ export default class OraclePayHistoryPage extends Vue {
     },
   ]
 
+  mounted() {
+    if (process.client && Swiper) {
+      this.swiper = new Swiper('.historySwiper', {
+        loop: false,
+        slidesPerView: 1,
+        spaceBetween: 20,
+        pagination: {
+          el: '.swiper-pagination',
+          clickable: true,
+        },
+        on: {
+          slideChange: () => {
+            if (this.swiper) {
+              this.selectedMonth = this.swiper.activeIndex + 1
+            }
+          },
+        },
+      })
+    }
+  }
+
   created() {
     this.localData = [...this.data]
   }
@@ -564,6 +605,9 @@ export default class OraclePayHistoryPage extends Vue {
 
   monthSelected(i: any) {
     this.selectedMonth = i
+    if (this.swiper) {
+      this.swiper.slideTo(i - 1)
+    }
   }
 
   expensisSelect(name: string) {

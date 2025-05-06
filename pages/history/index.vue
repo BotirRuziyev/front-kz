@@ -24,12 +24,19 @@
             </span>
           </button>
           <h2 class="history-title">{{ expensisTitle }}</h2>
-          <ExpensisDoughnutChart
-            :data="expensesText"
-            :active-expensis-type="activeExpensesType"
-            :step="step"
-            :chart-data="chartData"
-          />
+          <div class="swiper historySwiper">
+            <div class="swiper-wrapper">
+              <div v-for="item in 5" :key="item" class="swiper-slide">
+                <ExpensisDoughnutChart
+                  :data="expensesText"
+                  :active-expensis-type="activeExpensesType"
+                  :step="step"
+                  :chart-data="chartData"
+                />
+              </div>
+            </div>
+            <div class="swiper-pagination" style="display: none"></div>
+          </div>
           <div class="history-chart__filter">
             <div class="chart-pagination">
               <div
@@ -71,12 +78,19 @@
             </span>
           </button>
           <h2 class="history-title">{{ depositTitle }}</h2>
-          <DepositDoughnutChart
-            :data="depositText"
-            :active-deposit-type="activeDepositType"
-            :step-deposit="stepDeposit"
-            :chart-data="chartData"
-          />
+          <div class="swiper historySwiper">
+            <div class="swiper-wrapper">
+              <div v-for="item in 5" :key="item" class="swiper-slide">
+                <DepositDoughnutChart
+                  :data="depositText"
+                  :active-deposit-type="activeDepositType"
+                  :step-deposit="stepDeposit"
+                  :chart-data="chartData"
+                />
+              </div>
+            </div>
+            <div class="swiper-pagination" style="display: none"></div>
+          </div>
           <div class="history-chart__filter">
             <div class="chart-pagination">
               <div
@@ -109,10 +123,11 @@
                 class="deposits-btn tab-btn"
                 :class="{ active: deposit }"
                 @click="
-                  ;(expensis = false),
-                    (deposit = true),
-                    (expensisChart = false),
-                    (depositChart = true)
+                  expensis = false
+                  deposit = true
+                  expensisChart = false
+                  depositChart = true
+                  selectedMonth = 1
                 "
               >
                 deposits
@@ -125,6 +140,7 @@
                   deposit = false
                   expensisChart = true
                   depositChart = false
+                  selectedMonth = 1
                 "
               >
                 Expenses
@@ -224,6 +240,9 @@ import ExpensisDoughnutChart from '~/components/charts/ExpensisDoughnutChart.vue
 // @ts-ignore
 import ArrowIcon from '@/assets/svg/arrow-back.svg?inline'
 
+const Swiper = process.client ? require('swiper').default : null
+require('swiper/swiper-bundle.css')
+
 // interface Payload {
 //   type: string
 //   step: number
@@ -250,6 +269,7 @@ interface Text {
   },
 })
 export default class HistoryPage extends Vue {
+  private swiper!: any
   searchIcon = true
   search = false
   allCheck = false
@@ -498,6 +518,27 @@ export default class HistoryPage extends Vue {
     },
   ]
 
+  mounted() {
+    if (process.client && Swiper) {
+      this.swiper = new Swiper('.historySwiper', {
+        loop: false,
+        slidesPerView: 1,
+        spaceBetween: 20,
+        pagination: {
+          el: '.swiper-pagination',
+          clickable: true,
+        },
+        on: {
+          slideChange: () => {
+            if (this.swiper) {
+              this.selectedMonth = this.swiper.activeIndex + 1
+            }
+          },
+        },
+      })
+    }
+  }
+
   created() {
     this.localData = [...this.data]
   }
@@ -603,63 +644,14 @@ export default class HistoryPage extends Vue {
 
   monthSelected(i: any) {
     this.selectedMonth = i
+    if (this.swiper) {
+      this.swiper.slideTo(i - 1)
+    }
   }
 
   expensisSelect(name: string) {
     this.expensisTitle = name
     this.isExLabSelected = false
-    // this.activeExpensesType = payload.type
-    // this.expensisTitle = 'Escrow'
-    // this.pageTitle = 'escrow History'
-    // this.step = this.step !== 2 ? this.step + 1 : (this.step = 2)
-
-    // if (this.step === 1) {
-    //   this.expensisData = [
-    //     {
-    //       id: 1,
-    //       type: 'escrow',
-    //       name: '@TopHitta228 (ID: 90192102)',
-    //       price: '$593.15',
-    //       color: 'color-escrow',
-    //     },
-    //     {
-    //       id: 2,
-    //       type: 'p2p',
-    //       name: '@UserUser (ID: 810192102)',
-    //       price: '$1,923.15',
-    //       color: 'color-p2p',
-    //     },
-    //     {
-    //       id: 3,
-    //       type: 'swap',
-    //       name: '@TopUser (ID: 10192102)',
-    //       price: '$1,923.15',
-    //       color: 'color-swap',
-    //     },
-    //     {
-    //       id: 4,
-    //       type: 'transfers',
-    //       name: '@TopUser123 (ID: 70192102) ',
-    //       price: '$1,923.15',
-    //       color: 'color-transfers',
-    //     },
-    //   ]
-    //   this.expensesText = {
-    //     title: 'Escrow',
-    //     price: '1,923$',
-    //     date: '01.01.25 - 01.02.25',
-    //   }
-    // } else {
-    //   this.expensisData = this.expensisData.filter(
-    //     (item) => item.type === payload.type
-    //   )
-    //   this.expensesText = {
-    //     title: 'Escrow',
-    //     price: '593$',
-    //     percent: '22%',
-    //     date: '01.01.25 - 01.02.25',
-    //   }
-    // }
   }
 
   depositSelect(name: string) {
