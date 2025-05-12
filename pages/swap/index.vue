@@ -1,458 +1,737 @@
 <template>
   <div class="swap-page">
-    <div v-if="swap">
-      <div class="swap-page-in">
-        <block-nav-bar text="Swap" />
-        <block-home-cards />
-        <div class="swiper swiper-container swiper-first">
-          <div class="swiper-wrapper">
-            <div v-for="item in 3" :key="item" class="swiper-slide">
-              <select-oracle
-                class="form-select-first"
-                amount="15"
-                name="USDT"
-                price="(≈ $15)"
+    <block-nav-bar to="#" text="Swap" :time="true" />
+    <div class="swap-page__content">
+      <div class="swap-page__converter">
+        <div class="coin-converter coin-converter__input">
+          <coin-select name="USDT" price="2500 USDT" amount="2500" />
+          <div class="input-coin">
+            <div class="form-control">
+              <input
+                v-model="inputCoin"
+                type="text"
+                inputmode="decimal"
+                pattern="[0-9]*[.,]?[0-9]*"
+                placeholder="0.00"
+                class="form-input"
+                @input="coinEvent"
+                @keypress="allowDecimalNumbers"
+                @paste="blockInvalidDecimalPaste"
               />
             </div>
+            <h4 class="coin-name">USDT</h4>
+            <button class="max-btn" @click="maxInputSelect">MAX</button>
           </div>
-          <div class="swiper-pagination"></div>
-        </div>
-        <div class="swiper swiper-container">
-          <div class="swiper-wrapper">
-            <div v-for="item in 3" :key="item" class="swiper-slide">
-              <select-oracle amount="0,015424" name="BTC" price="(≈ $1.455)" />
-            </div>
-          </div>
-          <div class="swiper-pagination"></div>
-        </div>
-        <div class="swap-form">
-          <div class="form-control">
-            <span v-if="false" class="error"
-              >Amount exceeds your current balance</span
-            >
-            <div class="form-input">
-              <input-oracle :v="maxsum" placeholder="1" />
-              <div class="input-icon">
-                <img :src="require('@/assets/svg/tether-usdt.svg')" alt="" />
+          <div class="coin-converter__to-usd">
+            <h5 class="to-usd__value">$</h5>
+            <div class="form-control">
+              <input
+                v-model="inputDollor"
+                type="text"
+                inputmode="decimal"
+                pattern="[0-9]*[.,]?[0-9]*"
+                class="form-input"
+                @input="inputDollorEvent"
+                @keypress="allowDecimalNumbers"
+                @paste="blockInvalidDecimalPaste"
+              />
+              <div v-if="isInputFilled" class="input-placeholder">
+                <span>0</span>.00
               </div>
             </div>
-            <div class="form-input">
-              <input-oracle placeholder="0.00000010" />
-              <div class="input-icon bitcoin-icon">
-                <img :src="require('@/assets/svg/bitcoin-icon.svg')" alt="" />
-              </div>
-              <div class="input-icon" @click="sendMax">
-                <img :src="require('@/assets/svg/money-send.svg')" alt="" />
-              </div>
-            </div>
-          </div>
-          <div class="equals-sign">
-            <div class="equals-sign-item">
-              <button class="equals-btn">
-                <svg
-                  width="9"
-                  height="9"
-                  viewBox="0 0 9 9"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M9 3.46034H0L0 0L9 0V3.46034ZM9 9H0L0 5.53966H9V9Z"
-                    fill="white"
-                  />
-                </svg>
-              </button>
-            </div>
-            <div class="equals-sign-item">
-              <button class="equals-btn">
-                <svg
-                  width="9"
-                  height="9"
-                  viewBox="0 0 9 9"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M9 3.46034H0L0 0L9 0V3.46034ZM9 9H0L0 5.53966H9V9Z"
-                    fill="white"
-                  />
-                </svg>
-              </button>
-            </div>
-          </div>
-          <div class="form-control">
-            <input-oracle class="form-input" v="$101,920" />
-            <input-oracle class="form-input" v="$101,920" />
+            <button class="transfer-btn">
+              <TransferIcon />
+            </button>
           </div>
         </div>
-        <div class="validity-period">
-          <div class="valid-img">
-            <img :src="require('@/assets/svg/valid.svg')" alt="" />
+        <button
+          class="coin-convert__icon"
+          :class="{ active: isOpen }"
+          @click=";(isOpen = true), $nuxt.$emit('open-modal')"
+        >
+          <ConvertShowIcon v-if="isOpen" class="convert-show__icon" />
+          <ConvertIcon v-else class="convert-icon" />
+        </button>
+        <div class="coin-converter coin-converter__output">
+          <coin-select name="Litecoin" price="1 LTC" amount="2500" />
+          <div class="input-coin">
+            <div class="form-control">
+              <input
+                v-model="coinConvert"
+                type="text"
+                inputmode="decimal"
+                pattern="[0-9]*[.,]?[0-9]*"
+                class="form-input"
+                placeholder="0.00"
+                @input="coinConvertEvent"
+                @keypress="allowDecimalNumbers"
+                @paste="blockInvalidDecimalPaste"
+              />
+            </div>
+            <h4 class="coin-name">LTC</h4>
+            <button class="max-btn" @click="maxOutputSelect">MAX</button>
           </div>
-          <p class="valid-text">
-            USDT/BTC Rate= 0.00000010 Swap Rate is valid for 10 seconds
+          <div class="coin-converter__to-usd">
+            <h5 class="to-usd__value">$</h5>
+            <div class="form-control">
+              <input
+                v-model="outputDollor"
+                type="text"
+                inputmode="decimal"
+                pattern="[0-9]*[.,]?[0-9]*"
+                class="form-input"
+                @input="outputDollorEvent"
+                @keypress="allowDecimalNumbers"
+                @paste="blockInvalidDecimalPaste"
+              />
+              <div v-if="isOutputFilled" class="input-placeholder">
+                <span>0</span>.00
+              </div>
+            </div>
+            <button class="transfer-btn">
+              <TransferIcon />
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="swap-info">
+        <div class="swap-info__fees">
+          <div class="swap-info__label">Fees</div>
+          <div class="swap-info__amount">0.5 USDT</div>
+        </div>
+        <div class="swap-info__coin">
+          <div class="swap-info__pair">USDT/LTC</div>
+          <div class="swap-info__rate">0.00000010</div>
+        </div>
+        <new-oracle-button
+          text="Swap"
+          color="yellow"
+          @click="isSuccessful = true"
+        />
+      </div>
+    </div>
+
+    <draggable-modal :is-open="isOpen" @close="isOpen = false">
+      <h1 class="modal-title">Choose Network</h1>
+      <ul class="coins-list">
+        <div v-for="item of data" :key="item.id" class="list-item">
+          <label class="list-item__label">
+            <input
+              name="user"
+              type="radio"
+              class="form-input"
+              :checked="item.selected"
+            />
+            <div class="checkbox-button">
+              <span class="check-icon">
+                <CheckIcon />
+              </span>
+            </div>
+            <div class="coin-info">
+              <div class="coin-img">
+                <img :src="item.img" alt="" />
+              </div>
+              <div class="coin-body">
+                <div class="body-head">
+                  <h4 class="coin-name">{{ item.name }}</h4>
+                  <h4 class="coin-convert">0,0244 TON</h4>
+                </div>
+                <div class="body-bottom">
+                  <h5 class="card-num">***2343</h5>
+                  <h5 class="coin-convert">≈ 1000.4$</h5>
+                </div>
+              </div>
+            </div>
+          </label>
+        </div>
+      </ul>
+    </draggable-modal>
+
+    <history-modal :is-visible="isSuccessful" class="successful-modal">
+      <div class="modal-body">
+        <div class="icon">
+          <SeccessfulIcon />
+        </div>
+        <h2 class="modal-title">Swap Successful!</h2>
+        <div class="conversion-info">
+          <p class="conversion-info__pair">BTC → USDT</p>
+          <p class="conversion-info__result">You’ve received: 1,902 USDT</p>
+          <p class="conversion-info__rate-change">
+            <span>3.5 USDT</span> → 4 USDT
           </p>
         </div>
       </div>
-      <div class="swap-btn">
-        <button-oracle
-          text="SWAP"
-          class="orange"
-          @click=";(status = true), (swap = false)"
-        />
-        <button-oracle text="Swap history" />
-      </div>
-    </div>
-    <div v-if="status && !swap" class="swap-status">
-      <div class="swap-status-content">
-        <h4 class="swap-status-title">The SWAP WENT WELL!</h4>
-        <div class="swap-img">
-          <img :src="require('@/assets/png/swap-success.png')" alt="" />
-        </div>
-        <div class="exchange">
-          <div class="exchange-head">
-            <p class="cripto-name">BTC</p>
-            <div class="arrown-icon">
-              <svg
-                width="12"
-                height="13"
-                viewBox="0 0 12 13"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M7.21484 3.46484L10.2498 6.49984L7.21484 9.53484"
-                  stroke="white"
-                  stroke-opacity="0.4"
-                  stroke-miterlimit="10"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-                <path
-                  d="M1.75 6.5H10.165"
-                  stroke="white"
-                  stroke-opacity="0.4"
-                  stroke-miterlimit="10"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-              </svg>
-            </div>
-            <p class="cripto-name">USDT</p>
-          </div>
-          <div class="exchange-value">1.902 USDT</div>
-          <div class="criptio-sum">
-            <p class="sum-value">3.5 USDT</p>
-            <div class="arrown-icon">
-              <svg
-                width="14"
-                height="14"
-                viewBox="0 0 14 14"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M8.41797 3.45898L11.9588 6.99982L8.41797 10.5407"
-                  stroke="white"
-                  stroke-miterlimit="10"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-                <path
-                  d="M2.04297 7H11.8605"
-                  stroke="white"
-                  stroke-miterlimit="10"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-              </svg>
-            </div>
-            <p class="sum-value">4 USDT</p>
-          </div>
-        </div>
-      </div>
-      <button-oracle
-        text="BACK"
-        color="orange"
-        @click=";(status = true), (swap = true)"
+      <new-oracle-button
+        text="Close"
+        color="yellow"
+        @click="isSuccessful = false"
       />
-    </div>
-    <div v-else-if="!status && !swap" class="swap-status">
-      <div class="swap-status-content">
-        <h4 class="swap-status-title">Couldn't make the SWAP!</h4>
-        <div class="swap-img">
-          <img :src="require('@/assets/png/swap-error.png')" alt="" />
+    </history-modal>
+    <history-modal :is-visible="isFailed" class="failed-modal">
+      <div class="modal-body">
+        <div class="icon">
+          <FailedIcon />
         </div>
+        <h2 class="modal-title">Swap Failed</h2>
+        <p class="modal-description">
+          Unfortunately, we couldn’t complete the swap. Please try again later
+          or check your connection.
+        </p>
       </div>
-      <button-oracle
-        text="BACK"
-        color="orange"
-        @click=";(status = true), (swap = true)"
-      />
-    </div>
+      <new-oracle-button text="Close" @click="isFailed = false" />
+    </history-modal>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'nuxt-property-decorator'
-const Swiper = process.client ? require('swiper').default : null
-require('swiper/swiper-bundle.css')
+// @ts-ignore
+import ConvertIcon from '@/assets/svg/coin-convert-icon.svg?inline'
+// @ts-ignore
+import ConvertShowIcon from '@/assets/svg/coin-convert-show-icon.svg?inline'
+// @ts-ignore
+import TransferIcon from '@/assets/svg/transfer-vertical-svg.svg?inline'
+// @ts-ignore
+import CheckIcon from '@/assets/svg/check-icon.svg?inline'
+// @ts-ignore
+import SeccessfulIcon from '@/assets/svg/successful.svg?inline'
+// @ts-ignore
+import FailedIcon from '@/assets/svg/failed.svg?inline'
 
-@Component
+@Component({
+  components: {
+    ConvertIcon,
+    ConvertShowIcon,
+    TransferIcon,
+    CheckIcon,
+    SeccessfulIcon,
+    FailedIcon,
+  },
+})
 export default class SwapPage extends Vue {
-  private swiper!: any
-  swap = true
-  status = true
-  maxsum = ''
-  layout() {
-    return 'mobile'
+  isOpen = false
+  inputCoin: string = ''
+  coinConvert: string = ''
+  inputDollor: string = ''
+  outputDollor: string = ''
+  maxInput = '100'
+  maxOutput = '55'
+  isInputFilled: boolean = true
+  isOutputFilled: boolean = true
+  isSuccessful: boolean = false
+  isFailed: boolean = false
+
+  data = [
+    {
+      id: 1,
+      img: require('@/assets/svg/litecoin-ltc.svg'),
+      name: 'Litecoin',
+      selected: true,
+    },
+    {
+      id: 2,
+      img: require('@/assets/svg/bitcoin.svg'),
+      name: 'XRP',
+      selected: false,
+    },
+    {
+      id: 3,
+      img: require('@/assets/svg/bitcoin.svg'),
+      name: 'Bitcoin',
+      selected: false,
+    },
+    {
+      id: 4,
+      img: require('@/assets/svg/bitcoin.svg'),
+      name: 'Etherium',
+      selected: false,
+    },
+    {
+      id: 5,
+      img: require('@/assets/svg/tether-usdt.svg'),
+      name: 'USDT',
+      selected: false,
+    },
+    {
+      id: 6,
+      img: require('@/assets/svg/tether-usdt.svg'),
+      name: 'BNB',
+      selected: false,
+    },
+  ]
+
+  inputDollorEvent() {
+    this.inputDollor = this.inputDollor.replace(',', '.')
+    this.isInputFilled = this.inputDollor.trim() === ''
+    this.inputCoin = String(Number(this.inputDollor) * 1.3)
   }
 
-  mounted() {
-    if (process.client && Swiper) {
-      this.swiper = new Swiper('.swiper-container', {
-        loop: true,
-        slidesPerView: 1,
-        spaceBetween: 20,
-        pagination: {
-          el: '.swiper-pagination',
-          clickable: true,
-        },
-      })
+  outputDollorEvent() {
+    this.outputDollor = this.outputDollor.replace(',', '.')
+    this.isOutputFilled = this.outputDollor.trim() === ''
+    this.coinConvert = String(Number(this.outputDollor) * 1.3)
+  }
+
+  coinEvent() {
+    this.inputCoin = this.inputCoin.replace(',', '.')
+    this.isInputFilled = this.inputCoin.trim() === ''
+    this.inputDollor =
+      this.inputCoin.trim() === '' ? '' : String(Number(this.inputCoin) * 0.7)
+  }
+
+  coinConvertEvent() {
+    this.coinConvert = this.coinConvert.replace(',', '.')
+    this.isOutputFilled = this.coinConvert.trim() === ''
+    this.outputDollor =
+      this.coinConvert.trim() === ''
+        ? ''
+        : String(Number(this.coinConvert) * 0.7)
+  }
+
+  maxInputSelect() {
+    this.inputCoin = this.maxInput
+    this.coinEvent()
+  }
+
+  maxOutputSelect() {
+    this.coinConvert = this.maxOutput
+    this.coinConvertEvent()
+  }
+
+  allowDecimalNumbers(event: KeyboardEvent): void {
+    const key = event.key
+    const isNumber = /^\d$/.test(key)
+    const isDot = key === '.' || key === ','
+
+    const target = event.target as HTMLInputElement
+    const currentValue = target.value
+    const alreadyHasDot =
+      currentValue.includes('.') || currentValue.includes(',')
+
+    if (!isNumber && !(isDot && !alreadyHasDot)) {
+      event.preventDefault()
     }
   }
 
-  sendMax() {
-    this.maxsum = '101,920'
+  blockInvalidDecimalPaste(event: ClipboardEvent): void {
+    event.preventDefault()
+    let pasted = event.clipboardData?.getData('text') || ''
+
+    pasted = pasted.replace(/,/g, '.')
+
+    pasted = pasted.replace(/[^\d.]/g, '')
+
+    const firstDotIndex = pasted.indexOf('.')
+    if (firstDotIndex !== -1) {
+      const beforeDot = pasted.slice(0, firstDotIndex + 1)
+      const afterDot = pasted.slice(firstDotIndex + 1).replace(/\./g, '')
+      pasted = beforeDot + afterDot
+    }
+
+    const target = event.target as HTMLInputElement
+    const currentValue = target.value
+    const selectionStart = target.selectionStart || 0
+    const selectionEnd = target.selectionEnd || 0
+
+    const newValue =
+      currentValue.slice(0, selectionStart) +
+      pasted +
+      currentValue.slice(selectionEnd)
+
+    target.value = newValue
   }
 }
 </script>
 
 <style lang="scss">
 .swap-page {
-  &-in {
-    overflow: hidden;
-  }
-  .swiper {
-    width: calc(100% - 1px);
-    overflow: visible;
-    position: relative;
-    margin-left: 0.5px;
-    .swiper-wrapper {
-      position: relative;
-      z-index: 2;
-    }
-    &.swiper-first {
-      z-index: 2;
-    }
-    .swiper-pagination {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      left: 50%;
-      bottom: 28px;
-      transform: translateX(-50%);
-      z-index: 1;
-      &-bullet {
-        width: 8px;
-        height: 8px;
-        background: #211e2e;
-        margin: 0 3px;
-      }
-      &-bullet-active {
-        width: 10px;
-        height: 10px;
-        background: #f64e2a;
-      }
-    }
-  }
-  .form-select {
-    margin-bottom: 50px;
-  }
-  .swap-form {
-    margin-bottom: 24px;
-    .form-control {
-      display: flex;
-      align-items: stretch;
-      gap: 12px;
-      position: relative;
-      .error {
-        position: absolute;
-        bottom: calc(100% + 4px);
-        left: 0;
-        font-family: var(--font-family);
-        font-weight: 400;
-        font-size: 10px;
-        line-height: 12px;
-        color: #ff5906;
-      }
-      .form-input {
-        position: relative;
-      }
-      .form-button {
-        width: 100%;
-        background: #121119;
-        border-radius: 8px;
-        padding: 16px 14px;
-        font-family: var(--font-family);
-        font-weight: 400;
-        text-align: left;
-        font-size: 16px;
-        line-height: 11px;
-        color: #fff;
-      }
-      input {
-        height: 43px;
-        padding-right: 74px;
-        text-overflow: ellipsis;
-      }
-      .input-icon {
-        position: absolute;
-        top: 50%;
-        right: 10px;
-        transform: translateY(-50%);
-        cursor: pointer;
-        &.bitcoin-icon {
-          right: 42px;
-        }
-      }
-    }
-    .equals-sign {
-      display: flex;
-      margin: 5px 0;
-      &-item {
-        flex: 1 1 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        .equals-btn {
-          width: 23px;
-          height: 23px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          background: #f64e2a;
-          border-radius: 4px;
-        }
-      }
-    }
-  }
-  .validity-period {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    background: #121119;
-    border-radius: 8px;
-    padding: 13px;
-    margin-bottom: 25px;
-    .valid-text {
-      font-family: var(--font-family);
-      font-weight: 400;
-      font-size: 16px;
-      line-height: 100%;
-      color: #fff;
-    }
-  }
-  .swap-btn {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
-  .swap-status {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    padding: 50px 0;
-    width: 100%;
-    height: 100vh;
-    background: #0a090f;
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 101;
-    &::before {
-      background: #f64e2a;
-      border-radius: 100%;
-      content: '';
-      filter: blur(125px);
-      height: 100px;
-      left: 50%;
-      position: absolute;
-      top: -50px;
-      transform: translateX(-50%);
-      width: 100px;
-      z-index: 0;
-    }
-    &-content {
-      height: 100%;
+  max-width: 375px;
+  margin: 0 auto;
+  padding: 0 16px 24px;
+  display: flex;
+  flex-direction: column;
+  &__content {
+    flex: 1 1 100%;
+    .swap-page__converter {
       display: flex;
       flex-direction: column;
-      justify-content: center;
-      position: relative;
-      z-index: 1;
-    }
-    .swap-status-title {
-      max-width: 200px;
-      margin: 0 auto;
-      position: relative;
-      z-index: 1;
-      font-family: var(--second-family);
-      font-weight: 700;
-      font-size: 16px;
-      line-height: 160%;
-      text-transform: uppercase;
-      text-align: center;
-      color: #fff;
-    }
-    .swap-img {
-      width: 270px;
-      height: 270px;
-      display: flex;
       align-items: center;
-      justify-content: center;
-      margin: 0 auto;
-    }
-    .exchange {
-      margin-bottom: 25px;
-      &-head {
+      gap: 16px;
+      margin-bottom: 75px;
+
+      .coin-converter {
+        width: 100%;
         display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 6px;
-        .cripto-name {
-          font-family: var(--font3);
-          font-weight: 400;
-          font-size: 14px;
-          color: rgba(255, 255, 255, 0.4);
+        flex-direction: column;
+        gap: 8px;
+        background: #13121b;
+        border-radius: 8px;
+        padding: 8px 16px 16px 16px;
+        .input-coin {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          .form-control {
+            .form-input {
+              width: 100%;
+              height: 40px;
+              background: transparent;
+              padding: 0 20px 0 0;
+              border: none;
+              font-family: 'Hector', sans-serif;
+              font-weight: 400;
+              font-size: 32px;
+              line-height: 125%;
+              color: #fff;
+              &:focus {
+                outline: none;
+              }
+              &::placeholder {
+                font-family: 'Hector', sans-serif;
+                font-weight: 400;
+                font-size: 32px;
+                line-height: 125%;
+                color: #7a74ba;
+              }
+            }
+          }
+          .coin-name {
+            font-family: 'Roboto', sans-serif;
+            font-weight: 600;
+            font-size: 14px;
+            line-height: 130%;
+            color: #67639a;
+          }
+          .max-btn {
+            margin-left: 8px;
+            cursor: pointer;
+            font-family: 'Roboto', sans-serif;
+            font-weight: 600;
+            font-size: 14px;
+            line-height: 130%;
+            color: #f64e2a;
+          }
+        }
+        .coin-converter__to-usd {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 2px;
+          .to-usd__value {
+            font-family: 'Roboto', sans-serif;
+            font-weight: 500;
+            font-size: 16px;
+            line-height: 100%;
+            color: rgba(131, 131, 175, 0.8);
+            span {
+              font-size: 12px;
+            }
+          }
+          .form-control {
+            width: 100%;
+            position: relative;
+            .form-input {
+              width: 100%;
+              height: 16px;
+              position: relative;
+              z-index: 2;
+              background: transparent;
+              padding: 0 20px 0 0;
+              border: none;
+              font-family: 'Roboto', sans-serif;
+              font-weight: 500;
+              font-size: 16px;
+              line-height: 120%;
+              color: #fff;
+              &:focus {
+                outline: none;
+              }
+              &::placeholder {
+                font-family: 'Roboto', sans-serif;
+                font-weight: 500;
+                font-size: 12px;
+                text-transform: capitalize;
+                line-height: 120%;
+                color: #7a74ba;
+              }
+            }
+            .input-placeholder {
+              position: absolute;
+              top: 50%;
+              left: 0;
+              transform: translateY(-50%);
+              font-family: 'Roboto', sans-serif;
+              font-weight: 500;
+              font-size: 12px;
+              line-height: 120%;
+              color: rgba(131, 131, 175, 0.8);
+              span {
+                font-size: 16px;
+              }
+            }
+          }
         }
       }
-      .exchange-value {
-        margin-bottom: 12px;
-        font-family: var(--font3);
-        font-weight: 700;
-        font-size: 30px;
-        text-align: center;
-        color: #1b961f;
+      .coin-converter__input {
+        position: relative;
+        z-index: 6;
       }
-      .criptio-sum {
+      .coin-converter__output {
+        .coin-select {
+          .select-btn {
+            .left-block {
+              .coin-info-head {
+                display: block;
+                .coin-name {
+                  font-weight: 400;
+                  font-size: 14px;
+                  line-height: 120%;
+                }
+              }
+            }
+          }
+        }
+      }
+      .coin-convert__icon {
+        border-radius: 8px;
+        width: 34px;
+        height: 34px;
+        background: #181720;
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 12px;
-        .sum-value {
-          font-family: var(--font3);
-          font-weight: 400;
-          font-size: 18px;
+        cursor: pointer;
+        transition: 0.2s;
+        .convert-icon {
+          width: 18px;
+          height: 18px;
+        }
+        &.active {
+          width: 40px;
+          height: 40px;
+        }
+      }
+    }
+    .swap-info {
+      &__fees,
+      &__coin {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 8px;
+      }
+      &__coin {
+        margin-bottom: 16px;
+      }
+      &__label,
+      &__pair {
+        font-family: 'Roboto', sans-serif;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 130%;
+        text-align: center;
+        color: #7a74ba;
+      }
+      &__amount,
+      &__rate {
+        font-family: 'Roboto', sans-serif;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 130%;
+        text-align: center;
+        color: #fff;
+      }
+      .new-oracle-button {
+        padding: 11px;
+        line-height: 22px;
+      }
+    }
+  }
+  .draggable-modal {
+    backdrop-filter: blur(0);
+    display: flex;
+    align-items: end;
+    .draggable-modal-content {
+      width: 100%;
+      height: auto;
+      border-radius: 30px 30px 0 0;
+      background: #181720;
+      padding: 0 16px 24px;
+      .drag-handle-container {
+        background: #181720;
+        margin-bottom: 10px;
+      }
+      &__in {
+        background: #181720;
+        min-height: auto;
+        .modal-title {
+          margin-bottom: 12px;
+          font-family: 'Roboto', sans-serif;
+          font-weight: 500;
+          font-size: 20px;
+          line-height: 140%;
           color: #fff;
-          &:nth-child(1) {
-            text-decoration: line-through;
+        }
+        .coins-list {
+          .list-item {
+            width: calc(100% + 32px);
+            margin-left: -16px;
+            border-bottom: 1px solid #28283a;
+            &:last-child {
+              border: 0;
+            }
+            &__label {
+              display: flex;
+              align-items: center;
+              gap: 12px;
+              padding: 10px 16px;
+              cursor: pointer;
+              .form-input {
+                display: none;
+                &:checked + .checkbox-button {
+                  background: #f64e2a;
+                  border-color: #f64e2a;
+                  .check-icon {
+                    opacity: 1;
+                  }
+                }
+              }
+              .checkbox-button {
+                min-width: 18px;
+                min-height: 18px;
+                width: 18px;
+                height: 18px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 50%;
+                border: 1px solid #7a74ba;
+                transition: 0.1s;
+                .check-icon {
+                  line-height: 0;
+                  opacity: 0;
+                  transition: 0.1s;
+                }
+              }
+              .coin-info {
+                width: 100%;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                .coin-body {
+                  width: 100%;
+                  .body-head,
+                  .body-bottom {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                  }
+                  .body-bottom {
+                    .card-num,
+                    .coin-convert {
+                      font-family: 'Roboto', sans-serif;
+                      font-weight: 400;
+                      font-size: 12px;
+                      line-height: 135%;
+                      color: #7a74ba;
+                    }
+                  }
+                  .body-head {
+                    .coin-name,
+                    .coin-convert {
+                      font-family: 'Roboto', sans-serif;
+                      font-weight: 400;
+                      font-size: 14px;
+                      line-height: 130%;
+                      color: #fff;
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }
     }
-    .button-oracle {
-      max-width: 287px;
-      margin: 0 auto;
+  }
+  .successful-modal,
+  .failed-modal {
+    padding: 24px 16px;
+    .modal-content {
+      display: flex;
+      flex-direction: column;
+      padding: 0;
+      .modal-body {
+        flex: 1 1 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        .icon {
+          margin-bottom: 12px;
+        }
+        .modal-title {
+          margin-bottom: 38px;
+          font-family: 'Hector', sans-serif;
+          font-weight: 400;
+          font-size: 24px;
+          line-height: 130%;
+          text-align: center;
+          color: #fff;
+        }
+        .modal-description {
+          font-family: 'Roboto', sans-serif;
+          font-weight: 400;
+          font-size: 16px;
+          line-height: 140%;
+          text-align: center;
+          color: #fff;
+        }
+        .conversion-info {
+          &__pair {
+            margin-bottom: 4px;
+            font-family: 'Roboto', sans-serif;
+            font-weight: 400;
+            font-size: 16px;
+            line-height: 140%;
+            text-align: center;
+            color: #31f62a;
+          }
+          &__result {
+            margin-bottom: 12px;
+            font-family: 'Roboto', sans-serif;
+            font-weight: 400;
+            font-size: 14px;
+            line-height: 130%;
+            text-align: center;
+            color: #fff;
+          }
+          &__rate-change {
+            font-family: 'Roboto', sans-serif;
+            font-weight: 400;
+            font-size: 14px;
+            line-height: 130%;
+            text-align: center;
+            color: #b2aaf9;
+            span {
+              text-decoration: line-through;
+            }
+          }
+        }
+      }
+      .new-oracle-button {
+        padding: 11px;
+        line-height: 22px;
+      }
+    }
+  }
+  .failed-modal {
+    .new-oracle-button {
+      background: #fff;
+      color: #000;
+      &:hover {
+        box-shadow: none;
+      }
     }
   }
 }

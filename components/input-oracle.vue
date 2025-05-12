@@ -100,6 +100,9 @@ export default class InputOracle extends Vue {
     left: 12px;
     top: 50%;
     transform: translateY(-50%);
+    path {
+      stroke: #7a74ba;
+    }
   }
   &-user-icon {
     position: absolute;
@@ -129,27 +132,26 @@ export default class InputOracle extends Vue {
   }
 
   input {
+    box-sizing: border-box;
     padding: 12px;
     width: 100%;
-    height: 48px;
-    background: rgba(29, 29, 41, 0.4);
-    border: none;
-    border-radius: 8px;
-    border: 1px solid rgba(255, 89, 6, 0);
-    box-sizing: border-box;
-    font-family: var(--font-family);
-    font-weight: 400;
-    font-size: 16px;
+    height: 44px;
+    background: #181720;
+    border-radius: 12px;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 120%;
     color: #fff;
-    outline: 0;
-    &:focus {
-      border-color: rgba(255, 89, 6, 0.2);
-    }
+    border: none;
+    outline: none;
 
     &::placeholder {
-      font-family: 'Reza Zulmi Alfaizi Sans';
-      font-weight: 400;
-      color: rgba(255, 255, 255, 0.4);
+      font-family: 'Nunito', sans-serif;
+      font-weight: 600;
+      font-size: 14px;
+      line-height: 120%;
+      color: #7a74ba;
     }
   }
 }

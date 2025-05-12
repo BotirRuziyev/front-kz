@@ -1,90 +1,53 @@
 <template>
-  <div ref="select" class="form-select form__select">
-    <button
-      class="select-btn"
-      :class="{ active: isOpen }"
-      @click="isOpen = !isOpen"
-    >
-      <div class="select-value">
-        <span v-if="selectedItems.length == 0" class="default-value">
-          {{ label }}
-        </span>
-        <template v-else>
-          <span
-            v-for="(name, i) in selectedItems"
-            :key="i"
-            class="selected-values"
-          >
-            {{ name }},
-          </span>
-        </template>
+  <div ref="select" class="coin-select">
+    <button class="select-btn" :class="{ active: show }" @click="show = !show">
+      <div class="left-block">
+        <div class="coin-img">
+          <img :src="require('@/assets/svg/usdt.svg')" alt="" />
+        </div>
+        <div class="coin-info">
+          <div class="coin-info-head">
+            <h3 class="coin-name">{{ name }}</h3>
+            <p class="coin-price">{{ price }} <span> ≈ $2499</span></p>
+          </div>
+        </div>
       </div>
-      <span class="arrown-icon">
+      <div class="arrown-icon">
         <img :src="require('@/assets/svg/arrow-back.svg')" alt="" />
-      </span>
+      </div>
     </button>
-    <div class="select-menu" :class="{ show: isOpen }">
-      <div v-for="option in data" :key="option.id" class="select-option">
-        <button class="option-button" @click="addSelected(option.name)">
-          <div class="icon">
-            <img :src="option.img" alt="" />
+    <div class="select-menu" :class="{ show: show }">
+      <div
+        v-for="(item, index) of 3"
+        :key="index"
+        class="menu-item"
+        @click="show = !show"
+      >
+        <div class="coin-img">
+          <img :src="require('@/assets/svg/usdt.svg')" alt="" />
+        </div>
+        <div class="coin-info">
+          <div class="coin-info-head">
+            <h3 class="coin-name">{{ name }}</h3>
+            <p class="coin-price">{{ price }} <span> ≈ $2499</span></p>
           </div>
-          <p class="option-text">
-            {{ option.name }}
-          </p>
-          <div class="form-control">
-            <checkbox-oracle :checked="option.selected" />
-          </div>
-        </button>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue, Watch } from 'nuxt-property-decorator'
+import { Component, Prop, Vue } from 'nuxt-property-decorator'
 
-interface Item {
-  id: number
-  img: string
-  name: string
-  selected: boolean
-}
+@Component({})
+export default class CoinSelect extends Vue {
+  @Prop({ default: '' }) readonly img!: string
+  @Prop({ default: '' }) readonly name!: string
+  @Prop({ default: '' }) readonly price!: string
+  @Prop({ default: '' }) readonly amount!: string
 
-@Component
-export default class FormSelect extends Vue {
-  @Prop({ default: () => [] }) data!: Item[]
-  @Prop({ default: '' }) label!: string
-
-  isOpen = false
-  selectedItems: string[] = []
-
-  localData: Item[] = []
-
-  created() {
-    this.localData = [...this.data]
-  }
-
-  @Watch('data', { deep: true })
-  onDataChange(newVal: Item[]) {
-    this.localData = [...newVal]
-  }
-
-  addSelected(name: string) {
-    this.localData.forEach((item) => {
-      if (item.name === name) {
-        this.$set(item, 'selected', !item.selected)
-      }
-    })
-    const index = this.selectedItems.indexOf(name)
-    if (index !== -1) {
-      this.selectedItems.splice(index, 1)
-    } else {
-      this.selectedItems.push(name)
-    }
-
-    this.$emit('update', this.localData)
-  }
+  show = false
 
   mounted() {
     document.addEventListener('click', this.ClickOutside)
@@ -95,21 +58,18 @@ export default class FormSelect extends Vue {
   }
 
   ClickOutside(event: Event) {
-    const target = event.target as HTMLElement
-    const select = this.$refs.select as HTMLElement | null
-
-    if (select && !select.contains(target)) {
-      this.isOpen = false
+    const select = this.$refs.select as HTMLElement
+    if (select && !select.contains(event.target as Node)) {
+      this.show = false
     }
   }
 }
 </script>
 
 <style lang="scss">
-.form__select {
-  width: 100%;
+.coin-select {
   position: relative;
-  z-index: 2;
+  z-index: 5;
   .select-btn {
     width: 100%;
     display: flex;
@@ -155,6 +115,7 @@ export default class FormSelect extends Vue {
             font-weight: 500;
             font-size: 14px;
             line-height: 130%;
+            text-align: left;
             color: #fff;
           }
           .coin-price {
@@ -221,15 +182,16 @@ export default class FormSelect extends Vue {
           gap: 5px;
           .coin-name {
             font-family: 'Roboto', sans-serif;
-            font-weight: 700;
-            font-size: 12px;
-            text-transform: uppercase;
+            font-weight: 500;
+            font-size: 13px;
+            line-height: 130%;
+            text-align: left;
             color: #fff;
           }
           .coin-price {
             font-family: 'Roboto', sans-serif;
             font-weight: 400;
-            font-size: 12px;
+            font-size: 13px;
             text-transform: uppercase;
             color: #67639a;
           }
