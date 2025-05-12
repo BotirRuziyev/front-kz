@@ -272,32 +272,12 @@ export default class SwapPage extends Vue {
     this.coinConvert = String(Number(this.outputDollor) * 1.3)
   }
 
-  coinEvent(event: Event): void {
+  coinEvent(event: Event) {
     this.inputCoin = this.inputCoin.replace(',', '.')
     this.isInputFilled = this.inputCoin.trim() === ''
     this.inputDollor =
       this.inputCoin.trim() === '' ? '' : String(Number(this.inputCoin) * 0.7)
-
-    const target = event.target as HTMLInputElement
-    let value = target.value
-
-    // Birinchi nuqta yoki vergulni saqlaymiz, qolganlarini olib tashlaymiz
-    const firstDotIndex = Math.min(
-      value.indexOf('.'),
-      value.includes('.') ? Infinity : value.indexOf(',')
-    )
-
-    if (firstDotIndex !== -1) {
-      // Ajratish
-      const before = value.substring(0, firstDotIndex + 1)
-      const after = value.substring(firstDotIndex + 1).replace(/[.,]/g, '') // Qolgan nuqtalarni olib tashlash
-      value = before + after
-    }
-
-    // Harflarni olib tashlash
-    value = value.replace(/[^\d.,]/g, '')
-
-    target.value = value
+    this.allowDecimalNumbers(event as KeyboardEvent)
   }
 
   coinConvertEvent() {
