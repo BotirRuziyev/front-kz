@@ -98,6 +98,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'nuxt-property-decorator'
+// @ts-ignore
 import draggable from 'vuedraggable'
 // @ts-ignore
 import BackIcon from '@/assets/svg/arrow-back.svg?inline'
