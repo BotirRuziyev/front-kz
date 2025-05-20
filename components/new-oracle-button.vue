@@ -62,14 +62,14 @@ export default class ButtonOracle extends Vue {
     background: #1e1d28;
     &:hover {
       background: #f64e2a;
-      box-shadow: 0 0 5px #f64e2a;
+      box-shadow: 0 0 10px rgba(246, 78, 42, 0.25);
     }
   }
   &.yellow {
     background: #f64e2a;
     &:hover {
       background: #f64e2a;
-      box-shadow: 0 0 5px #f64e2a;
+      box-shadow: 0 0 10px rgba(246, 78, 42, 0.25);
     }
   }
   .button-icon {

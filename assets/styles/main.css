@@ -25,9 +25,33 @@ a {
 button {
   background-color: transparent;
   border: 0;
+  cursor: pointer;
 }
 html {
   scroll-behavior: smooth;
+}
+:root {
+  --primary-1: #0a090f;
+  --primary-2: #f64e2a;
+  --primary-3: #fff;
+  --primary-4: #111016;
+  --secondary-1: #121119;
+  --secondary-2: #1b961f;
+  --secondary-3: #4f4ec1;
+  --secondary-7: #21212d;
+  --secondary-9: #191823;
+  --secondary-10: #1d1c24;
+  --secondary-11: #a50e0e;
+  --secondary-12: #1e1d26;
+  --secondary-13: #262633;
+  --secondary-14: #15151f;
+  --gradient2: #fff;
+  --oranzhevyy750: rgba(246, 78, 42, 0.75);
+  --belyy-chat: #f6f6f6;
+  --oranzhevyy: #ffb200;
+  --ne-iz-fayla-klaviatura-apple: #434343;
+  --ne-iz-fayla-klaviatura-apple: #202020;
+  --ne-iz-fayla-klaviatura-apple: #606060;
 }
 :root {
   --font-family: 'Reza Zulmi Alfaizi Sans', sans-serif;
@@ -50,6 +74,34 @@ html {
   font-weight: 500;
   src: url('~assets/fonts/sf-pro/SFPRODISPLAYMEDIUM.otf') format('opentype');
 } */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url('~assets/fonts/Inter/Inter_24pt-Light.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('~assets/fonts/Inter/Inter_28pt-Regular.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('~assets/fonts/Inter/Inter_28pt-Medium.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('~assets/fonts/Inter/Inter_28pt-SemiBold.ttf') format('truetype');
+}
 @font-face {
   font-family: 'Nunito';
   font-style: normal;
@@ -128,7 +180,12 @@ html {
   src: url('~assets/fonts/kenyan coffee rg.ttf') format('truetype');
 }
 
-/* font-family: 'Druk Text Wide Cyr'; */
+.main-container {
+  max-width: 375px;
+  padding: 24px 12px 0;
+  margin: 0 auto;
+}
+
 button.tgme_widget_login_button,
 .btn.tgme_widget_login_button,
 .tgme_widget_login_button {
