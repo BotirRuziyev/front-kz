@@ -390,6 +390,7 @@ export default class PinCodePage extends Vue {
     }
     &-content {
       max-width: 375px;
+      margin: 0 auto;
       padding: 0 12px 16px;
       width: 100%;
       height: 100%;

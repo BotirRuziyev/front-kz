@@ -48,7 +48,7 @@
               <span class="exclude-chats__types-label">Muted</span>
               <input
                 id="Muted"
-                type="radio"
+                type="checkbox"
                 name="chatTypes"
                 style="display: none"
                 :checked="true"
@@ -65,7 +65,7 @@
               <span class="exclude-chats__types-label">Read</span>
               <input
                 id="Read"
-                type="radio"
+                type="checkbox"
                 name="chatTypes"
                 style="display: none"
                 class="form-check"
@@ -81,7 +81,7 @@
               <span class="exclude-chats__types-label">Archived</span>
               <input
                 id="Archived"
-                type="radio"
+                type="checkbox"
                 name="chatTypes"
                 style="display: none"
                 class="form-check"
@@ -111,7 +111,7 @@
               <span class="exclude-chats__chats-label">{{ chat.name }}</span>
               <input
                 :id="`${chat.id}`"
-                type="radio"
+                type="checkbox"
                 name="chats"
                 style="display: none"
                 class="form-check"

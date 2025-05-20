@@ -48,7 +48,7 @@
               <span class="include-chats__types-label">Contacts</span>
               <input
                 id="Contacts"
-                type="radio"
+                type="checkbox"
                 name="chatTypes"
                 style="display: none"
                 :checked="true"
@@ -66,7 +66,7 @@
               <span class="include-chats__types-label">Non-Contacts</span>
               <input
                 id="Non-Contacts"
-                type="radio"
+                type="checkbox"
                 name="chatTypes"
                 style="display: none"
                 class="form-check"
@@ -83,7 +83,7 @@
               <span class="include-chats__types-label">Groups</span>
               <input
                 id="Groups"
-                type="radio"
+                type="checkbox"
                 name="chatTypes"
                 style="display: none"
                 class="form-check"
@@ -100,7 +100,7 @@
               <span class="include-chats__types-label">Channels</span>
               <input
                 id="Channels"
-                type="radio"
+                type="checkbox"
                 name="chatTypes"
                 style="display: none"
                 class="form-check"
@@ -117,7 +117,7 @@
               <span class="include-chats__types-label">Bots</span>
               <input
                 id="Bots"
-                type="radio"
+                type="checkbox"
                 name="chatTypes"
                 style="display: none"
                 class="form-check"
@@ -147,7 +147,7 @@
               <span class="include-chats__chats-label">{{ chat.name }}</span>
               <input
                 :id="`${chat.id}`"
-                type="radio"
+                type="checkbox"
                 name="chats"
                 style="display: none"
                 class="form-check"

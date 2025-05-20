@@ -73,7 +73,10 @@
             >
               <MinusCircleIcon />
             </button>
-            <nuxt-link to="" class="chat-folders__list-item-link">
+            <nuxt-link
+              :to="isEditMode ? '' : '/chat-settings/folders/edit-folder'"
+              class="chat-folders__list-item-link"
+            >
               <span class="chat-folders__list-item-label">{{
                 folder.name
               }}</span>

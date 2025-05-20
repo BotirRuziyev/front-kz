@@ -3,11 +3,13 @@
     <div class="main-container">
       <!-- Header -->
       <div class="edit-folder__header">
-        <nuxt-link to="/chat-settings" class="edit-folder__header-cancel"
+        <nuxt-link
+          to="/chat-settings/folders"
+          class="edit-folder__header-cancel"
           >Cancel</nuxt-link
         >
         <h2 class="edit-folder__header-title">Edit folder</h2>
-        <nuxt-link to="/chat-settings" class="edit-folder__header-done"
+        <nuxt-link to="/chat-settings/folders" class="edit-folder__header-done"
           >Done</nuxt-link
         >
       </div>
@@ -118,7 +120,7 @@ import PlusIcon from '@/assets/svg/plus.svg?inline'
 })
 export default class EditFolderPage extends Vue {
   folderName: string = ''
-  selectedColor: string | null = null
+  selectedColor: string | null = '#955ddc'
 
   colors: string[] = [
     '#fff',
