@@ -3,7 +3,7 @@
     <div class="main-container">
       <!-- Header -->
       <div class="privacy-settings__header">
-        <nuxt-link to="/chat-setttings" class="privacy-settings__header-back">
+        <nuxt-link to="/chat-settings" class="privacy-settings__header-back">
           <BackIcon />
         </nuxt-link>
         <h1 class="privacy-settings__header-title">Privacy</h1>

@@ -29,14 +29,14 @@
       </div>
       <div class="settings-menu">
         <div class="settings-menu__section">
-          <nuxt-link to="/chat-settings/emoji" class="settings-menu__item">
+          <nuxt-link to="" class="settings-menu__item">
             <div class="settings-menu__icon settings-menu__icon--emoji">
               <EmojiIcon />
             </div>
             <div class="settings-menu__label">Change Emoji Status</div>
           </nuxt-link>
 
-          <nuxt-link to="/chat-settings/saved" class="settings-menu__item">
+          <nuxt-link to="" class="settings-menu__item">
             <div class="settings-menu__icon settings-menu__icon--saved">
               <SavedIcon />
             </div>
@@ -44,7 +44,7 @@
             <div class="settings-menu__arrow"></div>
           </nuxt-link>
 
-          <nuxt-link to="/chat-settings/catalogue" class="settings-menu__item">
+          <nuxt-link to="" class="settings-menu__item">
             <div class="settings-menu__icon settings-menu__icon--catalogue">
               <NotebookIcon />
             </div>
@@ -93,7 +93,7 @@
 
         <div class="settings-menu__section">
           <nuxt-link
-            to="/chat-settings/premium"
+            to=""
             class="settings-menu__item settings-menu__item--premium"
           >
             <div class="settings-menu__icon settings-menu__icon--premium">

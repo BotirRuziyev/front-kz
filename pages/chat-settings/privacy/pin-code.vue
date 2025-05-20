@@ -4,7 +4,7 @@
       <!-- Header -->
       <div class="chat-pin__code-header">
         <nuxt-link
-          to="/chat-setttings/privacy"
+          to="/chat-settings/privacy"
           class="chat-pin__code-header-back"
         >
           <BackIcon />

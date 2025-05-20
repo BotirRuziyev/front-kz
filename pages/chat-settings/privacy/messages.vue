@@ -40,7 +40,7 @@
       </div>
 
       <div class="premium-wrapper">
-        <nuxt-link to="/premium-info" class="link--highlighted">
+        <nuxt-link to="" class="link--highlighted">
           What is Premium?
         </nuxt-link>
       </div>

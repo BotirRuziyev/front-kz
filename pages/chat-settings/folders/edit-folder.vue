@@ -33,7 +33,7 @@
         <label class="edit-folder__label">Included Chats</label>
         <div class="edit-folder__chat-block">
           <nuxt-link
-            to="/chat-settings/edit-folder/include"
+            to="/chat-settings/folders/edit-folder/include"
             class="edit-folder__link"
           >
             <span><PlusIcon /></span> Add Chats
@@ -58,7 +58,7 @@
       <div class="edit-folder__section">
         <label class="edit-folder__label">Excluded Chats</label>
         <nuxt-link
-          to="/chat-settings/edit-folder/exclude"
+          to="/chat-settings/folders/edit-folder/exclude"
           class="edit-folder__link"
         >
           <span><PlusIcon /></span> Add Chats to Exclude

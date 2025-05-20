@@ -46,7 +46,7 @@
       <div class="new-folder__section">
         <label class="new-folder__label">Included Chats</label>
         <nuxt-link
-          to="/chat-settings/new-folder/include"
+          to="/chat-settings/folders/new-folder/include"
           class="new-folder__link"
         >
           <span><PlusIcon /></span> Add Chats
@@ -61,7 +61,7 @@
       <div class="new-folder__section">
         <label class="new-folder__label">Excluded Chats</label>
         <nuxt-link
-          to="/chat-settings/new-folder/exclude"
+          to="/chat-settings/folders/new-folder/exclude"
           class="new-folder__link"
         >
           <span><PlusIcon /></span> Add Chats to Exclude

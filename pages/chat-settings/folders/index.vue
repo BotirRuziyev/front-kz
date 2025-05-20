@@ -40,7 +40,10 @@
       <!-- Body (Create + List) -->
       <div class="chat-folders__body">
         <!-- Create button -->
-        <nuxt-link to="/chat-settings/new-folder" class="chat-folders__create">
+        <nuxt-link
+          to="/chat-settings/folders/new-folder"
+          class="chat-folders__create"
+        >
           <span class="chat-folders__create-label">Create a Folder</span>
           <span class="chat-folders__create-btn">
             <CreateIcon />
@@ -70,10 +73,7 @@
             >
               <MinusCircleIcon />
             </button>
-            <nuxt-link
-              to="/chat-folders/all"
-              class="chat-folders__list-item-link"
-            >
+            <nuxt-link to="" class="chat-folders__list-item-link">
               <span class="chat-folders__list-item-label">{{
                 folder.name
               }}</span>

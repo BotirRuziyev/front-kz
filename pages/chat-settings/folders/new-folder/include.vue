@@ -4,13 +4,13 @@
       <!-- Header -->
       <div class="include-chats__header">
         <nuxt-link
-          to="/chat-settings/new-folder"
+          to="/chat-settings/folders/new-folder"
           class="include-chats__header-cancel"
           >Cancel</nuxt-link
         >
         <h2 class="include-chats__header-title">Include chats</h2>
         <nuxt-link
-          to="/chat-settings/new-folder"
+          to="/chat-settings/folders/new-folder"
           class="include-chats__header-done"
           >Done</nuxt-link
         >

@@ -4,7 +4,7 @@
       <!-- Header -->
       <div class="group-chats__header">
         <nuxt-link
-          to="/chat-setttings/notifications"
+          to="/chat-settings/notifications"
           class="group-chats__header-back"
         >
           <BackIcon />
@@ -57,10 +57,7 @@
       <!-- exeptions Body -->
       <div class="group-chats__exeptions">
         <!-- Add Exception -->
-        <nuxt-link
-          to="/notifications/add-exception"
-          class="group-chats__exeptions-add"
-        >
+        <nuxt-link to="" class="group-chats__exeptions-add">
           <CreateIcon class="group-chats__exeptions-add-icon" />
           <span class="group-chats__exeptions-add-label">Add Exception</span>
         </nuxt-link>

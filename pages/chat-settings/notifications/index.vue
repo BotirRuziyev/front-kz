@@ -22,10 +22,7 @@
 
         <ul class="notification-settings__message-list">
           <li>
-            <nuxt-link
-              to="/chat-settings/notifications/private"
-              class="notification-settings__message-item"
-            >
+            <nuxt-link to="" class="notification-settings__message-item">
               <div class="notification-settings__message-left">
                 <span
                   class="notification-settings__message-icon notification-settings__message-icon--private"
@@ -74,10 +71,7 @@
             </nuxt-link>
           </li>
           <li>
-            <nuxt-link
-              to="/chat-settings/notifications/channels"
-              class="notification-settings__message-item"
-            >
+            <nuxt-link to="" class="notification-settings__message-item">
               <div class="notification-settings__message-left">
                 <span
                   class="notification-settings__message-icon notification-settings__message-icon--channel"

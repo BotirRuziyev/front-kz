@@ -4,13 +4,13 @@
       <!-- Header -->
       <div class="exclude-chats__header">
         <nuxt-link
-          to="/chat-settings/new-folder"
+          to="/chat-settings/folders/new-folder"
           class="exclude-chats__header-cancel"
           >Cancel</nuxt-link
         >
         <h2 class="exclude-chats__header-title">Exclude chats</h2>
         <nuxt-link
-          to="/chat-settings/new-folder"
+          to="/chat-settings/folders/new-folder"
           class="exclude-chats__header-done"
           >Done</nuxt-link
         >
