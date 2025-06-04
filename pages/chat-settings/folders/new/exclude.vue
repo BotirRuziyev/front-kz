@@ -4,31 +4,20 @@
       <!-- Header -->
       <div class="exclude-chats__header">
         <nuxt-link
-          to="/chat-settings/folders/new-folder"
+          to="/chat-settings/folders/new"
           class="exclude-chats__header-cancel"
           >Cancel</nuxt-link
         >
         <h2 class="exclude-chats__header-title">Exclude chats</h2>
-        <nuxt-link
-          to="/chat-settings/folders/new-folder"
-          class="exclude-chats__header-done"
-          >Done</nuxt-link
-        >
       </div>
 
       <!-- Filter / Selected Info -->
       <div class="exclude-chats__filter-info">
-        <div class="form-control">
-          <input
-            v-model="search"
-            type="search"
-            placeholder="Search"
-            class="form-input"
-          />
-          <button class="search-btn" :class="{ noactive: search !== '' }">
-            <SearchIcon />
-          </button>
-        </div>
+        <input-oracle
+          :search="true"
+          placeholder="Search"
+          @changed="searchUpdate"
+        />
       </div>
 
       <div class="exclude-chats__types">
@@ -94,7 +83,7 @@
 
       <div class="exclude-chats__chats">
         <!-- title -->
-        <h2 class="exclude-chats__chats-title">CHATS</h2>
+        <h2 class="exclude-chats__chats-title">Chats</h2>
 
         <!-- Types List -->
         <ul v-if="filteredChats.length >= 1" class="exclude-chats__chats-list">
@@ -121,6 +110,15 @@
             </label>
           </li>
         </ul>
+      </div>
+
+      <!-- Done Button -->
+      <div class="new-folder__button">
+        <new-oracle-button
+          :to="selectedCheck ? '/chat-settings/folders/new' : ''"
+          text="Done"
+          :color="selectedCheck ? 'yellow' : 'black'"
+        />
       </div>
     </div>
   </div>
@@ -150,6 +148,7 @@ import CheckIcon from '@/assets/svg/check-icon.svg?inline'
 })
 export default class excludePage extends Vue {
   search: string | null = ''
+  selectedCheck: boolean = false
 
   chats = [
     {
@@ -189,6 +188,10 @@ export default class excludePage extends Vue {
     },
   ]
 
+  searchUpdate(val: string) {
+    this.search = val
+  }
+
   get filteredChats() {
     if (!this.search) return this.chats
     return this.chats.filter((chat) =>
@@ -200,124 +203,69 @@ export default class excludePage extends Vue {
 
 <style lang="scss">
 .exclude-chats {
-  background: var(--primary-1);
   overflow: hidden;
   min-height: 100vh;
   padding-bottom: 24px;
+  border-radius: 8px 8px 0 0;
+  padding-bottom: 96px;
   &__header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 16px 12px;
-    background: var(--secondary-1);
-    width: calc(100% + 24px);
-    margin-left: -12px;
-    border-radius: 8px 8px 0 0;
+    padding: 16px 0;
+    position: relative;
+    margin-bottom: 12px;
 
     &-cancel {
       font-family: 'Roboto', sans-serif;
       font-weight: 400;
-      font-size: 16px;
-      letter-spacing: 0.02em;
-      text-align: center;
-      color: var(--primary-2);
+      font-size: 14px;
+      line-height: 130%;
+      color: #f64e2a;
     }
     &-title {
-      font-family: 'Inter', sans-serif;
-      font-weight: 600;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: 'Roboto', sans-serif;
+      font-weight: 500;
       font-size: 18px;
-      line-height: 100%;
-      letter-spacing: 0.02em;
-      color: var(--primary-3);
-    }
-    &-done {
-      font-family: 'Inter', sans-serif;
-      font-weight: 700;
-      font-size: 14px;
-      line-height: 120%;
-      letter-spacing: 0.02em;
-      text-align: center;
-      color: var(--primary-2);
+      line-height: 140%;
+      color: #fff;
     }
   }
   &__filter-info {
-    background: var(--secondary-1);
-    width: calc(100% + 24px);
-    margin-left: -12px;
-    padding: 0 12px;
-    .form-control {
-      position: relative;
-      background: var(--primary-1);
-      border-radius: 10px;
-      &:focus-within {
-        .search-btn {
-          left: 15px;
-          transform: translate(0, -50%);
-        }
-      }
-      .form-input {
-        width: 100%;
-        height: 36px;
-        background: transparent;
-        border: 0;
-        padding: 0 15px;
-        font-family: 'Roboto', sans-serif;
-        font-weight: 400;
-        font-size: 14px;
-        line-height: 120%;
-        text-align: center;
-        color: rgba(255, 255, 255, 1);
-        &::placeholder {
-          font-family: 'Roboto', sans-serif;
-          font-weight: 400;
-          font-size: 14px;
-          line-height: 120%;
-          text-align: center;
-          color: rgba(255, 255, 255, 0.65);
-        }
-        &:focus {
-          outline: none;
-        }
-      }
-      .search-btn {
-        position: absolute;
-        top: 50%;
-        left: calc(50% - 40px);
-        transform: translate(-50%, -50%);
-        transition: 0.2s;
-        &.noactive {
-          left: 15px;
-          transform: translate(0, -50%);
-        }
-      }
-    }
+    margin-bottom: 24px;
+  }
+  &__types {
+    margin-bottom: 16px;
   }
   &__types,
   &__chats {
     &-title {
-      background: var(--secondary-1);
-      width: calc(100% + 24px);
-      margin-left: -12px;
-      padding: 5px 12px;
+      padding: 0 8px 8px;
       user-select: none;
       font-family: 'Roboto', sans-serif;
-      font-weight: 400;
-      font-size: 16px;
-      letter-spacing: 0.02em;
-      color: var(--primary-3);
+      font-weight: 500;
+      font-size: 14px;
+      line-height: 130%;
+      color: #fff;
     }
     &-list {
-      width: 100vw;
-      background: var(--primary-1);
-      position: relative;
-      left: 50%;
-      transform: translateX(-50%);
-      padding: 0;
+      background: #14131b;
+      border-radius: 12px;
+    }
+    &-icon {
+      svg {
+        width: 24px;
+        height: 24px;
+      }
     }
     &-avatar {
-      width: 38px;
-      min-width: 38px;
-      height: 38px;
+      width: 28px;
+      min-width: 28px;
+      height: 28px;
       border-radius: 50%;
       overflow: hidden;
       img {
@@ -330,7 +278,9 @@ export default class excludePage extends Vue {
       &:last-child {
         .exclude-chats__chats-item--label,
         .exclude-chats__types-item--label {
-          border: 0;
+          &::after {
+            display: none;
+          }
         }
       }
     }
@@ -339,31 +289,37 @@ export default class excludePage extends Vue {
       align-items: center;
       justify-content: space-between;
       gap: 8px;
-      max-width: 375px;
-      margin: 0 auto;
-      padding: 6px 12px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+      padding: 10px 12px;
+      position: relative;
       cursor: pointer;
+      &::after {
+        content: '';
+        width: calc(100% - 12px);
+        height: 0;
+        border-bottom: 1px solid #2b2741;
+        position: absolute;
+        bottom: 0;
+        right: 0;
+      }
     }
     &-label {
       width: 100%;
       text-align: left;
       user-select: none;
-      font-family: 'Inter', sans-serif;
-      font-weight: 700;
+      font-family: 'Roboto', sans-serif;
+      font-weight: 400;
       font-size: 14px;
-      line-height: 120%;
-      letter-spacing: 0.02em;
-      color: var(--primary-3);
+      line-height: 130%;
+      color: #fff;
     }
     &-check {
-      width: 21px;
-      min-width: 21px;
-      height: 21px;
+      width: 20px;
+      min-width: 20px;
+      height: 20px;
       display: flex;
       align-items: center;
       justify-content: center;
-      border: 1px solid rgba(255, 255, 255, 0.65);
+      border: 1px solid #60578e;
       border-radius: 100%;
       line-height: 0;
       transition: 0.2s;

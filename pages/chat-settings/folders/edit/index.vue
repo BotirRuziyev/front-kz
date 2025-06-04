@@ -3,20 +3,24 @@
     <div class="main-container">
       <!-- Header -->
       <div class="edit-folder__header">
-        <nuxt-link
-          to="/chat-settings/folders"
-          class="edit-folder__header-cancel"
-          >Cancel</nuxt-link
-        >
-        <h2 class="edit-folder__header-title">Edit folder</h2>
-        <nuxt-link to="/chat-settings/folders" class="edit-folder__header-done"
-          >Done</nuxt-link
-        >
+        <nuxt-link to="/chat-settings/folders" class="edit-folder__header-back">
+          <BackIcon />
+        </nuxt-link>
+        <h2 class="edit-folder__header-title">Chat Folders</h2>
+      </div>
+
+      <!-- Intro -->
+      <div class="edit-folder__intro">
+        <div class="edit-folder__intro-image">
+          <img
+            src="@/assets/png/create-file.png"
+            alt="Chat folders illustration"
+          />
+        </div>
       </div>
 
       <!-- Folder Name -->
       <div class="edit-folder__field">
-        <label class="edit-folder__label">Folder Name</label>
         <div class="form-control">
           <input
             v-model="folderName"
@@ -24,9 +28,6 @@
             placeholder="Folder Name"
             class="edit-folder__input"
           />
-          <button class="emoji-btn">
-            <EmojiIcon class="emoji" />
-          </button>
         </div>
       </div>
 
@@ -34,13 +35,6 @@
       <div class="edit-folder__section">
         <label class="edit-folder__label">Included Chats</label>
         <div class="edit-folder__chat-block">
-          <nuxt-link
-            to="/chat-settings/folders/edit-folder/include"
-            class="edit-folder__link"
-          >
-            <span><PlusIcon /></span> Add Chats
-          </nuxt-link>
-          <hr class="edit-folder__divider" />
           <div class="edit-folder__chat-item">
             <img
               src="@/assets/svg/avatar.svg"
@@ -48,23 +42,66 @@
               class="edit-folder__chat-avatar"
             />
             <span class="edit-folder__chat-name">Julia Work</span>
+            <button class="edit-folder__chat-delete--btn">
+              <DeleteIcon />
+            </button>
           </div>
+          <div class="edit-folder__chat-item">
+            <img
+              src="@/assets/svg/avatar.svg"
+              alt="Julia Work"
+              class="edit-folder__chat-avatar"
+            />
+            <span class="edit-folder__chat-name">Julia Work</span>
+            <button class="edit-folder__chat-delete--btn">
+              <DeleteIcon />
+            </button>
+          </div>
+          <div class="edit-folder__chat-item">
+            <img
+              src="@/assets/svg/avatar.svg"
+              alt="Julia Work"
+              class="edit-folder__chat-avatar"
+            />
+            <span class="edit-folder__chat-name">Julia Work</span>
+            <button class="edit-folder__chat-delete--btn">
+              <DeleteIcon />
+            </button>
+          </div>
+          <nuxt-link
+            to="/chat-settings/folders/edit/include"
+            class="edit-folder__link"
+          >
+            <span><PlusIcon /></span> Add Chats
+          </nuxt-link>
         </div>
         <p class="edit-folder__desc">
-          Choose chats or types of chats that will appear <br />
-          in this folder
+          Choose chats or types of chats that will appear in this folder
         </p>
       </div>
 
       <!-- Excluded Chats -->
       <div class="edit-folder__section">
         <label class="edit-folder__label">Excluded Chats</label>
-        <nuxt-link
-          to="/chat-settings/folders/edit-folder/exclude"
-          class="edit-folder__link"
-        >
-          <span><PlusIcon /></span> Add Chats to Exclude
-        </nuxt-link>
+        <div class="edit-folder__chat-block">
+          <div class="edit-folder__chat-item">
+            <img
+              src="@/assets/svg/avatar.svg"
+              alt="Julia Work"
+              class="edit-folder__chat-avatar"
+            />
+            <span class="edit-folder__chat-name">Julia Work</span>
+            <button class="edit-folder__chat-delete--btn">
+              <DeleteIcon />
+            </button>
+          </div>
+          <nuxt-link
+            to="/chat-settings/folders/edit/exclude"
+            class="edit-folder__link"
+          >
+            <span><PlusIcon /></span> Add Chats to Exclude
+          </nuxt-link>
+        </div>
         <p class="edit-folder__desc">
           Choose chats or types of chats that will not appear in this folder
         </p>
@@ -98,6 +135,15 @@
           in the chat list
         </p>
       </div>
+
+      <!-- Create Button -->
+      <div class="edit-folder__button">
+        <new-oracle-button
+          to="/chat-settings/folders"
+          text="Create"
+          color="yellow"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -110,12 +156,15 @@ import BackIcon from '@/assets/svg/arrow-back.svg?inline'
 import EmojiIcon from '@/assets/svg/emoji.svg?inline'
 // @ts-ignore
 import PlusIcon from '@/assets/svg/plus.svg?inline'
+// @ts-ignore
+import DeleteIcon from '@/assets/svg/close.svg?inline'
 
 @Component({
   components: {
     BackIcon,
     PlusIcon,
     EmojiIcon,
+    DeleteIcon,
   },
 })
 export default class EditFolderPage extends Vue {
@@ -160,64 +209,69 @@ export default class EditFolderPage extends Vue {
 
 <style lang="scss">
 .edit-folder {
-  background: var(--primary-1);
-  min-height: 100vh;
-  padding-bottom: 24px;
+  padding-bottom: 72px;
   &__label {
     display: block;
     margin-bottom: 8px;
-    margin-left: 4px;
-    font-family: 'Inter', sans-serif;
-    font-weight: 700;
+    margin-left: 8px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
     font-size: 14px;
-    line-height: 120%;
-    letter-spacing: 0.02em;
-    color: var(--primary-3);
+    line-height: 130%;
+    color: #fff;
   }
   &__header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 16px 12px;
-    background: var(--secondary-1);
-    width: calc(100% + 24px);
-    margin-left: -12px;
-    border-radius: 8px 8px 0 0;
-    margin-bottom: 26px;
-    &-cancel {
-      font-family: 'Roboto', sans-serif;
-      font-weight: 400;
-      font-size: 16px;
-      letter-spacing: 0.02em;
-      text-align: center;
-      color: var(--primary-2);
+    gap: 4px;
+    margin-bottom: 24px;
+    position: relative;
+    &-back {
+      width: 22px;
+      height: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      svg {
+        path {
+          stroke: #fff;
+        }
+      }
     }
     &-title {
-      font-family: 'Inter', sans-serif;
-      font-weight: 600;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: -1;
+      font-family: 'Roboto', sans-serif;
+      font-weight: 500;
       font-size: 18px;
-      line-height: 100%;
-      letter-spacing: 0.02em;
-      color: var(--primary-3);
+      line-height: 140%;
+      color: #fff;
     }
-    &-done {
-      font-family: 'Inter', sans-serif;
-      font-weight: 700;
-      font-size: 14px;
-      line-height: 120%;
-      letter-spacing: 0.02em;
-      text-align: center;
-      color: var(--primary-2);
+  }
+  &__intro {
+    margin-bottom: 24px;
+    &-image {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 16px;
+      img {
+        width: 125px;
+        height: 125px;
+      }
     }
   }
   &__field {
-    margin-bottom: 32px;
+    margin-bottom: 24px;
     .form-control {
       display: flex;
       align-items: center;
       gap: 20px;
       background: var(--secondary-1);
-      border-radius: 8px;
+      border-radius: 12px;
       padding: 0 9px 0 0;
     }
   }
@@ -247,12 +301,12 @@ export default class EditFolderPage extends Vue {
     margin-bottom: 32px;
   }
   &__chat-block {
-    margin-bottom: 8px;
-    background: var(--secondary-1);
-    border-radius: 8px;
-    padding: 16px 20px 4px 18px;
+    margin-bottom: 4px;
+    background: #14131b;
+    border-radius: 12px;
     .edit-folder__link {
-      padding: 0 0 17px;
+      height: 44px;
+      padding: 0 16px;
       margin: 0;
     }
   }
@@ -260,36 +314,56 @@ export default class EditFolderPage extends Vue {
     display: flex;
     align-items: center;
     gap: 8px;
-    padding-top: 8px;
+    padding: 8px 16px;
+    position: relative;
+    &::after {
+      content: '';
+      width: calc(100% - 16px);
+      height: 0;
+      border-bottom: 1px solid #2b2741;
+      position: absolute;
+      bottom: 0;
+      right: 0;
+    }
   }
   &__chat-avatar {
-    width: 38px;
-    min-width: 38px;
-    height: 38px;
+    width: 28px;
+    min-width: 28px;
+    height: 28px;
     object-fit: cover;
     border-radius: 50%;
   }
   &__chat-name {
-    font-family: 'Inter', sans-serif;
-    font-weight: 700;
+    width: 100%;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
     font-size: 14px;
-    line-height: 120%;
-    letter-spacing: 0.02em;
-    color: var(--primary-3);
+    line-height: 130%;
+    color: #fff;
   }
   &__divider {
     position: relative;
     left: 20px;
     border-color: rgba(255, 255, 255, 0.3);
   }
+  &__chat-delete--btn {
+    cursor: pointer;
+    svg {
+      width: 22px;
+      height: 22px;
+      path {
+        stroke: #f64e2a;
+      }
+    }
+  }
   &__link {
     display: flex;
     align-items: center;
     gap: 10px;
-    margin-bottom: 8px;
-    background: var(--secondary-1);
-    border-radius: 8px;
-    padding: 16px 9px 16px 18px;
+    min-height: 44px;
+    padding: 0 16px;
+    background: #14131b;
+    border-radius: 12px;
     font-family: 'Roboto', sans-serif;
     font-weight: 400;
     font-size: 14px;
@@ -302,17 +376,18 @@ export default class EditFolderPage extends Vue {
     }
   }
   &__desc {
+    padding: 0 8px;
     font-family: 'Roboto', sans-serif;
     font-weight: 400;
-    font-size: 14px;
-    line-height: 120%;
-    color: rgba(255, 255, 255, 0.65);
+    font-size: 12px;
+    line-height: 135%;
+    color: #7873b4;
   }
   &__field-head {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 8px;
+    margin-bottom: 12px;
     .edit-folder__label {
       margin-bottom: 0;
     }
@@ -330,9 +405,7 @@ export default class EditFolderPage extends Vue {
     display: flex;
     justify-content: center;
     gap: 10px;
-    border-radius: 8px;
-    background: var(--secondary-1);
-    padding: 5px;
+    padding: 0 8px;
     margin-bottom: 8px;
     .edit-folder__color-circle {
       width: 32px;
@@ -359,6 +432,19 @@ export default class EditFolderPage extends Vue {
         opacity: 0;
         transition: 0.2s;
       }
+    }
+  }
+  &__button {
+    width: 100%;
+    background: #14131b;
+    border-top: 1px solid #2b2741;
+    padding: 12px 16px 24px 16px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    .new-oracle-button {
+      max-width: 345px;
+      margin: 0 auto;
     }
   }
 }

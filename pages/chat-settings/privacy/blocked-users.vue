@@ -10,32 +10,13 @@
           <BackIcon />
         </nuxt-link>
         <h1 class="blocked-users__header-title">Group Chats</h1>
-        <button
-          v-if="!isEditMode"
-          class="blocked-users__header-btn blocked-users__header-btn--edit"
-          @click="isEditMode = true"
-        >
-          Edit
-        </button>
-        <button
-          v-else
-          class="blocked-users__header-btn blocked-users__header-btn--done"
-          @click="isEditMode = false"
-        >
-          Done
-        </button>
       </div>
 
-      <div class="blocked-users__search">
-        <span class="blocked-users__search-icon">
-          <SearchIcon />
-        </span>
-        <input
-          v-model="searchQuery"
-          type="text"
-          class="blocked-users__search-input"
-          placeholder="Block User..."
-        />
+      <div class="blocked-users__add">
+        <nuxt-link to="" class="blocked-users__link">
+          <CreateIcon class="blocked-users__link-icon" />
+          <span class="blocked-users__link-label">Block User</span>
+        </nuxt-link>
       </div>
 
       <!-- exeptions Body -->
@@ -43,19 +24,10 @@
         <!-- Exception List -->
         <ul class="blocked-users__exeptions-list">
           <li
-            v-for="(user, index) in filteredBlockedUsers"
+            v-for="(user, index) in blockedUsers"
             :key="index"
             class="blocked-users__exeptions-item"
           >
-            <!-- Remove button -->
-            <button
-              v-if="isEditMode"
-              class="blocked-users__exeptions-remove"
-              @click="deleteExeption(index)"
-            >
-              <MinusCircleIcon />
-            </button>
-
             <!-- Avatar + Name -->
             <div class="blocked-users__exeptions-user">
               <img
@@ -65,6 +37,13 @@
               />
               <span class="blocked-users__exeptions-name">{{ user.name }}</span>
             </div>
+            <!-- Remove button -->
+            <button
+              class="blocked-users__exeptions-remove"
+              @click="deleteExeption(index)"
+            >
+              <MinusCircleIcon />
+            </button>
           </li>
         </ul>
       </div>
@@ -77,22 +56,29 @@ import { Component, Vue } from 'nuxt-property-decorator'
 // @ts-ignore
 import BackIcon from '@/assets/svg/arrow-back.svg?inline'
 // @ts-ignore
-import MinusCircleIcon from '@/assets/svg/minus-circle.svg?inline'
+import MinusCircleIcon from '@/assets/svg/close.svg?inline'
 // @ts-ignore
-import SearchIcon from '@/assets/svg/emoji-icon.svg?inline'
+import CreateIcon from '@/assets/svg/plus.svg?inline'
 
 @Component({
   components: {
     BackIcon,
     MinusCircleIcon,
-    SearchIcon,
+    CreateIcon,
   },
 })
 export default class BlockedUsersPage extends Vue {
-  searchQuery: string = ''
   isEditMode = false
 
   blockedUsers = [
+    { name: 'Bill', deletable: true },
+    { name: 'Julia Work', deletable: true },
+    { name: 'Bill', deletable: true },
+    { name: 'Julia Work', deletable: true },
+    { name: 'Bill', deletable: true },
+    { name: 'Julia Work', deletable: true },
+    { name: 'Bill', deletable: true },
+    { name: 'Julia Work', deletable: true },
     { name: 'Bill', deletable: true },
     { name: 'Julia Work', deletable: true },
   ]
@@ -100,13 +86,6 @@ export default class BlockedUsersPage extends Vue {
   deleteExeption(index: number) {
     if (!this.blockedUsers[index].deletable) return
     this.blockedUsers.splice(index, 1)
-  }
-
-  get filteredBlockedUsers() {
-    const query = this.searchQuery.toLowerCase().trim()
-    return this.blockedUsers.filter((user) =>
-      user.name.toLowerCase().includes(query)
-    )
   }
 }
 </script>
@@ -118,101 +97,80 @@ export default class BlockedUsersPage extends Vue {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    padding: 10px 0;
     gap: 4px;
     margin-bottom: 24px;
+    position: relative;
     &-back {
-      width: 22px;
-      height: 22px;
+      width: 18px;
+      height: 18px;
       display: flex;
       align-items: center;
       justify-content: center;
+      svg {
+        path {
+          stroke: #fff;
+        }
+      }
     }
     &-title {
       width: 100%;
-      font-family: 'Inter', sans-serif;
-      font-weight: 600;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: -1;
+      font-family: 'Roboto', sans-serif;
+      font-weight: 500;
       font-size: 18px;
-      line-height: 100%;
-      letter-spacing: 0.02em;
-      text-align: left;
-      color: var(--primary-3);
-    }
-    &-btn {
-      font-family: 'Inter', sans-serif;
-      font-weight: 700;
-      font-size: 14px;
-      line-height: 120%;
-      letter-spacing: 0.02em;
+      line-height: 140%;
       text-align: center;
-      color: var(--primary-2);
-      transition: 0.2s;
-      &:hover {
-        color: var(--oranzhevyy750);
+      color: #fff;
+    }
+  }
+  &__link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 44px;
+    position: relative;
+    background: #14131b;
+    padding: 0 18px;
+    border-radius: 12px;
+    margin-bottom: 24px;
+    cursor: pointer;
+    transition: 0.2s;
+    &:hover {
+      background: #2b2741;
+    }
+    &-label {
+      font-family: 'Roboto', sans-serif;
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 130%;
+      color: #f64e2a;
+    }
+    &-icon {
+      rect {
+        fill: var(--primary-2);
       }
     }
   }
-  &__search {
-    display: flex;
-    align-items: center;
-    margin-bottom: 32px;
-    background: var(--secondary-1);
-    border-radius: 8px;
-    padding: 0 12px 0 14px;
-  }
-  &__search-input {
-    width: 100%;
-    min-height: 43px;
-    background: transparent;
-    border: 0;
-    padding: 13px 0 13px 8px;
-    font-family: 'Inter', sans-serif;
-    font-weight: 700;
-    font-size: 14px;
-    line-height: 120%;
-    letter-spacing: 0.02em;
-    color: rgba(255, 255, 255, 1);
-    &::placeholder {
-      font-family: 'Inter', sans-serif;
-      font-weight: 700;
-      font-size: 14px;
-      line-height: 120%;
-      letter-spacing: 0.02em;
-      color: rgba(255, 255, 255, 0.65);
-    }
-    &:focus {
-      outline: none;
-    }
-  }
-  &__exeptions {
-    background: var(--secondary-1);
-    border-radius: 8px;
-    overflow: hidden;
-  }
   &__exeptions-item {
+    min-height: 44px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 16px;
     position: relative;
-    padding: 8px 14px 8px 14px;
-    background: var(--secondary-1);
-    transition: 0.2s;
-    &:last-child {
-      &::after {
-        display: none;
-      }
-    }
     &::after {
       content: '';
-      width: calc(100% - 60px);
+      width: calc(100% + 12px);
       height: 0;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+      border-bottom: 1px solid #2b2741;
       position: absolute;
       bottom: 0;
-      right: 0;
-    }
-    &:hover {
-      background: var(--secondary-7);
+      right: -12px;
     }
   }
   &__exeptions-user {
@@ -222,17 +180,17 @@ export default class BlockedUsersPage extends Vue {
     gap: 8px;
   }
   &__exeptions-avatar {
-    width: 38px;
-    height: 38px;
+    width: 28px;
+    height: 28px;
     border-radius: 50%;
     object-fit: cover;
   }
   &__exeptions-name {
     font-family: 'Roboto', sans-serif;
     font-weight: 400;
-    font-size: 16px;
-    line-height: 120%;
-    color: var(--primary-3);
+    font-size: 14px;
+    line-height: 130%;
+    color: #fff;
   }
   &__exeptions-clear {
     display: flex;
@@ -246,6 +204,15 @@ export default class BlockedUsersPage extends Vue {
     font-size: 14px;
     line-height: 120%;
     color: var(--primary-2);
+  }
+  &__exeptions-remove {
+    svg {
+      width: 22px;
+      height: 22px;
+      path {
+        stroke: #f64e2a;
+      }
+    }
   }
 }
 </style>

@@ -180,37 +180,35 @@ export default class PrivacySettingsPage extends Vue {}
     display: flex;
     align-items: center;
     justify-content: space-between;
+    padding: 10px 0;
     gap: 4px;
     margin-bottom: 24px;
+    position: relative;
     &-back {
-      width: 22px;
-      height: 22px;
+      width: 18px;
+      height: 18px;
       display: flex;
       align-items: center;
       justify-content: center;
+      svg {
+        path {
+          stroke: #fff;
+        }
+      }
     }
     &-title {
       width: 100%;
-      font-family: 'Inter', sans-serif;
-      font-weight: 600;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: -1;
+      font-family: 'Roboto', sans-serif;
+      font-weight: 500;
       font-size: 18px;
-      line-height: 100%;
-      letter-spacing: 0.02em;
-      text-align: left;
-      color: var(--primary-3);
-    }
-    &-btn {
-      font-family: 'Inter', sans-serif;
-      font-weight: 700;
-      font-size: 14px;
-      line-height: 120%;
-      letter-spacing: 0.02em;
+      line-height: 140%;
       text-align: center;
-      color: var(--primary-2);
-      transition: 0.2s;
-      &:hover {
-        color: var(--oranzhevyy750);
-      }
+      color: #fff;
     }
   }
   &__section-title {
@@ -229,20 +227,40 @@ export default class PrivacySettingsPage extends Vue {}
   &__in-app-list {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    background: #14131b;
+    border-radius: 12px;
+    overflow: hidden;
+    li {
+      &:last-child {
+        .privacy-settings__account-security--item {
+          &::after {
+            display: none;
+          }
+        }
+      }
+    }
   }
   &__account-security--item {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    min-height: 43px;
+    min-height: 44px;
     gap: 8px;
-    background: var(--secondary-1);
-    border-radius: 8px;
-    padding: 10px 12px 10px 14px;
+    padding: 0 16px;
     transition: 0.2s;
+    position: relative;
+
+    &::after {
+      content: '';
+      width: calc(100% - 16px);
+      height: 0;
+      border-bottom: 1px solid #2b2741;
+      position: absolute;
+      bottom: 0;
+      right: 0;
+    }
     &:hover {
-      background: var(--secondary-13);
+      background: #2b2741;
     }
   }
   &__account-security-left {
@@ -265,9 +283,9 @@ export default class PrivacySettingsPage extends Vue {}
     gap: 6px;
     font-family: 'Roboto', sans-serif;
     font-weight: 400;
-    font-size: 16px;
-    line-height: 11px;
-    color: rgba(255, 255, 255, 0.65);
+    font-size: 14px;
+    line-height: 130%;
+    color: #fff;
   }
   &__account-security-right {
     display: flex;
@@ -277,9 +295,9 @@ export default class PrivacySettingsPage extends Vue {}
   &__account-security-status {
     font-family: 'Roboto', sans-serif;
     font-weight: 400;
-    font-size: 14px;
-    line-height: 120%;
-    color: rgba(255, 255, 255, 0.65);
+    font-size: 12px;
+    line-height: 135%;
+    color: #8780cf;
   }
   &__account-security-arrow {
     width: 7px;

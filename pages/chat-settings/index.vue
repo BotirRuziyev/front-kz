@@ -18,7 +18,7 @@
         <div class="profile-name">
           <span>Julia Work</span>
           <span class="logo">
-            <img src="@/assets/svg/logo.png" alt="" />
+            <img src="@/assets/svg/cat-emoji.svg" alt="" />
           </span>
         </div>
         <div class="profile-meta">
@@ -28,14 +28,14 @@
         </div>
       </div>
       <div class="settings-menu">
+        <nuxt-link to="" class="settings-menu__item">
+          <div class="settings-menu__icon settings-menu__icon--emoji">
+            <PencilIcon />
+          </div>
+          <div class="settings-menu__label">Change Emoji Status</div>
+          <div class="settings-menu__arrow"></div>
+        </nuxt-link>
         <div class="settings-menu__section">
-          <nuxt-link to="" class="settings-menu__item">
-            <div class="settings-menu__icon settings-menu__icon--emoji">
-              <EmojiIcon />
-            </div>
-            <div class="settings-menu__label">Change Emoji Status</div>
-          </nuxt-link>
-
           <nuxt-link to="" class="settings-menu__item">
             <div class="settings-menu__icon settings-menu__icon--saved">
               <SavedIcon />
@@ -73,14 +73,6 @@
             <div class="settings-menu__arrow"></div>
           </nuxt-link>
 
-          <nuxt-link to="/chat-settings/privacy" class="settings-menu__item">
-            <div class="settings-menu__icon settings-menu__icon--privacy">
-              <PrivacyIcon />
-            </div>
-            <div class="settings-menu__label">Privacy</div>
-            <div class="settings-menu__arrow"></div>
-          </nuxt-link>
-
           <nuxt-link to="/chat-settings/language" class="settings-menu__item">
             <div class="settings-menu__icon settings-menu__icon--language">
               <LangIcon />
@@ -91,18 +83,16 @@
           </nuxt-link>
         </div>
 
-        <div class="settings-menu__section">
-          <nuxt-link
-            to=""
-            class="settings-menu__item settings-menu__item--premium"
-          >
-            <div class="settings-menu__icon settings-menu__icon--premium">
-              <PremiumIcon />
-            </div>
-            <div class="settings-menu__label">Premium</div>
-            <div class="settings-menu__arrow"></div>
-          </nuxt-link>
-        </div>
+        <nuxt-link
+          to=""
+          class="settings-menu__item settings-menu__item--premium"
+        >
+          <div class="settings-menu__icon settings-menu__icon--premium">
+            <PremiumIcon />
+          </div>
+          <div class="settings-menu__label">Premium</div>
+          <div class="settings-menu__arrow"></div>
+        </nuxt-link>
       </div>
     </div>
   </div>
@@ -114,7 +104,7 @@ import { Component, Vue } from 'nuxt-property-decorator'
 // @ts-ignore
 import QrCodeIcon from '@/assets/svg/qr-code-icon.svg?inline'
 // @ts-ignore
-import EmojiIcon from '@/assets/svg/emoji-icon.svg?inline'
+import PencilIcon from '@/assets/svg/pencil-icon.svg?inline'
 // @ts-ignore
 import SavedIcon from '@/assets/svg/save-icon.svg?inline'
 // @ts-ignore
@@ -133,7 +123,7 @@ import PremiumIcon from '@/assets/svg/premium-icon.svg?inline'
 @Component({
   components: {
     QrCodeIcon,
-    EmojiIcon,
+    PencilIcon,
     SavedIcon,
     NotebookIcon,
     FoldersIcon,
@@ -183,61 +173,77 @@ export default class ChatSettinsPage extends Vue {}
     .profile-name {
       display: flex;
       align-items: center;
-      gap: 4px;
+      gap: 8px;
       margin-bottom: 4px;
-      font-family: 'Inter', sans-serif;
-      font-weight: 600;
+      font-family: 'Roboto', sans-serif;
+      font-weight: 500;
       font-size: 18px;
-      line-height: 100%;
-      letter-spacing: 0.02em;
+      line-height: 140%;
       text-align: center;
-      color: var(--primary-3);
+      color: #fff;
       .logo {
         line-height: 0;
-        img {
-          width: 24px;
-          height: 24px;
-        }
       }
     }
     .profile-meta {
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 20px;
+      gap: 17px;
       .profile-id,
       .profile-nikname {
         font-family: 'Roboto', sans-serif;
         font-weight: 400;
-        font-size: 16px;
-        line-height: 120%;
+        font-size: 14px;
+        line-height: 130%;
         text-align: center;
-        color: rgba(255, 255, 255, 0.65);
+        color: #8780cf;
       }
       .circle {
         width: 5px;
         height: 5px;
         border-radius: 50%;
-        background: rgba(255, 255, 255, 0.65);
+        background: #8780cf;
       }
     }
   }
   .settings-menu {
     display: flex;
     flex-direction: column;
-    gap: 32px;
+    gap: 16px;
     &__section {
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      .settings-menu__item {
+        position: relative;
+        border-radius: 0;
+        &:first-child {
+          border-radius: 12px 12px 0 0;
+        }
+        &:last-child {
+          border-radius: 0 0 12px 12px;
+          &::after {
+            display: none;
+          }
+        }
+        &::after {
+          content: '';
+          width: calc(100% - 12px);
+          height: 0;
+          border-bottom: 1px solid #2b2741;
+          position: absolute;
+          right: 0;
+          bottom: 0;
+        }
+      }
     }
     &__item {
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 8px;
-      background: var(--secondary-1);
-      border-radius: 8px;
+      background: #14131b;
+      border-radius: 12px;
       padding: 10px 12px 10px 14px;
       transition: 0.2s;
       &:hover {

@@ -172,94 +172,97 @@ export default class NotificationSettingsPage extends Vue {}
   &__header {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 4px;
+    padding: 10px 0;
+    position: relative;
     margin-bottom: 24px;
+
     &-back {
-      width: 22px;
-      height: 22px;
+      width: 18px;
+      height: 18px;
       display: flex;
       align-items: center;
       justify-content: center;
+      svg {
+        path {
+          stroke: #fff;
+        }
+      }
     }
     &-title {
       width: 100%;
-      font-family: 'Inter', sans-serif;
-      font-weight: 600;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: -1;
+      font-family: 'Roboto', sans-serif;
+      font-weight: 500;
       font-size: 18px;
-      line-height: 100%;
-      letter-spacing: 0.02em;
-      text-align: left;
-      color: var(--primary-3);
-    }
-    &-btn {
-      font-family: 'Inter', sans-serif;
-      font-weight: 700;
-      font-size: 14px;
-      line-height: 120%;
-      letter-spacing: 0.02em;
+      line-height: 140%;
       text-align: center;
-      color: var(--primary-2);
-      transition: 0.2s;
-      &:hover {
-        color: var(--oranzhevyy750);
-      }
+      color: #fff;
     }
   }
   &__section-title {
-    padding: 0 0 8px 4px;
-    font-family: 'Inter', sans-serif;
-    font-weight: 700;
-    font-size: 14px;
-    line-height: 120%;
-    letter-spacing: 0.02em;
-    color: var(--primary-3);
+    padding: 0 8px 8px 8px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 140%;
+    color: #fff;
   }
   &__message-section {
-    margin-bottom: 32px;
-  }
-  &__message-list,
-  &__in-app-list {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
+    margin-bottom: 24px;
   }
   &__message-item {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    min-height: 44px;
     gap: 8px;
-    background: var(--secondary-1);
-    border-radius: 8px;
-    padding: 10px 12px 10px 14px;
-    transition: 0.2s;
-    &:hover {
-      background: var(--secondary-13);
+    padding: 5px 0;
+    position: relative;
+    &::after {
+      content: '';
+      width: calc(100% - 30px);
+      height: 0;
+      border-bottom: 1px solid #2b2741;
+      position: absolute;
+      bottom: 0;
+      right: -12px;
     }
   }
   &__message-left {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 12px;
   }
   &__message-icon {
     svg {
-      width: 24px;
-      height: 24px;
-      min-width: 24px;
-      min-height: 24px;
+      width: 30px;
+      height: 30px;
+      min-width: 30px;
+      min-height: 30px;
     }
   }
   &__message-text {
     width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
+  }
+  &__message-title {
+    display: block;
     font-family: 'Roboto', sans-serif;
     font-weight: 400;
-    font-size: 16px;
-    line-height: 11px;
-    color: rgba(255, 255, 255, 0.65);
+    font-size: 12px;
+    line-height: 135%;
+    color: #bfb7ff;
+  }
+  &__message-subtext {
+    display: block;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 130%;
+    color: #fff;
   }
   &__message-right {
     display: flex;
@@ -269,9 +272,9 @@ export default class NotificationSettingsPage extends Vue {}
   &__message-status {
     font-family: 'Roboto', sans-serif;
     font-weight: 400;
-    font-size: 14px;
-    line-height: 120%;
-    color: rgba(255, 255, 255, 0.65);
+    font-size: 12px;
+    line-height: 135%;
+    color: #8780cf;
   }
   &__message-arrow {
     width: 7px;
@@ -283,16 +286,24 @@ export default class NotificationSettingsPage extends Vue {}
     align-items: center;
     justify-content: space-between;
     gap: 8px;
-    background: var(--secondary-1);
-    border-radius: 8px;
-    padding: 10px 12px 10px 14px;
+    min-height: 44px;
+    position: relative;
+    &::after {
+      content: '';
+      width: calc(100% + 12px);
+      height: 0;
+      border-bottom: 1px solid #2b2741;
+      position: absolute;
+      bottom: 0;
+      right: -12px;
+    }
   }
   &__in-app-label {
     font-family: 'Roboto', sans-serif;
     font-weight: 400;
-    font-size: 16px;
-    line-height: 120%;
-    color: rgba(255, 255, 255, 0.65);
+    font-size: 14px;
+    line-height: 130%;
+    color: #fff;
   }
   &__toggle {
     &-input {
@@ -300,18 +311,21 @@ export default class NotificationSettingsPage extends Vue {}
     }
     &-slider {
       display: block;
-      width: 40px;
-      height: 25px;
-      background: rgba(255, 255, 255, 0.3);
-      border-radius: 41px;
+      width: 51px;
+      height: 31px;
+      background: rgba(120, 120, 128, 0.16);
+      border-radius: 100px;
       cursor: pointer;
       transition: 0.2s;
       &::after {
         content: '';
         display: inline-block;
-        padding: 10.5px;
+        width: 27px;
+        height: 27px;
         border-radius: 50%;
-        background: var(--primary-3);
+        box-shadow: 0 3px 1px 0 rgba(0, 0, 0, 0.06),
+          0 3px 8px 0 rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(0, 0, 0, 0.04);
+        background: #fff;
         margin-left: 2px;
         margin-top: 2px;
         line-height: 0;
@@ -319,11 +333,10 @@ export default class NotificationSettingsPage extends Vue {}
       }
     }
     &-input:checked + .notification-settings__toggle-slider {
-      background-color: #00c853;
+      background: #f64e2a;
     }
     &-input:checked ~ .notification-settings__toggle-slider::after {
-      background: white;
-      margin-left: 17px;
+      margin-left: 22px;
     }
   }
 }

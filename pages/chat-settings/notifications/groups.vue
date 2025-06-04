@@ -22,14 +22,18 @@
           class="group-chats__header-btn group-chats__header-btn--done"
           @click="isEditMode = false"
         >
-          Done</button
-        >s
+          Done
+        </button>
       </div>
       <!-- Show Notifications -->
       <div class="group-chats__toggle-row show-notifications">
         <span class="group-chats__toggle-label">Show Notifications</span>
-        <label class="group-chats__toggle">
-          <input type="checkbox" class="group-chats__toggle-input" />
+        <label for="show-notifications" class="group-chats__toggle">
+          <input
+            id="show-notifications"
+            type="checkbox"
+            class="group-chats__toggle-input"
+          />
           <span class="group-chats__toggle-slider"></span>
         </label>
       </div>
@@ -38,8 +42,12 @@
         <h3 class="group-chats__section-title">Options</h3>
         <div class="group-chats__toggle-row">
           <span class="group-chats__toggle-label">Message Preview</span>
-          <label class="group-chats__toggle">
-            <input type="checkbox" class="group-chats__toggle-input" />
+          <label for="message-preview" class="group-chats__toggle">
+            <input
+              id="message-preview"
+              type="checkbox"
+              class="group-chats__toggle-input"
+            />
             <span class="group-chats__toggle-slider"></span>
           </label>
         </div>
@@ -55,9 +63,10 @@
       </div>
 
       <!-- exeptions Body -->
+      <h3 class="group-chats__section-title">Exeptions</h3>
       <div class="group-chats__exeptions">
         <!-- Add Exception -->
-        <nuxt-link to="" class="group-chats__exeptions-add">
+        <nuxt-link v-if="!isEditMode" to="" class="group-chats__exeptions-add">
           <CreateIcon class="group-chats__exeptions-add-icon" />
           <span class="group-chats__exeptions-add-label">Add Exception</span>
         </nuxt-link>
@@ -69,6 +78,25 @@
             :key="index"
             class="group-chats__exeptions-item"
           >
+            <!-- Avatar + Name -->
+            <div class="group-chats__exeptions-user">
+              <img
+                :src="require('@/assets/svg/avatar.svg')"
+                :alt="exception.name"
+                class="group-chats__exeptions-avatar"
+              />
+              <div style="width: 100%">
+                <span class="group-chats__exeptions-name">{{
+                  exception.name
+                }}</span>
+                <span v-if="!isEditMode" class="group-chats__exeptions-label">{{
+                  exception.label
+                }}</span>
+              </div>
+            </div>
+            <button v-if="!isEditMode" class="group-chats__owner-btn">
+              Owner
+            </button>
             <!-- Remove button -->
             <button
               v-if="isEditMode"
@@ -77,23 +105,12 @@
             >
               <MinusCircleIcon />
             </button>
-
-            <!-- Avatar + Name -->
-            <div class="group-chats__exeptions-user">
-              <img
-                :src="require('@/assets/svg/avatar.svg')"
-                :alt="exception.name"
-                class="group-chats__exeptions-avatar"
-              />
-              <span class="group-chats__exeptions-name">{{
-                exception.name
-              }}</span>
-            </div>
           </li>
         </ul>
 
         <!-- Delete All -->
         <button
+          v-if="!isEditMode"
           class="group-chats__exeptions-clear"
           @click="clearAllExceptions"
         >
@@ -114,7 +131,7 @@ import BackIcon from '@/assets/svg/arrow-back.svg?inline'
 // @ts-ignore
 import CreateIcon from '@/assets/svg/plus.svg?inline'
 // @ts-ignore
-import MinusCircleIcon from '@/assets/svg/minus-circle.svg?inline'
+import MinusCircleIcon from '@/assets/svg/close.svg?inline'
 // @ts-ignore
 import TrashIcon from '@/assets/svg/delete-icon.svg?inline'
 
@@ -130,8 +147,9 @@ export default class GroupChatsPage extends Vue {
   isEditMode = false
 
   exeptions = [
-    { name: 'Julia Work', deletable: true },
-    { name: 'Julia Work', deletable: true },
+    { name: 'Julia Work', label: 'Last seen recently', deletable: true },
+    { name: 'Julia Work', label: 'Last seen recently', deletable: true },
+    { name: 'Julia Work', label: 'Last seen recently', deletable: true },
   ]
 
   deleteExeption(index: number) {
@@ -151,33 +169,42 @@ export default class GroupChatsPage extends Vue {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    padding: 10px 0;
     gap: 4px;
     margin-bottom: 24px;
+    position: relative;
     &-back {
-      width: 22px;
-      height: 22px;
+      width: 18px;
+      height: 18px;
       display: flex;
       align-items: center;
       justify-content: center;
+      svg {
+        path {
+          stroke: #fff;
+        }
+      }
     }
     &-title {
       width: 100%;
-      font-family: 'Inter', sans-serif;
-      font-weight: 600;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: -1;
+      font-family: 'Roboto', sans-serif;
+      font-weight: 500;
       font-size: 18px;
-      line-height: 100%;
-      letter-spacing: 0.02em;
-      text-align: left;
-      color: var(--primary-3);
+      line-height: 140%;
+      text-align: center;
+      color: #fff;
     }
     &-btn {
-      font-family: 'Inter', sans-serif;
-      font-weight: 700;
-      font-size: 14px;
-      line-height: 120%;
-      letter-spacing: 0.02em;
-      text-align: center;
-      color: var(--primary-2);
+      font-family: 'Roboto', sans-serif;
+      font-weight: 500;
+      font-size: 16px;
+      line-height: 140%;
+      color: #f64e2a;
       transition: 0.2s;
       &:hover {
         color: var(--oranzhevyy750);
@@ -186,18 +213,17 @@ export default class GroupChatsPage extends Vue {
   }
   &__section-title {
     padding: 0 0 8px 4px;
-    font-family: 'Inter', sans-serif;
-    font-weight: 700;
-    font-size: 14px;
-    line-height: 120%;
-    letter-spacing: 0.02em;
-    color: var(--primary-3);
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 140%;
+    color: #fff;
   }
   .show-notifications {
-    margin-bottom: 32px;
+    margin-bottom: 24px;
   }
   &__options {
-    margin-bottom: 32px;
+    margin-bottom: 24px;
     .group-chats__toggle-row {
       margin-bottom: 4px;
     }
@@ -208,20 +234,26 @@ export default class GroupChatsPage extends Vue {
     align-items: center;
     justify-content: space-between;
     gap: 8px;
-    background: var(--secondary-1);
-    border-radius: 8px;
-    padding: 9px 12px 9px 14px;
-  }
-  &__select-row--link {
-    padding: 12px 12px 12px 14px;
+    min-height: 44px;
+    position: relative;
+    cursor: pointer;
+    &::after {
+      content: '';
+      width: calc(100% + 12px);
+      height: 0;
+      border-bottom: 1px solid #2b2741;
+      position: absolute;
+      bottom: 0;
+      right: -12px;
+    }
   }
   &__toggle-label,
   &__select-label {
     font-family: 'Roboto', sans-serif;
     font-weight: 400;
-    font-size: 16px;
-    line-height: 120%;
-    color: rgba(255, 255, 255, 0.65);
+    font-size: 14px;
+    line-height: 130%;
+    color: #fff;
   }
   &__toggle {
     &-input {
@@ -229,18 +261,21 @@ export default class GroupChatsPage extends Vue {
     }
     &-slider {
       display: block;
-      width: 40px;
-      height: 25px;
-      background: rgba(255, 255, 255, 0.3);
-      border-radius: 41px;
+      width: 51px;
+      height: 31px;
+      background: rgba(120, 120, 128, 0.16);
+      border-radius: 100px;
       cursor: pointer;
       transition: 0.2s;
       &::after {
         content: '';
         display: inline-block;
-        padding: 10.5px;
+        width: 27px;
+        height: 27px;
         border-radius: 50%;
-        background: var(--primary-3);
+        box-shadow: 0 3px 1px 0 rgba(0, 0, 0, 0.06),
+          0 3px 8px 0 rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(0, 0, 0, 0.04);
+        background: #fff;
         margin-left: 2px;
         margin-top: 2px;
         line-height: 0;
@@ -248,11 +283,10 @@ export default class GroupChatsPage extends Vue {
       }
     }
     &-input:checked + .group-chats__toggle-slider {
-      background-color: #00c853;
+      background: #f64e2a;
     }
     &-input:checked ~ .group-chats__toggle-slider::after {
-      background: white;
-      margin-left: 17px;
+      margin-left: 22px;
     }
   }
   &__select-value {
@@ -261,9 +295,9 @@ export default class GroupChatsPage extends Vue {
     gap: 8px;
     font-family: 'Roboto', sans-serif;
     font-weight: 400;
-    font-size: 14px;
-    line-height: 120%;
-    color: rgba(255, 255, 255, 0.65);
+    font-size: 12px;
+    line-height: 135%;
+    color: #8780cf;
   }
   &__select-arrow {
     width: 7px;
@@ -271,37 +305,37 @@ export default class GroupChatsPage extends Vue {
     background: url('@/assets/svg/shape-icon.svg') no-repeat center/contain;
   }
   &__exeptions {
-    background: var(--secondary-1);
-    border-radius: 8px;
+    background: #14131b;
+    border-radius: 12px;
     overflow: hidden;
   }
   &__exeptions-add {
     display: flex;
     align-items: center;
     gap: 8px;
+    min-height: 44px;
     position: relative;
-    padding: 16px 18px;
+    padding: 0 18px;
     cursor: pointer;
-    background: var(--secondary-1);
     transition: 0.2s;
     &::after {
       content: '';
-      width: calc(100% - 36px);
+      width: calc(100% - 12px);
       height: 0;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+      border-bottom: 1px solid #2b2741;
       position: absolute;
       bottom: 0;
       right: 0;
     }
     &:hover {
-      background: var(--secondary-7);
+      background: #2b2741;
     }
     &-label {
       font-family: 'Roboto', sans-serif;
       font-weight: 400;
-      font-size: 16px;
-      line-height: 120%;
-      color: var(--primary-2);
+      font-size: 14px;
+      line-height: 130%;
+      color: #f64e2a;
     }
     &-icon {
       rect {
@@ -315,20 +349,20 @@ export default class GroupChatsPage extends Vue {
     justify-content: space-between;
     gap: 16px;
     position: relative;
-    padding: 8px 14px 8px 14px;
-    background: var(--secondary-1);
+    padding: 3px 12px;
+    cursor: pointer;
     transition: 0.2s;
     &::after {
       content: '';
-      width: calc(100% - 36px);
+      width: calc(100% - 12px);
       height: 0;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+      border-bottom: 1px solid #2b2741;
       position: absolute;
       bottom: 0;
       right: 0;
     }
     &:hover {
-      background: var(--secondary-7);
+      background: #2b2741;
     }
   }
   &__exeptions-user {
@@ -344,24 +378,58 @@ export default class GroupChatsPage extends Vue {
     object-fit: cover;
   }
   &__exeptions-name {
+    display: block;
     font-family: 'Roboto', sans-serif;
     font-weight: 400;
     font-size: 16px;
-    line-height: 120%;
+    line-height: 18px;
     color: var(--primary-3);
   }
+  &__exeptions-label {
+    margin-top: 4px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 18px;
+    color: #8780cf;
+  }
   &__exeptions-clear {
+    width: 100%;
+    min-height: 44px;
     display: flex;
     align-items: center;
     gap: 8px;
-    padding: 16px 18px;
+    padding: 0 18px;
   }
   &__exeptions-clear-label {
     font-family: 'Roboto', sans-serif;
     font-weight: 400;
     font-size: 14px;
-    line-height: 120%;
-    color: var(--primary-2);
+    line-height: 130%;
+    color: #f64e2a;
+  }
+  &__owner-btn {
+    border: 0;
+    background: transparent;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 130%;
+    text-align: right;
+    color: #8780cf;
+    transition: 0.2s;
+    &:hover {
+      color: #f64e2a;
+    }
+  }
+  &__exeptions-remove {
+    svg {
+      width: 22px;
+      height: 22px;
+      path {
+        stroke: #f64e2a;
+      }
+    }
   }
 }
 </style>

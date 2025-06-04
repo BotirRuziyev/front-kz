@@ -1,44 +1,41 @@
 <template>
-  <div class="message-permissions">
+  <div class="chat-messages">
     <div class="main-container">
       <!-- Header -->
-      <div class="message-permissions__header">
+      <div class="chat-messages__header">
         <nuxt-link
-          to="/chat-settings/privacy"
-          class="message-permissions__header-back"
+          to="/chat-settings/privacy/"
+          class="chat-messages__header-back"
         >
           <BackIcon />
         </nuxt-link>
-        <h1 class="message-permissions__header-title">Messages</h1>
+        <h1 class="chat-messages__header-title">Messages</h1>
       </div>
 
       <!-- Visibility options block -->
-      <div class="message-permissions__visibility">
-        <h2 class="message-permissions__title">Who Can Send Me Messages</h2>
+      <div class="chat-messages__visibility">
+        <h2 class="chat-messages__title">Who Can Send Me Messages</h2>
 
-        <ul class="message-permissions__options">
+        <ul class="chat-messages__options">
           <li
             v-for="option in options"
             :key="option"
-            class="message-permissions__option"
+            class="chat-messages__option"
             :class="{
-              'message-permissions__option--active': selectedOption === option,
+              'chat-messages__option--active': selectedOption === option,
             }"
             @click="selectedOption = option"
           >
-            <span class="message-permissions__checkmark"
-              ><CheckmarkIcon
-            /></span>
             {{ option }}
+            <span class="chat-messages__checkmark"><CheckmarkIcon /></span>
           </li>
         </ul>
 
-        <p class="message-permissions__description">
+        <p class="chat-messages__description">
           You can restrict messages from users who are not in your contacts and
           don’t have Premium
         </p>
       </div>
-
       <div class="premium-wrapper">
         <nuxt-link to="" class="link--highlighted">
           What is Premium?
@@ -49,12 +46,11 @@
 </template>
 
 <script lang="ts">
-import { Component } from 'nuxt-property-decorator'
-import Vue from 'vue'
+import { Component, Vue } from 'nuxt-property-decorator'
 // @ts-ignore
 import BackIcon from '@/assets/svg/arrow-back.svg?inline'
 // @ts-ignore
-import CheckmarkIcon from '@/assets/svg/checkbox.svg?inline'
+import CheckmarkIcon from '@/assets/svg/check-icon.svg?inline'
 // @ts-ignore
 import ArrowIcon from '@/assets/svg/shape-icon.svg?inline'
 
@@ -65,7 +61,7 @@ import ArrowIcon from '@/assets/svg/shape-icon.svg?inline'
     ArrowIcon,
   },
 })
-export default class MessagesPage extends Vue {
+export default class BiePage extends Vue {
   selectedOption: string = 'Everybody'
 
   options = ['Everybody', 'My contacts and Premium Users']
@@ -73,84 +69,80 @@ export default class MessagesPage extends Vue {
 </script>
 
 <style lang="scss">
-.message-permissions {
+.chat-messages {
   padding-bottom: 32px;
   &__header {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    padding: 10px 0;
     gap: 4px;
     margin-bottom: 24px;
+    position: relative;
     &-back {
-      width: 22px;
-      height: 22px;
+      width: 18px;
+      height: 18px;
       display: flex;
       align-items: center;
       justify-content: center;
+      svg {
+        path {
+          stroke: #fff;
+        }
+      }
     }
     &-title {
       width: 100%;
-      font-family: 'Inter', sans-serif;
-      font-weight: 600;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: -1;
+      font-family: 'Roboto', sans-serif;
+      font-weight: 500;
       font-size: 18px;
-      line-height: 100%;
-      letter-spacing: 0.02em;
-      text-align: left;
-      color: var(--primary-3);
-    }
-    &-btn {
-      font-family: 'Inter', sans-serif;
-      font-weight: 700;
-      font-size: 14px;
-      line-height: 120%;
-      letter-spacing: 0.02em;
+      line-height: 140%;
       text-align: center;
-      color: var(--primary-2);
-      transition: 0.2s;
-      &:hover {
-        color: var(--oranzhevyy750);
-      }
+      color: #fff;
     }
   }
   &__title {
-    padding: 0 0 8px 4px;
-    font-family: 'Inter', sans-serif;
-    font-weight: 700;
+    padding: 0 8px 8px 8px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
     font-size: 14px;
-    line-height: 120%;
-    letter-spacing: 0.02em;
-    color: var(--primary-3);
+    line-height: 130%;
+    color: #fff;
   }
   &__description {
     font-family: 'Roboto', sans-serif;
     font-weight: 400;
-    font-size: 14px;
-    line-height: 120%;
-    color: rgba(255, 255, 255, 0.65);
+    font-size: 12px;
+    line-height: 135%;
+    color: #7873b4;
   }
   &__visibility {
     margin-bottom: 24px;
   }
   &__options {
-    border-radius: 8px;
+    border-radius: 12px;
     background: var(--secondary-1);
     margin-bottom: 8px;
   }
   &__option {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     gap: 8px;
-    padding: 14px 10px 14px 36px;
+    padding: 0 16px;
+    min-height: 44px;
     position: relative;
     cursor: pointer;
     font-family: 'Roboto', sans-serif;
     font-weight: 400;
-    font-size: 16px;
-    line-height: 120%;
-    color: var(--primary-3);
-    .message-permissions__checkmark {
-      opacity: 0;
-    }
+    font-size: 14px;
+    line-height: 130%;
+    color: #fff;
     &:last-child {
       &::after {
         display: none;
@@ -158,33 +150,52 @@ export default class MessagesPage extends Vue {
     }
     &::after {
       content: '';
-      width: calc(100% - 60px);
+      width: calc(100% - 12px);
       height: 0;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+      border-bottom: 1px solid #2b2741;
       position: absolute;
       bottom: 0;
       right: 0;
     }
   }
   &__checkmark {
-    opacity: 0;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #60578e;
+    border-radius: 50%;
     svg {
-      width: 16px;
-      height: 14px;
+      opacity: 0;
     }
   }
   &__option--active {
-    .message-permissions__checkmark {
-      opacity: 1;
+    .chat-messages__checkmark {
+      background: #f64e2a;
+      border-color: #f64e2a;
+      svg {
+        opacity: 1;
+      }
     }
   }
   .premium-wrapper {
     .link--highlighted {
-      font-family: 'Roboto', sans-serif;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      background: #14131b;
+      border-radius: 12px;
+      font-family: 'Roboto';
       font-weight: 400;
       font-size: 14px;
-      line-height: 120%;
-      color: var(--primary-2);
+      line-height: 130%;
+      color: #f64e2a;
+      transition: 0.2s;
+      &:hover {
+        background: #2b2741;
+      }
     }
   }
 }

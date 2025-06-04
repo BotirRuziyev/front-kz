@@ -4,7 +4,7 @@
       <!-- Header -->
       <div class="forwarded-messages__header">
         <nuxt-link
-          to="/chat-settings/privacy"
+          to="/chat-settings/privacy/"
           class="forwarded-messages__header-back"
         >
           <BackIcon />
@@ -28,8 +28,8 @@
             }"
             @click="selectedOption = option"
           >
-            <span class="forwarded-messages__checkmark"><CheckmarkIcon /></span>
             {{ option }}
+            <span class="forwarded-messages__checkmark"><CheckmarkIcon /></span>
           </li>
         </ul>
 
@@ -43,28 +43,30 @@
       <div class="forwarded-messages__exceptions">
         <h3 class="forwarded-messages__title">Exeptions</h3>
 
-        <nuxt-link to="#" class="forwarded-messages__exceptions-item">
-          <span class="forwarded-messages__exceptions-label"
-            >Never Share With</span
-          >
-          <button class="forwarded-messages__exceptions-action">
-            Add Users
-            <span class="forwarded-messages__exceptions-arrow">
-              <ArrowIcon />
-            </span>
-          </button>
-        </nuxt-link>
-        <nuxt-link to="#" class="forwarded-messages__exceptions-item">
-          <span class="forwarded-messages__exceptions-label"
-            >Always Share With</span
-          >
-          <button class="forwarded-messages__exceptions-action">
-            Add Users
-            <span class="forwarded-messages__exceptions-arrow">
-              <ArrowIcon />
-            </span>
-          </button>
-        </nuxt-link>
+        <div class="forwarded-messages__exceptions-list">
+          <nuxt-link to="#" class="forwarded-messages__exceptions-item">
+            <span class="forwarded-messages__exceptions-label"
+              >Never Share With</span
+            >
+            <button class="forwarded-messages__exceptions-action">
+              Add Users
+              <span class="forwarded-messages__exceptions-arrow">
+                <ArrowIcon />
+              </span>
+            </button>
+          </nuxt-link>
+          <nuxt-link to="#" class="forwarded-messages__exceptions-item">
+            <span class="forwarded-messages__exceptions-label"
+              >Always Share With</span
+            >
+            <button class="forwarded-messages__exceptions-action">
+              Add Users
+              <span class="forwarded-messages__exceptions-arrow">
+                <ArrowIcon />
+              </span>
+            </button>
+          </nuxt-link>
+        </div>
 
         <p class="forwarded-messages__description">
           You can add users or entire groups as exceptions that will override
@@ -76,12 +78,11 @@
 </template>
 
 <script lang="ts">
-import { Component } from 'nuxt-property-decorator'
-import Vue from 'vue'
+import { Component, Vue } from 'nuxt-property-decorator'
 // @ts-ignore
 import BackIcon from '@/assets/svg/arrow-back.svg?inline'
 // @ts-ignore
-import CheckmarkIcon from '@/assets/svg/checkbox.svg?inline'
+import CheckmarkIcon from '@/assets/svg/check-icon.svg?inline'
 // @ts-ignore
 import ArrowIcon from '@/assets/svg/shape-icon.svg?inline'
 
@@ -93,7 +94,7 @@ import ArrowIcon from '@/assets/svg/shape-icon.svg?inline'
   },
 })
 export default class ForwardedMessagesPage extends Vue {
-  selectedOption: string = 'My contacts'
+  selectedOption: string = 'Everybody'
 
   options = ['Everybody', 'My contacts', 'Nobody']
 }
@@ -106,78 +107,74 @@ export default class ForwardedMessagesPage extends Vue {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    padding: 10px 0;
     gap: 4px;
     margin-bottom: 24px;
+    position: relative;
     &-back {
-      width: 22px;
-      height: 22px;
+      width: 18px;
+      height: 18px;
       display: flex;
       align-items: center;
       justify-content: center;
+      svg {
+        path {
+          stroke: #fff;
+        }
+      }
     }
     &-title {
       width: 100%;
-      font-family: 'Inter', sans-serif;
-      font-weight: 600;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: -1;
+      font-family: 'Roboto', sans-serif;
+      font-weight: 500;
       font-size: 18px;
-      line-height: 100%;
-      letter-spacing: 0.02em;
-      text-align: left;
-      color: var(--primary-3);
-    }
-    &-btn {
-      font-family: 'Inter', sans-serif;
-      font-weight: 700;
-      font-size: 14px;
-      line-height: 120%;
-      letter-spacing: 0.02em;
+      line-height: 140%;
       text-align: center;
-      color: var(--primary-2);
-      transition: 0.2s;
-      &:hover {
-        color: var(--oranzhevyy750);
-      }
+      color: #fff;
     }
   }
   &__title {
-    padding: 0 0 8px 4px;
-    font-family: 'Inter', sans-serif;
-    font-weight: 700;
+    padding: 0 8px 8px 8px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
     font-size: 14px;
-    line-height: 120%;
-    letter-spacing: 0.02em;
-    color: var(--primary-3);
+    line-height: 130%;
+    color: #fff;
   }
   &__description {
     font-family: 'Roboto', sans-serif;
     font-weight: 400;
-    font-size: 14px;
-    line-height: 120%;
-    color: rgba(255, 255, 255, 0.65);
+    font-size: 12px;
+    line-height: 135%;
+    color: #7873b4;
   }
   &__visibility {
-    margin-bottom: 32px;
+    margin-bottom: 24px;
   }
   &__options {
-    border-radius: 8px;
+    border-radius: 12px;
     background: var(--secondary-1);
     margin-bottom: 8px;
   }
   &__option {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     gap: 8px;
-    padding: 14px 10px 14px 36px;
+    padding: 0 16px;
+    min-height: 44px;
     position: relative;
     cursor: pointer;
     font-family: 'Roboto', sans-serif;
     font-weight: 400;
-    font-size: 16px;
-    line-height: 120%;
-    color: var(--primary-3);
-    .forwarded-messages__checkmark {
-      opacity: 0;
-    }
+    font-size: 14px;
+    line-height: 130%;
+    color: #fff;
     &:last-child {
       &::after {
         display: none;
@@ -185,49 +182,75 @@ export default class ForwardedMessagesPage extends Vue {
     }
     &::after {
       content: '';
-      width: calc(100% - 60px);
+      width: calc(100% - 12px);
       height: 0;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+      border-bottom: 1px solid #2b2741;
       position: absolute;
       bottom: 0;
       right: 0;
     }
   }
   &__checkmark {
-    opacity: 0;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #60578e;
+    border-radius: 50%;
     svg {
-      width: 16px;
-      height: 14px;
+      opacity: 0;
     }
   }
   &__option--active {
     .forwarded-messages__checkmark {
-      opacity: 1;
+      background: #f64e2a;
+      border-color: #f64e2a;
+      svg {
+        opacity: 1;
+      }
     }
   }
   &__exceptions {
+    &-list {
+      margin-bottom: 8px;
+      border-radius: 12px;
+      overflow: hidden;
+    }
     &-item {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      min-height: 43px;
+      min-height: 44px;
       gap: 8px;
-      margin-bottom: 8px;
-      background: var(--secondary-1);
-      border-radius: 8px;
-      padding: 10px 12px 10px 14px;
+      background: #14131b;
+      padding: 0 16px;
       transition: 0.2s;
+      position: relative;
       &:hover {
-        background: var(--secondary-13);
+        background: #2b2741;
+      }
+      &:last-child {
+        &::after {
+          display: none;
+        }
+      }
+      &::after {
+        content: '';
+        width: calc(100% - 16px);
+        height: 0;
+        border-bottom: 1px solid #2b2741;
+        position: absolute;
+        bottom: 0;
+        right: 0;
       }
     }
     &-label {
-      font-family: 'Inter', sans-serif;
-      font-weight: 700;
+      font-family: 'Roboto', sans-serif;
+      font-weight: 400;
       font-size: 14px;
-      line-height: 120%;
-      letter-spacing: 0.02em;
-      color: rgba(255, 255, 255, 0.65);
+      line-height: 130%;
+      color: #fff;
     }
     &-action {
       display: flex;
@@ -235,9 +258,9 @@ export default class ForwardedMessagesPage extends Vue {
       gap: 8px;
       font-family: 'Roboto', sans-serif;
       font-weight: 400;
-      font-size: 14px;
-      line-height: 120%;
-      color: rgba(255, 255, 255, 0.65);
+      font-size: 12px;
+      line-height: 135%;
+      color: #8780cf;
     }
   }
 }

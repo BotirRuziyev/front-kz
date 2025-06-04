@@ -3,13 +3,38 @@
     <label v-if="label" class="label">{{ label }}</label>
     <UserIcon v-if="user" class="input-user-icon" />
     <SearchIcon v-if="search" class="input-search" />
+    <div v-if="ispin" class="input-group">
+      <input
+        v-for="(value, index) in values"
+        :key="index"
+        :ref="`input${index}`"
+        v-model="values[index]"
+        type="tel"
+        inputmode="numeric"
+        :disabled="disabled[index]"
+        :class="{ error_input: error }"
+        maxlength="1"
+        :placeholder="placeholder"
+        @input="onInputChange(index)"
+        @keydown.backspace="onBackspacePress(index, $event)"
+      />
+    </div>
     <input
+      v-else
       v-model="value"
-      :type="type"
+      :type="computedType"
       :placeholder="placeholder"
       :style="{ paddingLeft }"
       :readonly="readonly"
     />
+    <div
+      v-if="type === 'password'"
+      class="input-eye"
+      type="button"
+      @click="togglePassword"
+    >
+      <EyeIcon />
+    </div>
     <CalendarIcon
       v-if="calendar"
       class="input-calendar-action"
@@ -28,6 +53,8 @@ import SearchIcon from '@/assets/svg/search.svg?inline'
 import UserIcon from '@/assets/svg/UserCircle.svg?inline'
 // @ts-ignore
 import CalendarIcon from '@/assets/svg/calendar.svg?inline'
+// @ts-ignore
+import EyeIcon from '@/assets/svg/eye.svg?inline'
 
 @Component({
   components: {
@@ -35,6 +62,7 @@ import CalendarIcon from '@/assets/svg/calendar.svg?inline'
     SearchIcon,
     UserIcon,
     CalendarIcon,
+    EyeIcon,
   },
 })
 export default class InputOracle extends Vue {
@@ -48,8 +76,67 @@ export default class InputOracle extends Vue {
   @Prop({ default: false }) readonly user!: boolean
   @Prop({ default: false }) readonly calendar!: boolean
   @Prop({ default: null }) readonly trashAction?: Function
+  @Prop({ default: false }) readonly ispin!: boolean
+  @Prop({ default: false }) error!: boolean
 
   value: string = this.v
+  values: string[] = ['', '', '', '', '', '']
+  disabled: boolean[] = [false, true, true, true, true, true]
+  isPasswordVisible: boolean = false
+
+  get computedType(): string {
+    return this.isPasswordVisible ? 'text' : this.type
+  }
+
+  togglePassword() {
+    this.isPasswordVisible = !this.isPasswordVisible
+    console.log(this.isPasswordVisible)
+  }
+
+  onInputChange(index: number) {
+    const val = this.values[index].replace(/\D/g, '').slice(0, 1)
+    this.values[index] = val
+
+    this.$emit('openPinCode', this.values)
+
+    // Agar input bo‘sh bo‘lmasa va oxirgi inputga yetilmagan bo‘lsa
+    if (val !== '' && index < this.values.length - 1) {
+      this.disabled[index + 1] = false
+
+      this.$nextTick(() => {
+        const nextInput = this.$refs[`input${index + 1}`] as
+          | HTMLInputElement
+          | HTMLInputElement[]
+
+        if (Array.isArray(nextInput)) {
+          nextInput[0]?.focus()
+        } else {
+          nextInput?.focus()
+        }
+      })
+    }
+  }
+
+  onBackspacePress(index: number, event: KeyboardEvent) {
+    if (
+      event &&
+      event.key === 'Backspace' &&
+      this.values[index] === '' &&
+      index > 0
+    ) {
+      this.disabled[index] = true
+      this.$nextTick(() => {
+        const prevInput = this.$refs[`input${index - 1}`] as
+          | HTMLInputElement
+          | HTMLInputElement[]
+        if (Array.isArray(prevInput)) {
+          prevInput[0]?.focus()
+        } else {
+          prevInput?.focus()
+        }
+      })
+    }
+  }
 
   @Watch('value')
   onChildChanged() {
@@ -94,7 +181,15 @@ export default class InputOracle extends Vue {
   flex-direction: column;
   font-size: 16px;
   position: relative;
-
+  &-eye {
+    height: 20px;
+    line-height: 0;
+    position: absolute;
+    cursor: pointer;
+    top: 12px;
+    right: 12px;
+    z-index: 2;
+  }
   &-search {
     position: absolute;
     left: 12px;
@@ -153,6 +248,52 @@ export default class InputOracle extends Vue {
       line-height: 120%;
       color: #7a74ba;
     }
+  }
+}
+.input-group {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 0 12px;
+  input {
+    width: 100%;
+    height: 50px;
+    background: transparent;
+    border-radius: 12px;
+    padding: 0;
+    border: 1px solid #2b2741;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-size: 28px;
+    text-align: center;
+    line-height: 135%;
+    color: #fff;
+    &.error_input {
+      border-color: #f64e2a;
+      color: #f64e2a;
+      margin-bottom: 100px;
+    }
+    &:focus {
+      border-color: #f64e2a;
+    }
+    &::placeholder {
+      font-family: var(--font3);
+      font-weight: 700;
+      font-size: 24px;
+      color: #464452;
+    }
+    &:focus {
+      &::placeholder {
+        opacity: 0;
+      }
+    }
+  }
+  .error-text {
+    left: 50%;
+    top: calc(100% - 50px);
+    transform: translateX(-50%);
+    font-weight: 500;
   }
 }
 </style>

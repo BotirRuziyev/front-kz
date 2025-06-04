@@ -6,7 +6,7 @@
         <nuxt-link to="/chat-settings/privacy/" class="last-seen__header-back">
           <BackIcon />
         </nuxt-link>
-        <h1 class="last-seen__header-title">Last Seen & Online</h1>
+        <h1 class="last-seen__header-title">Privacy</h1>
       </div>
 
       <!-- Visibility options block -->
@@ -21,17 +21,15 @@
             :class="{ 'last-seen__option--active': selectedOption === option }"
             @click="selectedOption = option"
           >
-            <span class="last-seen__checkmark"><CheckmarkIcon /></span>
             {{ option }}
+            <span class="last-seen__checkmark"><CheckmarkIcon /></span>
           </li>
         </ul>
 
         <p class="last-seen__description">
-          Unless you are a Premium user, you won't see <br />
-          Last Seen or Online statuses for people<br />
-          with whom you don't share yours.<br />
-          Approximate times will be shown instead <br />
-          (recently, within a week, within a month)
+          Unless you are a Premium user, you won't see Last Seen or Online
+          statuses for people with whom you don't share yours. Approximate times
+          will be shown instead (recently, within a week, within a month)
         </p>
       </div>
 
@@ -59,12 +57,11 @@
 </template>
 
 <script lang="ts">
-import { Component } from 'nuxt-property-decorator'
-import Vue from 'vue'
+import { Component, Vue } from 'nuxt-property-decorator'
 // @ts-ignore
 import BackIcon from '@/assets/svg/arrow-back.svg?inline'
 // @ts-ignore
-import CheckmarkIcon from '@/assets/svg/checkbox.svg?inline'
+import CheckmarkIcon from '@/assets/svg/check-icon.svg?inline'
 // @ts-ignore
 import ArrowIcon from '@/assets/svg/shape-icon.svg?inline'
 
@@ -89,78 +86,74 @@ export default class LastSeenPage extends Vue {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    padding: 10px 0;
     gap: 4px;
     margin-bottom: 24px;
+    position: relative;
     &-back {
-      width: 22px;
-      height: 22px;
+      width: 18px;
+      height: 18px;
       display: flex;
       align-items: center;
       justify-content: center;
+      svg {
+        path {
+          stroke: #fff;
+        }
+      }
     }
     &-title {
       width: 100%;
-      font-family: 'Inter', sans-serif;
-      font-weight: 600;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: -1;
+      font-family: 'Roboto', sans-serif;
+      font-weight: 500;
       font-size: 18px;
-      line-height: 100%;
-      letter-spacing: 0.02em;
-      text-align: left;
-      color: var(--primary-3);
-    }
-    &-btn {
-      font-family: 'Inter', sans-serif;
-      font-weight: 700;
-      font-size: 14px;
-      line-height: 120%;
-      letter-spacing: 0.02em;
+      line-height: 140%;
       text-align: center;
-      color: var(--primary-2);
-      transition: 0.2s;
-      &:hover {
-        color: var(--oranzhevyy750);
-      }
+      color: #fff;
     }
   }
   &__title {
-    padding: 0 0 8px 4px;
-    font-family: 'Inter', sans-serif;
-    font-weight: 700;
+    padding: 0 8px 8px 8px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
     font-size: 14px;
-    line-height: 120%;
-    letter-spacing: 0.02em;
-    color: var(--primary-3);
+    line-height: 130%;
+    color: #fff;
   }
   &__description {
     font-family: 'Roboto', sans-serif;
     font-weight: 400;
-    font-size: 14px;
-    line-height: 120%;
-    color: rgba(255, 255, 255, 0.65);
+    font-size: 12px;
+    line-height: 135%;
+    color: #7873b4;
   }
   &__visibility {
-    margin-bottom: 32px;
+    margin-bottom: 24px;
   }
   &__options {
-    border-radius: 8px;
-    background: var(--secondary-1);
+    border-radius: 12px;
+    background: #14131b;
     margin-bottom: 8px;
   }
   &__option {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     gap: 8px;
-    padding: 14px 10px 14px 36px;
+    padding: 0 16px;
+    min-height: 44px;
     position: relative;
     cursor: pointer;
     font-family: 'Roboto', sans-serif;
     font-weight: 400;
-    font-size: 16px;
-    line-height: 120%;
-    color: var(--primary-3);
-    .last-seen__checkmark {
-      opacity: 0;
-    }
+    font-size: 14px;
+    line-height: 130%;
+    color: #fff;
     &:last-child {
       &::after {
         display: none;
@@ -168,24 +161,33 @@ export default class LastSeenPage extends Vue {
     }
     &::after {
       content: '';
-      width: calc(100% - 60px);
+      width: calc(100% - 12px);
       height: 0;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+      border-bottom: 1px solid #2b2741;
       position: absolute;
       bottom: 0;
       right: 0;
     }
   }
   &__checkmark {
-    opacity: 0;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #60578e;
+    border-radius: 50%;
     svg {
-      width: 16px;
-      height: 14px;
+      opacity: 0;
     }
   }
   &__option--active {
     .last-seen__checkmark {
-      opacity: 1;
+      background: #f64e2a;
+      border-color: #f64e2a;
+      svg {
+        opacity: 1;
+      }
     }
   }
   &__exceptions {
@@ -193,24 +195,23 @@ export default class LastSeenPage extends Vue {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      min-height: 43px;
+      min-height: 44px;
       gap: 8px;
       margin-bottom: 8px;
-      background: var(--secondary-1);
-      border-radius: 8px;
-      padding: 10px 12px 10px 14px;
+      background: #14131b;
+      border-radius: 12px;
+      padding: 0 16px;
       transition: 0.2s;
       &:hover {
-        background: var(--secondary-13);
+        background: #2b2741;
       }
     }
     &-label {
-      font-family: 'Inter', sans-serif;
-      font-weight: 700;
+      font-family: 'Roboto', sans-serif;
+      font-weight: 400;
       font-size: 14px;
-      line-height: 120%;
-      letter-spacing: 0.02em;
-      color: rgba(255, 255, 255, 0.65);
+      line-height: 130%;
+      color: #fff;
     }
     &-action {
       display: flex;
@@ -218,9 +219,9 @@ export default class LastSeenPage extends Vue {
       gap: 8px;
       font-family: 'Roboto', sans-serif;
       font-weight: 400;
-      font-size: 14px;
-      line-height: 120%;
-      color: rgba(255, 255, 255, 0.65);
+      font-size: 12px;
+      line-height: 135%;
+      color: #8780cf;
     }
   }
 }

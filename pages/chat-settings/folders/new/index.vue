@@ -6,14 +6,7 @@
         <nuxt-link to="/chat-settings/folders" class="new-folder__header-back">
           <BackIcon />
         </nuxt-link>
-        <h1 class="new-folder__header-title">New Folder</h1>
-        <nuxt-link
-          :to="isCreateActive ? '/chat-settings/folders' : ''"
-          class="new-folder__header-btn new-folder__header-btn--create"
-          :class="{ active: isCreateActive }"
-        >
-          Create
-        </nuxt-link>
+        <h1 class="new-folder__header-title">Chat Folders</h1>
       </div>
 
       <!-- Intro -->
@@ -28,7 +21,6 @@
 
       <!-- Folder Name -->
       <div class="new-folder__field">
-        <label class="new-folder__label">Folder Name</label>
         <div class="form-control">
           <input
             v-model="folderName"
@@ -36,9 +28,6 @@
             placeholder="Folder Name"
             class="new-folder__input"
           />
-          <button class="emoji-btn">
-            <EmojiIcon class="emoji" />
-          </button>
         </div>
       </div>
 
@@ -46,14 +35,13 @@
       <div class="new-folder__section">
         <label class="new-folder__label">Included Chats</label>
         <nuxt-link
-          to="/chat-settings/folders/new-folder/include"
+          to="/chat-settings/folders/new/include"
           class="new-folder__link"
         >
           <span><PlusIcon /></span> Add Chats
         </nuxt-link>
         <p class="new-folder__desc">
-          Choose chats or types of chats that will appear <br />
-          in this folder
+          Choose chats or types of chats that will appear in this folder
         </p>
       </div>
 
@@ -61,7 +49,7 @@
       <div class="new-folder__section">
         <label class="new-folder__label">Excluded Chats</label>
         <nuxt-link
-          to="/chat-settings/folders/new-folder/exclude"
+          to="/chat-settings/folders/new/exclude"
           class="new-folder__link"
         >
           <span><PlusIcon /></span> Add Chats to Exclude
@@ -74,7 +62,7 @@
       <!-- Folder Color -->
       <div class="new-folder__field">
         <div class="new-folder__field-head">
-          <label class="new-folder__label">Folder Color</label>
+          <label class="new-folder__label">Color</label>
           <span
             v-if="selectedColor !== null"
             class="folder-color__badge"
@@ -95,9 +83,17 @@
           />
         </div>
         <p class="new-folder__desc">
-          This color will be used for the folder’s tag <br />
-          in the chat list
+          This color will be used for the folder’s tag in the chat list
         </p>
+      </div>
+
+      <!-- Create Button -->
+      <div class="new-folder__button">
+        <new-oracle-button
+          :to="folderName.length != 0 ? '/chat-settings/folders' : ''"
+          text="Create"
+          :color="folderName.length != 0 ? 'yellow' : 'black'"
+        />
       </div>
     </div>
   </div>
@@ -161,16 +157,16 @@ export default class CreateFolderPage extends Vue {
 
 <style lang="scss">
 .new-folder {
+  padding-bottom: 72px;
   &__label {
     display: block;
     margin-bottom: 8px;
-    margin-left: 4px;
-    font-family: 'Inter', sans-serif;
-    font-weight: 700;
+    margin-left: 8px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
     font-size: 14px;
-    line-height: 120%;
-    letter-spacing: 0.02em;
-    color: var(--primary-3);
+    line-height: 130%;
+    color: #fff;
   }
   &__header {
     display: flex;
@@ -178,97 +174,89 @@ export default class CreateFolderPage extends Vue {
     justify-content: space-between;
     gap: 4px;
     margin-bottom: 24px;
+    position: relative;
     &-back {
       width: 22px;
       height: 22px;
       display: flex;
       align-items: center;
       justify-content: center;
+      svg {
+        path {
+          stroke: #fff;
+        }
+      }
     }
     &-title {
-      width: 100%;
-      font-family: 'Inter', sans-serif;
-      font-weight: 600;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: -1;
+      font-family: 'Roboto', sans-serif;
+      font-weight: 500;
       font-size: 18px;
-      line-height: 100%;
-      letter-spacing: 0.02em;
-      text-align: left;
-      color: var(--primary-3);
-    }
-    &-btn {
-      font-family: 'Inter', sans-serif;
-      font-weight: 700;
-      font-size: 14px;
-      line-height: 120%;
-      letter-spacing: 0.02em;
-      text-align: center;
-      color: rgba(255, 255, 255, 0.65);
-      cursor: not-allowed;
-      transition: 0.2s;
-      &.active {
-        cursor: pointer;
-        color: var(--primary-2);
-      }
+      line-height: 140%;
+      color: #fff;
     }
   }
   &__intro {
-    margin-bottom: 32px;
+    margin-bottom: 24px;
     &-image {
       display: flex;
       justify-content: center;
       margin-bottom: 16px;
+      img {
+        width: 125px;
+        height: 125px;
+      }
     }
   }
   &__field {
-    margin-bottom: 32px;
+    margin-bottom: 16px;
     .form-control {
-      display: flex;
-      align-items: center;
-      gap: 20px;
       background: var(--secondary-1);
       border-radius: 8px;
-      padding: 0 9px 0 0;
     }
   }
   &__input {
     width: 100%;
-    height: 42px;
+    height: 44px;
     background: transparent;
     border: 0;
     padding: 13px 0 13px 14px;
     font-family: 'Roboto', sans-serif;
     font-weight: 400;
     font-size: 14px;
-    line-height: 120%;
-    color: rgba(255, 255, 255, 1);
+    line-height: 130%;
+    color: #fff;
     &::placeholder {
       font-family: 'Roboto', sans-serif;
-      font-weight: 400;
+      font-weight: 500;
       font-size: 14px;
-      line-height: 120%;
-      color: rgba(255, 255, 255, 0.65);
+      line-height: 130%;
+      color: #67639a;
     }
     &:focus {
       outline: none;
     }
   }
   &__section {
-    margin-bottom: 32px;
+    margin-bottom: 16px;
   }
-
   &__link {
     display: flex;
     align-items: center;
-    gap: 10px;
-    margin-bottom: 8px;
-    background: var(--secondary-1);
-    border-radius: 8px;
-    padding: 16px 9px 16px 14px;
+    gap: 8px;
+    margin-bottom: 4px;
+    background: #14131b;
+    border-radius: 12px;
+    padding: 12px 16px;
     font-family: 'Roboto', sans-serif;
     font-weight: 400;
     font-size: 14px;
-    line-height: 120%;
-    color: var(--primary-2);
+    line-height: 130%;
+    color: #f64e2a;
     svg {
       rect {
         fill: var(--primary-2);
@@ -276,17 +264,18 @@ export default class CreateFolderPage extends Vue {
     }
   }
   &__desc {
+    padding: 0 8px;
     font-family: 'Roboto', sans-serif;
     font-weight: 400;
-    font-size: 14px;
-    line-height: 120%;
-    color: rgba(255, 255, 255, 0.65);
+    font-size: 12px;
+    line-height: 135%;
+    color: #7873b4;
   }
   &__field-head {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 8px;
+    margin-bottom: 12px;
     .new-folder__label {
       margin-bottom: 0;
     }
@@ -304,9 +293,7 @@ export default class CreateFolderPage extends Vue {
     display: flex;
     justify-content: center;
     gap: 10px;
-    border-radius: 8px;
-    background: var(--secondary-1);
-    padding: 5px;
+    padding: 0 8px;
     margin-bottom: 8px;
     .new-folder__color-circle {
       width: 32px;
@@ -332,6 +319,35 @@ export default class CreateFolderPage extends Vue {
         transform: translate(-50%, -50%);
         opacity: 0;
         transition: 0.2s;
+      }
+    }
+  }
+  &__button {
+    width: 100%;
+    background: #14131b;
+    border-top: 1px solid #2b2741;
+    padding: 12px 16px 24px 16px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    .new-oracle-button {
+      max-width: 345px;
+      margin: 0 auto;
+      border-radius: 12px;
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 130%;
+      color: #67639a;
+      &.black {
+        border: 2px solid #2b2741;
+        background: #13121b;
+        cursor: no-drop;
+        &:hover {
+          box-shadow: none;
+        }
+      }
+      &.yellow {
+        color: #fff;
       }
     }
   }

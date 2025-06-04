@@ -39,17 +39,6 @@
 
       <!-- Body (Create + List) -->
       <div class="chat-folders__body">
-        <!-- Create button -->
-        <nuxt-link
-          to="/chat-settings/folders/new-folder"
-          class="chat-folders__create"
-        >
-          <span class="chat-folders__create-label">Create a Folder</span>
-          <span class="chat-folders__create-btn">
-            <CreateIcon />
-          </span>
-        </nuxt-link>
-
         <!-- Folder list -->
         <draggable
           v-model="folders"
@@ -71,10 +60,10 @@
               class="chat-folders__list-item-delete"
               @click="deleteFolder(index)"
             >
-              <MinusCircleIcon />
+              <span></span>
             </button>
             <nuxt-link
-              :to="isEditMode ? '' : '/chat-settings/folders/edit-folder'"
+              :to="isEditMode ? '' : '/chat-settings/folders/edit'"
               class="chat-folders__list-item-link"
             >
               <span class="chat-folders__list-item-label">{{
@@ -89,10 +78,17 @@
             </button>
           </li>
         </draggable>
+        <!-- Create button -->
+        <nuxt-link to="/chat-settings/folders/new" class="chat-folders__create">
+          <span class="chat-folders__create-btn">
+            <CreateIcon />
+          </span>
+          <span class="chat-folders__create-label">Create a Folder</span>
+        </nuxt-link>
       </div>
 
       <!-- Hint -->
-      <div class="chat-folders__hint">
+      <div v-if="!isEditMode" class="chat-folders__hint">
         Tap ‘edit’ to change the order or delete folders
       </div>
     </div>
@@ -111,8 +107,6 @@ import CreateIcon from '@/assets/svg/plus.svg?inline'
 import ShapeIcon from '@/assets/svg/shape-icon.svg?inline'
 // @ts-ignore
 import BurgerIcon from '@/assets/svg/burger-icon.svg?inline'
-// @ts-ignore
-import MinusCircleIcon from '@/assets/svg/minus-circle.svg?inline'
 
 @Component({
   components: {
@@ -121,23 +115,27 @@ import MinusCircleIcon from '@/assets/svg/minus-circle.svg?inline'
     CreateIcon,
     ShapeIcon,
     BurgerIcon,
-    MinusCircleIcon,
   },
 })
 export default class ChatFoldersPage extends Vue {
   isEditMode = false
 
   folders = [
-    { name: 'All Chats', deletable: false },
+    { name: 'All Chats', deletable: true },
     { name: 'French', deletable: true },
     { name: 'China', deletable: true },
-    { name: 'Bots', deletable: true },
-    { name: 'Russia', deletable: true },
-    { name: 'Others', deletable: true },
   ]
 
   deleteFolder(index: number) {
-    if (!this.folders[index].deletable) return
+    const folder = this.folders[index]
+
+    if (!folder.deletable) return
+
+    if (folder.name === 'All Chats') {
+      this.folders = []
+      return
+    }
+
     this.folders.splice(index, 1)
   }
 }
@@ -151,6 +149,7 @@ export default class ChatFoldersPage extends Vue {
     justify-content: space-between;
     gap: 4px;
     margin-bottom: 24px;
+    position: relative;
     &-back {
       width: 22px;
       height: 22px;
@@ -160,22 +159,25 @@ export default class ChatFoldersPage extends Vue {
     }
     &-title {
       width: 100%;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: -1;
       font-family: 'Inter', sans-serif;
       font-weight: 600;
       font-size: 18px;
       line-height: 100%;
       letter-spacing: 0.02em;
-      text-align: left;
+      text-align: center;
       color: var(--primary-3);
     }
     &-btn {
-      font-family: 'Inter', sans-serif;
-      font-weight: 700;
-      font-size: 14px;
-      line-height: 120%;
-      letter-spacing: 0.02em;
-      text-align: center;
-      color: var(--primary-2);
+      font-family: 'Roboto', sans-serif;
+      font-weight: 500;
+      font-size: 16px;
+      line-height: 140%;
+      color: #f64e2a;
       transition: 0.2s;
       &:hover {
         color: var(--oranzhevyy750);
@@ -183,7 +185,7 @@ export default class ChatFoldersPage extends Vue {
     }
   }
   &__intro {
-    margin-bottom: 32px;
+    margin-bottom: 24px;
     &-image {
       display: flex;
       justify-content: center;
@@ -195,24 +197,23 @@ export default class ChatFoldersPage extends Vue {
       font-family: 'Roboto', sans-serif;
       font-weight: 400;
       font-size: 14px;
-      line-height: 120%;
+      line-height: 130%;
       text-align: center;
-      color: rgba(255, 255, 255, 0.65);
+      color: #8780cf;
     }
   }
   &__body {
     border-radius: 8px;
     overflow: hidden;
-    margin-bottom: 8px;
+    margin-bottom: 24px;
   }
   &__create {
+    min-height: 44px;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    gap: 8px;
     padding: 10px 9px 10px 10px;
-    background: var(--secondary-1);
+    background: #14131b;
     transition: 0.2s;
     &:hover {
       background: var(--secondary-7);
@@ -220,9 +221,9 @@ export default class ChatFoldersPage extends Vue {
     &-label {
       font-family: 'Roboto', sans-serif;
       font-weight: 400;
-      font-size: 16px;
-      line-height: 120%;
-      color: var(--primary-2);
+      font-size: 14px;
+      line-height: 130%;
+      color: #f64e2a;
     }
     &-btn {
       svg {
@@ -234,17 +235,15 @@ export default class ChatFoldersPage extends Vue {
   }
   &__list {
     &-item {
+      min-height: 44px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 16px;
+      gap: 10px;
       border-bottom: 1px solid rgba(255, 255, 255, 0.3);
       padding: 10px 12px 10px 10px;
-      background: var(--secondary-1);
+      background: #14131b;
       transition: 0.2s;
-      &:last-child {
-        border: 0;
-      }
       &:hover {
         background: var(--secondary-7);
       }
@@ -258,12 +257,23 @@ export default class ChatFoldersPage extends Vue {
       &-label {
         font-family: 'Roboto', sans-serif;
         font-weight: 400;
-        font-size: 16px;
-        line-height: 120%;
-        color: var(--primary-3);
+        font-size: 14px;
+        line-height: 130%;
+        color: #fff;
       }
       &-drag {
         cursor: grab;
+      }
+      &-delete {
+        width: 16px;
+        height: 16px;
+        span {
+          display: block;
+          width: 16px;
+          height: 3px;
+          background: #f64e2a;
+          border-radius: 3px;
+        }
       }
     }
   }
@@ -271,8 +281,8 @@ export default class ChatFoldersPage extends Vue {
     font-family: 'Roboto', sans-serif;
     font-weight: 400;
     font-size: 14px;
-    line-height: 120%;
-    color: rgba(255, 255, 255, 0.65);
+    line-height: 130%;
+    color: #8780cf;
   }
 }
 </style>

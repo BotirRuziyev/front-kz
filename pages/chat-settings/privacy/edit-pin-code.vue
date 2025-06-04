@@ -12,40 +12,21 @@
         <h1 class="chat-pin__code-header-title">Pin Code</h1>
       </div>
 
-      <!-- Main content block -->
-      <div v-if="!useCustomCode && !isPinCodeSet" class="chat-pin__code-body">
-        <div class="body-top">
-          <!-- Illustration image -->
-          <div class="chat-pin__code-body--image">
-            <img
-              src="@/assets/png/pin-code.png"
-              alt="Pin Code Lock Illustration"
-            />
-          </div>
-
-          <!-- Title -->
-          <h2 class="chat-pin__code-body--title">Pin code lock</h2>
-
-          <!-- Description -->
-          <p class="chat-pin__code-body--description">
-            When a pin code is set, a lock icon appears above your chat list.
-            Tap it to lock your app
-          </p>
-        </div>
-
-        <div class="body-bottom">
-          <!-- Action button -->
-          <new-oracle-button text="Turn Pin Code On" color="yellow" />
-          <!-- Informational hint -->
-          <p class="chat-pin__code-body--hint">
-            If you forget your pin code, you'll need to log out or reinstall the
-            app
-          </p>
-        </div>
-      </div>
-      <div v-if="useCustomCode && !isPinCodeSet" class="pin-step--enter">
-        <div class="pin-step">
+      <div class="pin-step--enter">
+        <div v-if="step === 1" class="pin-step">
           <div v-if="alphaNumeric" class="chat-pin__code-enter--dots">
+            <p class="chat-pin__code-enter--title">Enter your new pin code</p>
+            <input-oracle :ispin="true" />
+          </div>
+          <div v-if="!alphaNumeric" class="form-control">
+            <input-oracle type="password" placeholder="Pin Code" />
+          </div>
+        </div>
+        <div v-else class="pin-step">
+          <div v-if="alphaNumeric" class="chat-pin__code-enter--dots">
+            <p class="chat-pin__code-enter--title">
+              Re - Enter your new pin code
+            </p>
             <input-oracle :ispin="true" />
           </div>
           <div v-if="!alphaNumeric" class="form-control">
@@ -57,38 +38,7 @@
           Pin code options
         </button>
       </div>
-      <!-- Block: Actions + Description -->
-      <div v-if="isPinCodeSet" class="chat-pin__code-block">
-        <!-- Actions -->
-        <div class="chat-pin__code-actions">
-          <button class="chat-pin__code-btn chat-pin__code-btn--off">
-            Turn Pin code Off
-          </button>
-          <nuxt-link
-            to="/chat-settings/privacy/edit-pin-code"
-            class="chat-pin__code-btn chat-pin__code-btn--change"
-          >
-            Change Pin Code
-          </nuxt-link>
-        </div>
-
-        <!-- Description -->
-        <div class="chat-pin__code-description">
-          <p>
-            Once a passcode is set, a lock icon will appear on the chats screen.
-            Tap it to lock your Oracle app.
-          </p>
-          <p class="chat-pin__code-note">
-            Note: if you forget your passcode, you’ll need to reinstall the app
-            — and all your Secret Chats will be permanently lost.
-          </p>
-        </div>
-      </div>
-      <div
-        v-if="useCustomCode"
-        class="chat-pin__modal"
-        :class="{ show: isModal }"
-      >
+      <div class="chat-pin__modal" :class="{ show: isModal }">
         <div class="chat-pin__modal-backdrop"></div>
 
         <div class="chat-pin__modal-content">
@@ -120,7 +70,8 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'nuxt-property-decorator'
+import { Component } from 'nuxt-property-decorator'
+import Vue from 'vue'
 // @ts-ignore
 import BackIcon from '@/assets/svg/arrow-back.svg?inline'
 
@@ -134,8 +85,7 @@ export default class PinCodePage extends Vue {
   isModal = false
   pin: string = ''
   confirmPin: string = ''
-  useCustomCode: boolean = true
-  isPinCodeSet: boolean = false
+  step: number = 2
 }
 </script>
 
@@ -238,14 +188,13 @@ export default class PinCodePage extends Vue {
     }
   }
   &-enter--title {
-    margin-bottom: 16px;
-    font-family: 'Inter', sans-serif;
-    font-weight: 700;
-    font-size: 14px;
-    line-height: 120%;
-    letter-spacing: 0.02em;
+    margin-bottom: 40px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 140%;
     text-align: center;
-    color: var(--primary-3);
+    color: #fff;
   }
   .pin-step--enter {
     flex: 1 1 calc(100% - 22px);
@@ -266,11 +215,6 @@ export default class PinCodePage extends Vue {
     align-items: center;
     justify-content: center;
     flex: 1 1 100%;
-  }
-  &-enter--dots {
-    display: flex;
-    align-items: center;
-    gap: 12px;
   }
   &-enter--dot {
     width: 15px;
@@ -300,8 +244,7 @@ export default class PinCodePage extends Vue {
   }
   &-btn {
     width: 100%;
-    display: flex;
-    align-items: center;
+    display: block;
     min-height: 44px;
     padding: 0 16px;
     position: relative;

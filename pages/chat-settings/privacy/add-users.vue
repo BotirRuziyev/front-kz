@@ -7,27 +7,15 @@
           >Cancel</nuxt-link
         >
         <h2 class="chat-add-users__header-title">Add Users</h2>
-        <nuxt-link to="/chat-settings" class="chat-add-users__header-done"
-          >Done</nuxt-link
-        >
       </div>
 
       <!-- Filter / Selected Info -->
       <div class="chat-add-users__filter-info">
-        <div class="form-control">
-          <input
-            v-model="search"
-            type="search"
-            placeholder="Search"
-            class="form-input"
-          />
-          <button class="search-btn" :class="{ noactive: search !== '' }">
-            <SearchIcon />
-          </button>
-        </div>
+        <input-oracle :search="true" placeholder="Search" />
       </div>
 
       <div class="chat-add-users__chats">
+        <h2 class="chat-add-users__chats-title">Users</h2>
         <!-- Types List -->
         <ul v-if="filteredChats.length >= 1" class="chat-add-users__chats-list">
           <!-- Item -->
@@ -126,7 +114,6 @@ export default class excludePage extends Vue {
 
 <style lang="scss">
 .chat-add-users {
-  background: var(--primary-1);
   overflow: hidden;
   min-height: 100vh;
   padding-bottom: 24px;
@@ -134,27 +121,28 @@ export default class excludePage extends Vue {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 16px 12px;
-    background: var(--secondary-1);
-    width: calc(100% + 24px);
-    margin-left: -12px;
-    border-radius: 8px 8px 0 0;
+    padding: 10px 0;
+    position: relative;
+    margin-bottom: 12px;
 
     &-cancel {
       font-family: 'Roboto', sans-serif;
       font-weight: 400;
-      font-size: 16px;
-      letter-spacing: 0.02em;
+      font-size: 14px;
+      line-height: 130%;
       text-align: center;
-      color: var(--primary-2);
+      color: #f64e2a;
     }
     &-title {
-      font-family: 'Inter', sans-serif;
-      font-weight: 600;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: 'Roboto', sans-serif;
+      font-weight: 500;
       font-size: 18px;
-      line-height: 100%;
-      letter-spacing: 0.02em;
-      color: var(--primary-3);
+      line-height: 140%;
+      color: #fff;
     }
     &-done {
       font-family: 'Inter', sans-serif;
@@ -167,83 +155,27 @@ export default class excludePage extends Vue {
     }
   }
   &__filter-info {
-    background: var(--secondary-1);
-    width: calc(100% + 24px);
-    margin-left: -12px;
-    padding: 0 12px 16px;
-    .form-control {
-      position: relative;
-      background: var(--primary-1);
-      border-radius: 10px;
-      &:focus-within {
-        .search-btn {
-          left: 15px;
-          transform: translate(0, -50%);
-        }
-      }
-      .form-input {
-        width: 100%;
-        height: 36px;
-        background: transparent;
-        border: 0;
-        padding: 0 15px;
-        font-family: 'Roboto', sans-serif;
-        font-weight: 400;
-        font-size: 14px;
-        line-height: 120%;
-        text-align: center;
-        color: rgba(255, 255, 255, 1);
-        &::placeholder {
-          font-family: 'Roboto', sans-serif;
-          font-weight: 400;
-          font-size: 14px;
-          line-height: 120%;
-          text-align: center;
-          color: rgba(255, 255, 255, 0.65);
-        }
-        &:focus {
-          outline: none;
-        }
-      }
-      .search-btn {
-        position: absolute;
-        top: 50%;
-        left: calc(50% - 40px);
-        transform: translate(-50%, -50%);
-        transition: 0.2s;
-        &.noactive {
-          left: 15px;
-          transform: translate(0, -50%);
-        }
-      }
-    }
+    margin-bottom: 24px;
   }
   &__types,
   &__chats {
     &-title {
-      background: var(--secondary-1);
-      width: calc(100% + 24px);
-      margin-left: -12px;
-      padding: 5px 12px;
+      padding: 0 8px 8px 8px;
       user-select: none;
       font-family: 'Roboto', sans-serif;
-      font-weight: 400;
-      font-size: 16px;
-      letter-spacing: 0.02em;
-      color: var(--primary-3);
+      font-weight: 500;
+      font-size: 14px;
+      line-height: 130%;
+      color: #fff;
     }
     &-list {
-      width: 100vw;
-      background: var(--primary-1);
-      position: relative;
-      left: 50%;
-      transform: translateX(-50%);
-      padding: 0;
+      background: #14131b;
+      border-radius: 12px;
     }
     &-avatar {
-      width: 38px;
-      min-width: 38px;
-      height: 38px;
+      width: 28px;
+      min-width: 28px;
+      height: 28px;
       border-radius: 50%;
       overflow: hidden;
       img {
@@ -261,26 +193,33 @@ export default class excludePage extends Vue {
       }
     }
     &-item--label {
+      min-height: 44px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 8px;
-      max-width: 375px;
-      margin: 0 auto;
-      padding: 6px 12px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+      padding: 0 16px;
       cursor: pointer;
+      position: relative;
+      &::after {
+        content: '';
+        width: calc(100% - 16px);
+        height: 0;
+        border-bottom: 1px solid #2b2741;
+        position: absolute;
+        bottom: 0;
+        right: 0;
+      }
     }
     &-label {
       width: 100%;
       text-align: left;
       user-select: none;
-      font-family: 'Inter', sans-serif;
-      font-weight: 700;
+      font-family: 'Roboto', sans-serif;
+      font-weight: 400;
       font-size: 14px;
-      line-height: 120%;
-      letter-spacing: 0.02em;
-      color: var(--primary-3);
+      line-height: 130%;
+      color: #fff;
     }
     &-check {
       width: 21px;
