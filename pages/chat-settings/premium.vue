@@ -162,7 +162,7 @@ export default class PremiumChatPage extends Vue {
   &__form-head {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 15px;
     .form-control {
       display: flex;
       flex-direction: column;
