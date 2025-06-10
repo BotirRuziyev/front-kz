@@ -44,7 +44,10 @@
         <h3 class="forwarded-messages__title">Exeptions</h3>
 
         <div class="forwarded-messages__exceptions-list">
-          <nuxt-link to="#" class="forwarded-messages__exceptions-item">
+          <nuxt-link
+            to="/chat-settings/privacy/add-users"
+            class="forwarded-messages__exceptions-item"
+          >
             <span class="forwarded-messages__exceptions-label"
               >Never Share With</span
             >
@@ -55,7 +58,10 @@
               </span>
             </button>
           </nuxt-link>
-          <nuxt-link to="#" class="forwarded-messages__exceptions-item">
+          <nuxt-link
+            to="/chat-settings/privacy/add-users"
+            class="forwarded-messages__exceptions-item"
+          >
             <span class="forwarded-messages__exceptions-label"
               >Always Share With</span
             >

@@ -64,10 +64,10 @@
         <div class="new-folder__field-head">
           <label class="new-folder__label">Color</label>
           <span
-            v-if="selectedColor !== null"
+            v-if="selectedColor !== null && folderName !== ''"
             class="folder-color__badge"
             :style="badgeStyle"
-            >FRENCH</span
+            >{{ folderName }}</span
           >
         </div>
         <div class="new-folder__colors">
@@ -333,6 +333,8 @@ export default class CreateFolderPage extends Vue {
     .new-oracle-button {
       max-width: 345px;
       margin: 0 auto;
+      min-height: 36px;
+      padding: 0;
       border-radius: 12px;
       font-weight: 400;
       font-size: 14px;

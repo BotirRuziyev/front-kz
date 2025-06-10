@@ -34,7 +34,7 @@
               <div class="exclude-chats__types-icon">
                 <Muted />
               </div>
-              <span class="exclude-chats__types-label">Muted</span>
+              <span class="exclude-chats__types-label">Saved Messages</span>
               <input
                 id="Muted"
                 type="checkbox"
@@ -51,7 +51,7 @@
               <div class="exclude-chats__types-icon">
                 <Read />
               </div>
-              <span class="exclude-chats__types-label">Read</span>
+              <span class="exclude-chats__types-label">Catalogue</span>
               <input
                 id="Read"
                 type="checkbox"
@@ -148,48 +148,55 @@ import CheckIcon from '@/assets/svg/check-icon.svg?inline'
 })
 export default class excludePage extends Vue {
   search: string | null = ''
-  selectedCheck: boolean = false
 
+  // chatlar
   chats = [
-    {
-      id: 1,
-      avatar: require('@/assets/svg/avatar.svg'),
-      name: 'Julia Work',
-    },
-    {
-      id: 2,
-      avatar: require('@/assets/svg/avatar.svg'),
-      name: 'Bill',
-    },
-    {
-      id: 3,
-      avatar: require('@/assets/svg/avatar.svg'),
-      name: 'Megan',
-    },
-    {
-      id: 4,
-      avatar: require('@/assets/svg/avatar.svg'),
-      name: 'Fred',
-    },
-    {
-      id: 5,
-      avatar: require('@/assets/svg/avatar.svg'),
-      name: 'Oliver',
-    },
-    {
-      id: 6,
-      avatar: require('@/assets/svg/avatar.svg'),
-      name: 'Amelia',
-    },
-    {
-      id: 7,
-      avatar: require('@/assets/svg/avatar.svg'),
-      name: 'Harry',
-    },
+    { id: 1, avatar: require('@/assets/svg/avatar.svg'), name: 'Julia Work' },
+    { id: 2, avatar: require('@/assets/svg/avatar.svg'), name: 'Bill' },
+    { id: 3, avatar: require('@/assets/svg/avatar.svg'), name: 'Megan' },
+    { id: 4, avatar: require('@/assets/svg/avatar.svg'), name: 'Fred' },
+    { id: 5, avatar: require('@/assets/svg/avatar.svg'), name: 'Oliver' },
+    { id: 6, avatar: require('@/assets/svg/avatar.svg'), name: 'Amelia' },
+    { id: 7, avatar: require('@/assets/svg/avatar.svg'), name: 'Harry' },
   ]
 
-  searchUpdate(val: string) {
-    this.search = val
+  initialCheckedTypes: string[] = []
+  initialCheckedChats: number[] = []
+
+  selectedCheck: boolean = false
+
+  mounted() {
+    this.initialCheckedTypes = this.getCheckedTypes()
+    this.initialCheckedChats = this.getCheckedChats()
+
+    setInterval(() => {
+      const nowTypes = this.getCheckedTypes()
+      const nowChats = this.getCheckedChats()
+
+      const typesChanged =
+        JSON.stringify(nowTypes.sort()) !==
+        JSON.stringify(this.initialCheckedTypes.sort())
+
+      const chatsChanged =
+        JSON.stringify(nowChats.sort()) !==
+        JSON.stringify(this.initialCheckedChats.sort())
+
+      this.selectedCheck = typesChanged || chatsChanged
+    }, 200)
+  }
+
+  getCheckedTypes(): string[] {
+    const checkboxes = document.querySelectorAll<HTMLInputElement>(
+      'input[name="chatTypes"]:checked'
+    )
+    return Array.from(checkboxes).map((el) => el.id)
+  }
+
+  getCheckedChats(): number[] {
+    const checkboxes = document.querySelectorAll<HTMLInputElement>(
+      'input[name="chats"]:checked'
+    )
+    return Array.from(checkboxes).map((el) => Number(el.id))
   }
 
   get filteredChats() {
@@ -197,6 +204,10 @@ export default class excludePage extends Vue {
     return this.chats.filter((chat) =>
       chat.name.toLowerCase().includes(this.search!.toLowerCase())
     )
+  }
+
+  searchUpdate(val: string) {
+    this.search = val
   }
 }
 </script>
@@ -285,11 +296,12 @@ export default class excludePage extends Vue {
       }
     }
     &-item--label {
+      min-height: 44px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 8px;
-      padding: 10px 12px;
+      padding: 0 12px 0 16px;
       position: relative;
       cursor: pointer;
       &::after {

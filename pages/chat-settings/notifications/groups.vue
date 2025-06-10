@@ -66,7 +66,11 @@
       <h3 class="group-chats__section-title">Exeptions</h3>
       <div class="group-chats__exeptions">
         <!-- Add Exception -->
-        <nuxt-link v-if="!isEditMode" to="" class="group-chats__exeptions-add">
+        <nuxt-link
+          v-if="!isEditMode"
+          to="/chat-settings/folders/new/exclude"
+          class="group-chats__exeptions-add"
+        >
           <CreateIcon class="group-chats__exeptions-add-icon" />
           <span class="group-chats__exeptions-add-label">Add Exception</span>
         </nuxt-link>
@@ -131,7 +135,7 @@ import BackIcon from '@/assets/svg/arrow-back.svg?inline'
 // @ts-ignore
 import CreateIcon from '@/assets/svg/plus.svg?inline'
 // @ts-ignore
-import MinusCircleIcon from '@/assets/svg/close.svg?inline'
+import MinusCircleIcon from '@/assets/svg/delete-img.svg?inline'
 // @ts-ignore
 import TrashIcon from '@/assets/svg/delete-icon.svg?inline'
 
@@ -349,7 +353,7 @@ export default class GroupChatsPage extends Vue {
     justify-content: space-between;
     gap: 16px;
     position: relative;
-    padding: 3px 12px;
+    padding: 3px 16px;
     cursor: pointer;
     transition: 0.2s;
     &::after {
@@ -423,13 +427,7 @@ export default class GroupChatsPage extends Vue {
     }
   }
   &__exeptions-remove {
-    svg {
-      width: 22px;
-      height: 22px;
-      path {
-        stroke: #f64e2a;
-      }
-    }
+    cursor: pointer;
   }
 }
 </style>

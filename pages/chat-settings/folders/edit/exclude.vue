@@ -34,7 +34,7 @@
               <div class="exclude-chats__types-icon">
                 <Muted />
               </div>
-              <span class="exclude-chats__types-label">Muted</span>
+              <span class="exclude-chats__types-label">Saved Messages</span>
               <input
                 id="Muted"
                 type="checkbox"
@@ -51,7 +51,7 @@
               <div class="exclude-chats__types-icon">
                 <Read />
               </div>
-              <span class="exclude-chats__types-label">Read</span>
+              <span class="exclude-chats__types-label">Saved Messages</span>
               <input
                 id="Read"
                 type="checkbox"
@@ -285,11 +285,12 @@ export default class excludePage extends Vue {
       }
     }
     &-item--label {
+      min-height: 44px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 8px;
-      padding: 10px 12px;
+      padding: 0 12px 0 16px;
       position: relative;
       cursor: pointer;
       &::after {

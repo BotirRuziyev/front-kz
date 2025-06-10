@@ -35,36 +35,21 @@
       <div class="edit-folder__section">
         <label class="edit-folder__label">Included Chats</label>
         <div class="edit-folder__chat-block">
-          <div class="edit-folder__chat-item">
+          <div
+            v-for="(i, index) in include"
+            :key="index"
+            class="edit-folder__chat-item"
+          >
             <img
               src="@/assets/svg/avatar.svg"
               alt="Julia Work"
               class="edit-folder__chat-avatar"
             />
-            <span class="edit-folder__chat-name">Julia Work</span>
-            <button class="edit-folder__chat-delete--btn">
-              <DeleteIcon />
-            </button>
-          </div>
-          <div class="edit-folder__chat-item">
-            <img
-              src="@/assets/svg/avatar.svg"
-              alt="Julia Work"
-              class="edit-folder__chat-avatar"
-            />
-            <span class="edit-folder__chat-name">Julia Work</span>
-            <button class="edit-folder__chat-delete--btn">
-              <DeleteIcon />
-            </button>
-          </div>
-          <div class="edit-folder__chat-item">
-            <img
-              src="@/assets/svg/avatar.svg"
-              alt="Julia Work"
-              class="edit-folder__chat-avatar"
-            />
-            <span class="edit-folder__chat-name">Julia Work</span>
-            <button class="edit-folder__chat-delete--btn">
+            <span class="edit-folder__chat-name">{{ i.name }}</span>
+            <button
+              class="edit-folder__chat-delete--btn"
+              @click="deleteInclude(index)"
+            >
               <DeleteIcon />
             </button>
           </div>
@@ -84,14 +69,21 @@
       <div class="edit-folder__section">
         <label class="edit-folder__label">Excluded Chats</label>
         <div class="edit-folder__chat-block">
-          <div class="edit-folder__chat-item">
+          <div
+            v-for="(i, index) in exclude"
+            :key="index"
+            class="edit-folder__chat-item"
+          >
             <img
               src="@/assets/svg/avatar.svg"
               alt="Julia Work"
               class="edit-folder__chat-avatar"
             />
             <span class="edit-folder__chat-name">Julia Work</span>
-            <button class="edit-folder__chat-delete--btn">
+            <button
+              class="edit-folder__chat-delete--btn"
+              @click="deleteExclude(index)"
+            >
               <DeleteIcon />
             </button>
           </div>
@@ -99,7 +91,7 @@
             to="/chat-settings/folders/edit/exclude"
             class="edit-folder__link"
           >
-            <span><PlusIcon /></span> Add Chats to Exclude
+            <span><PlusIcon /> </span> Add Chats to Exclude
           </nuxt-link>
         </div>
         <p class="edit-folder__desc">
@@ -115,7 +107,7 @@
             v-if="selectedColor !== null"
             class="folder-color__badge"
             :style="badgeStyle"
-            >FRENCH</span
+            >{{ folderName }}</span
           >
         </div>
         <div class="edit-folder__colors">
@@ -157,7 +149,7 @@ import EmojiIcon from '@/assets/svg/emoji.svg?inline'
 // @ts-ignore
 import PlusIcon from '@/assets/svg/plus.svg?inline'
 // @ts-ignore
-import DeleteIcon from '@/assets/svg/close.svg?inline'
+import DeleteIcon from '@/assets/svg/delete-img.svg?inline'
 
 @Component({
   components: {
@@ -168,7 +160,7 @@ import DeleteIcon from '@/assets/svg/close.svg?inline'
   },
 })
 export default class EditFolderPage extends Vue {
-  folderName: string = ''
+  folderName: string = 'News'
   selectedColor: string | null = '#955ddc'
 
   colors: string[] = [
@@ -181,6 +173,10 @@ export default class EditFolderPage extends Vue {
     '#c7508a',
     '#74899a',
   ]
+
+  include = [{ name: 'Bill' }, { name: 'Julia Work' }, { name: 'Bill' }]
+
+  exclude = [{ name: 'Bill' }]
 
   get isCreateActive(): boolean {
     return this.folderName.trim().length > 0 || this.selectedColor !== null
@@ -203,6 +199,14 @@ export default class EditFolderPage extends Vue {
     const g = parseInt(hex.slice(3, 5), 16)
     const b = parseInt(hex.slice(5, 7), 16)
     return `rgba(${r}, ${g}, ${b}, ${alpha})`
+  }
+
+  deleteInclude(index: number) {
+    this.include.splice(index, 1)
+  }
+
+  deleteExclude(index: number) {
+    this.exclude.splice(index, 1)
   }
 }
 </script>
@@ -270,31 +274,35 @@ export default class EditFolderPage extends Vue {
       display: flex;
       align-items: center;
       gap: 20px;
-      background: var(--secondary-1);
+      background: #13121b;
       border-radius: 12px;
       padding: 0 9px 0 0;
+      border: 1px solid #13121b;
+      &:focus-within {
+        border-color: #f64e2a;
+      }
     }
   }
   &__input {
     width: 100%;
-    height: 42px;
+    height: 44px;
     background: transparent;
     border: 0;
-    padding: 13px 0 13px 14px;
+    padding: 0 12px;
     font-family: 'Roboto', sans-serif;
     font-weight: 400;
     font-size: 14px;
     line-height: 120%;
     color: rgba(255, 255, 255, 1);
+    &:focus {
+      outline: none;
+    }
     &::placeholder {
       font-family: 'Roboto', sans-serif;
       font-weight: 400;
       font-size: 14px;
       line-height: 120%;
       color: rgba(255, 255, 255, 0.65);
-    }
-    &:focus {
-      outline: none;
     }
   }
   &__section {
@@ -348,13 +356,6 @@ export default class EditFolderPage extends Vue {
   }
   &__chat-delete--btn {
     cursor: pointer;
-    svg {
-      width: 22px;
-      height: 22px;
-      path {
-        stroke: #f64e2a;
-      }
-    }
   }
   &__link {
     display: flex;
@@ -445,6 +446,13 @@ export default class EditFolderPage extends Vue {
     .new-oracle-button {
       max-width: 345px;
       margin: 0 auto;
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 130%;
+      color: #67639a;
+      &.yellow {
+        color: #fff;
+      }
     }
   }
 }

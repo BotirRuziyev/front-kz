@@ -9,7 +9,7 @@
         >
           <BackIcon />
         </nuxt-link>
-        <h1 class="blocked-users__header-title">Group Chats</h1>
+        <h1 class="blocked-users__header-title">Blocked Users</h1>
       </div>
 
       <div class="blocked-users__add">

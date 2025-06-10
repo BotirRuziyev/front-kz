@@ -26,6 +26,7 @@
       :placeholder="placeholder"
       :style="{ paddingLeft }"
       :readonly="readonly"
+      @input="onChildChanged"
     />
     <div
       v-if="type === 'password'"
@@ -167,12 +168,12 @@ export default class InputOracle extends Vue {
 </script>
 <style lang="scss">
 .label {
-  margin-bottom: 10px;
-  font-family: 'Reza Zulmi Alfaizi Sans';
-  font-style: normal;
+  padding: 0 8px 8px 8px;
+  font-family: 'Roboto', sans-serif;
   font-weight: 400;
-  font-size: 12px;
-  line-height: 15px;
+  font-size: 14px;
+  line-height: 130%;
+  color: #fff;
 }
 
 .input {
@@ -238,8 +239,11 @@ export default class InputOracle extends Vue {
     font-size: 14px;
     line-height: 120%;
     color: #fff;
-    border: none;
+    border: 1px solid transparent;
     outline: none;
+    &:focus {
+      border-color: #f64e2a;
+    }
 
     &::placeholder {
       font-family: 'Nunito', sans-serif;

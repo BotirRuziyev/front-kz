@@ -3,7 +3,7 @@
     <div class="main-container">
       <!-- Header -->
       <div class="chat-folders__header">
-        <nuxt-link to="#" class="chat-folders__header-back">
+        <nuxt-link to="/chat-settings" class="chat-folders__header-back">
           <BackIcon />
         </nuxt-link>
         <h1 class="chat-folders__header-title">Chat Folders</h1>
@@ -156,6 +156,11 @@ export default class ChatFoldersPage extends Vue {
       display: flex;
       align-items: center;
       justify-content: center;
+      svg {
+        path {
+          stroke: #fff;
+        }
+      }
     }
     &-title {
       width: 100%;
@@ -212,7 +217,7 @@ export default class ChatFoldersPage extends Vue {
     display: flex;
     align-items: center;
     gap: 8px;
-    padding: 10px 9px 10px 10px;
+    padding: 0 16px;
     background: #14131b;
     transition: 0.2s;
     &:hover {
@@ -240,10 +245,19 @@ export default class ChatFoldersPage extends Vue {
       align-items: center;
       justify-content: space-between;
       gap: 10px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-      padding: 10px 12px 10px 10px;
+      padding: 0 16px;
       background: #14131b;
+      position: relative;
       transition: 0.2s;
+      &::after {
+        content: '';
+        width: calc(100% - 12px);
+        height: 0;
+        border-bottom: 1px solid #2b2741;
+        position: absolute;
+        right: 0;
+        bottom: 0;
+      }
       &:hover {
         background: var(--secondary-7);
       }

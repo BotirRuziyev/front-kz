@@ -37,7 +37,10 @@
       <div class="last-seen__exceptions">
         <h3 class="last-seen__title">Exeptions</h3>
 
-        <nuxt-link to="#" class="last-seen__exceptions-item">
+        <nuxt-link
+          to="/chat-settings/privacy/add-users"
+          class="last-seen__exceptions-item"
+        >
           <span class="last-seen__exceptions-label">Never Share With</span>
           <button class="last-seen__exceptions-action">
             Add Users

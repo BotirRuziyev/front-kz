@@ -40,7 +40,6 @@
                 type="checkbox"
                 name="chatTypes"
                 style="display: none"
-                :checked="true"
                 class="form-check"
               />
               <span class="include-chats__types-check"><CheckIcon /></span>
@@ -140,7 +139,6 @@
                 name="chats"
                 style="display: none"
                 class="form-check"
-                :checked="chat.id == 1"
               />
               <span class="include-chats__chats-check"><CheckIcon /></span>
             </label>
@@ -230,8 +228,41 @@ export default class IncludePage extends Vue {
     },
   ]
 
-  searchUpdate(val: string) {
-    this.search = val
+  initialCheckedTypes: string[] = []
+  initialCheckedChats: number[] = []
+
+  mounted() {
+    this.initialCheckedTypes = this.getCheckedTypes()
+    this.initialCheckedChats = this.getCheckedChats()
+
+    setInterval(() => {
+      const nowTypes = this.getCheckedTypes()
+      const nowChats = this.getCheckedChats()
+
+      const typesChanged =
+        JSON.stringify(nowTypes.sort()) !==
+        JSON.stringify(this.initialCheckedTypes.sort())
+
+      const chatsChanged =
+        JSON.stringify(nowChats.sort()) !==
+        JSON.stringify(this.initialCheckedChats.sort())
+
+      this.selectedCheck = typesChanged || chatsChanged
+    }, 200)
+  }
+
+  getCheckedTypes(): string[] {
+    const checkboxes = document.querySelectorAll<HTMLInputElement>(
+      'input[name="chatTypes"]:checked'
+    )
+    return Array.from(checkboxes).map((el) => el.id)
+  }
+
+  getCheckedChats(): number[] {
+    const checkboxes = document.querySelectorAll<HTMLInputElement>(
+      'input[name="chats"]:checked'
+    )
+    return Array.from(checkboxes).map((el) => Number(el.id))
   }
 
   get filteredChats() {
@@ -239,6 +270,10 @@ export default class IncludePage extends Vue {
     return this.chats.filter((chat) =>
       chat.name.toLowerCase().includes(this.search!.toLowerCase())
     )
+  }
+
+  searchUpdate(val: string) {
+    this.search = val
   }
 }
 </script>
@@ -326,11 +361,12 @@ export default class IncludePage extends Vue {
       }
     }
     &-item--label {
+      min-height: 44px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 8px;
-      padding: 10px 12px;
+      padding: 0 12px 0 16px;
       position: relative;
       cursor: pointer;
       &::after {

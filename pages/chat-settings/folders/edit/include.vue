@@ -326,11 +326,12 @@ export default class IncludePage extends Vue {
       }
     }
     &-item--label {
+      min-height: 44px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 8px;
-      padding: 10px 12px;
+      padding: 0 12px 0 16px;
       position: relative;
       cursor: pointer;
       &::after {

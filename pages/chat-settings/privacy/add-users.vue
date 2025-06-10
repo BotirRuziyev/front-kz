@@ -38,12 +38,20 @@
                 name="chats"
                 style="display: none"
                 class="form-check"
-                :checked="chat.id == 1"
               />
               <span class="chat-add-users__chats-check"><CheckIcon /></span>
             </label>
           </li>
         </ul>
+      </div>
+
+      <!-- Done Button -->
+      <div class="chat-add-users__button">
+        <new-oracle-button
+          :to="selectedCheck ? '/chat-settings/folders/new' : ''"
+          text="Done"
+          :color="selectedCheck ? 'yellow' : 'black'"
+        />
       </div>
     </div>
   </div>
@@ -64,6 +72,9 @@ import CheckIcon from '@/assets/svg/check-icon.svg?inline'
 })
 export default class excludePage extends Vue {
   search: string | null = ''
+  selectedCheck: boolean = false
+
+  initialCheckedChats: number[] = []
 
   chats = [
     {
@@ -108,6 +119,27 @@ export default class excludePage extends Vue {
     return this.chats.filter((chat) =>
       chat.name.toLowerCase().includes(this.search!.toLowerCase())
     )
+  }
+
+  mounted() {
+    this.initialCheckedChats = this.getCheckedChats()
+
+    setInterval(() => {
+      const nowChats = this.getCheckedChats()
+
+      const chatsChanged =
+        JSON.stringify(nowChats.sort()) !==
+        JSON.stringify(this.initialCheckedChats.sort())
+
+      this.selectedCheck = chatsChanged
+    }, 200)
+  }
+
+  getCheckedChats(): number[] {
+    const checkboxes = document.querySelectorAll<HTMLInputElement>(
+      'input[name="chats"]:checked'
+    )
+    return Array.from(checkboxes).map((el) => Number(el.id))
   }
 }
 </script>
@@ -247,6 +279,37 @@ export default class excludePage extends Vue {
         svg {
           opacity: 1;
         }
+      }
+    }
+  }
+  &__button {
+    width: 100%;
+    background: #14131b;
+    border-top: 1px solid #2b2741;
+    padding: 12px 16px 24px 16px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    .new-oracle-button {
+      max-width: 345px;
+      margin: 0 auto;
+      min-height: 36px;
+      padding: 0;
+      border-radius: 12px;
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 130%;
+      color: #67639a;
+      &.black {
+        border: 2px solid #2b2741;
+        background: #13121b;
+        cursor: no-drop;
+        &:hover {
+          box-shadow: none;
+        }
+      }
+      &.yellow {
+        color: #fff;
       }
     }
   }

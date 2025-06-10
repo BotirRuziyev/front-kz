@@ -36,7 +36,10 @@
         <h3 class="bio__title">Exeptions</h3>
 
         <div class="bio__exceptions-list">
-          <nuxt-link to="#" class="bio__exceptions-item active">
+          <nuxt-link
+            to="/chat-settings/privacy/add-users"
+            class="bio__exceptions-item active"
+          >
             <span class="bio__exceptions-label">Never Share With</span>
             <button class="bio__exceptions-action">
               <span class="bio__exceptions-action--status">Add Users</span>
@@ -70,7 +73,10 @@
               </button>
             </li>
           </ul>
-          <nuxt-link to="#" class="bio__exceptions-item no-active">
+          <nuxt-link
+            to="/chat-settings/privacy/add-users"
+            class="bio__exceptions-item no-active"
+          >
             <span class="bio__exceptions-label">Always Share With</span>
             <button class="bio__exceptions-action">
               Add Users

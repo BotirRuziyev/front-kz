@@ -41,6 +41,7 @@
               <SavedIcon />
             </div>
             <div class="settings-menu__label">Saved Messages</div>
+            <div class="settings-menu__value">3</div>
             <div class="settings-menu__arrow"></div>
           </nuxt-link>
 
@@ -84,13 +85,14 @@
         </div>
 
         <nuxt-link
-          to=""
+          to="/chat-settings/premium"
           class="settings-menu__item settings-menu__item--premium"
         >
           <div class="settings-menu__icon settings-menu__icon--premium">
             <PremiumIcon />
           </div>
           <div class="settings-menu__label">Premium</div>
+          <div class="settings-menu__value">Get</div>
           <div class="settings-menu__arrow"></div>
         </nuxt-link>
       </div>
@@ -238,13 +240,14 @@ export default class ChatSettinsPage extends Vue {}
       }
     }
     &__item {
+      min-height: 44px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 8px;
       background: #14131b;
       border-radius: 12px;
-      padding: 10px 12px 10px 14px;
+      padding: 0 16px;
       transition: 0.2s;
       &:hover {
         background: var(--secondary-7);
@@ -254,17 +257,16 @@ export default class ChatSettinsPage extends Vue {}
       width: 100%;
       font-family: 'Roboto', sans-serif;
       font-weight: 400;
-      font-size: 16px;
-      line-height: 120%;
-      text-align: left;
-      color: rgba(255, 255, 255, 0.65);
+      font-size: 14px;
+      line-height: 130%;
+      color: #fff;
     }
     &__value {
       font-family: 'Roboto', sans-serif;
       font-weight: 400;
-      font-size: 14px;
-      line-height: 120%;
-      color: rgba(255, 255, 255, 0.65);
+      font-size: 12px;
+      line-height: 135%;
+      color: #8780cf;
     }
     &__arrow {
       width: 7px;
